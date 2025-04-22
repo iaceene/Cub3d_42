@@ -1,9 +1,9 @@
-MLX_DIR = mlx
+MLX_DIR = ./src/lib/mlx
 MLX_LIB = $(MLX_DIR)/libmlx.a
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
-SRCS = ./src/main.c
+SRCS = ./src/main/main.c
 OBJS = $(SRCS:.c=.o)
 NAME = cub3d
 
