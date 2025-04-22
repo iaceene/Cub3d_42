@@ -5,7 +5,7 @@ CFLAGS = -Wall -Wextra -Werror
 MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 SRCS = ./src/main/main.c
 OBJS = $(SRCS:.c=.o)
-NAME = cub3d
+NAME = cub3D
 
 all: $(MLX_LIB) $(NAME)
 
