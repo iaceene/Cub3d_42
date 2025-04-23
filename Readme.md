@@ -3,7 +3,7 @@
 
 ### 🟦 To Do
 #### Setup & Learning
-- [ ] Install MLX and test example code
+- [X] Install MLX and test example code
 - [ ] Learn raycasting basics (watch YouTube videos or read guides)
 - [ ] Understand X and Y axis math (angle, sin/cos, grid units)
 
