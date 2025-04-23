@@ -1,5 +1,5 @@
 
-## 📋 Cub3D Project Board (Trello-style)
+## 📋 Cub3D Project Board
 
 ### 🟦 To Do
 #### Setup & Learning
