@@ -20,9 +20,7 @@ void	*ft_calloc(size_t count, size_t size)
 	mult = count * size;
 	if (count && size != mult / count)
 		return (NULL);
-	ptr = malloc(count * size);
-	if (!ptr)
-		return (NULL);
+	ptr = ft_malloc(count * size);
 	ft_bzero(ptr, count * size);
 	return (ptr);
 }

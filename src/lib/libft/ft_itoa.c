@@ -44,7 +44,7 @@ char	*ft_itoa(int n)
 	if (n == 0)
 		return (ft_strdup("0"));
 	nbr = ft_int_len(nbr, &len, &is_nigative);
-	str = malloc(len + 1);
+	str = ft_malloc(len + 1);
 	if (!str)
 		return (NULL);
 	str[len--] = '\0';

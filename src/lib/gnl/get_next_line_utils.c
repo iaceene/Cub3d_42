@@ -26,9 +26,7 @@ char	*ft_join(char *s1, char *s2)
 	else if (!s2 && s1)
 		return (s1);
 	len = ft_strlen(s1) + ft_strlen(s2);
-	ret = malloc(len + 1);
-	if (!ret)
-		return (free(s1), NULL);
+	ret = ft_malloc(len + 1);
 	i = -1;
 	while (s1[++i])
 		ret[i] = s1[i];
@@ -77,8 +75,6 @@ char	*ft_sub(char *s)
 		new_line = 1;
 		j = 2;
 	}
-	ret = malloc(i + j);
-	if (!ret)
-		return (NULL);
+	ret = ft_malloc(i + j);
 	return (ft_sub_helper(s, ret, new_line, i));
 }

@@ -25,17 +25,17 @@ static char	*ft_nextline(char *s)
 	while (s[i] && s[i] != '\n')
 		i++;
 	if (s[i] == '\0')
-		return (free(s), NULL);
+		return (NULL);
 	len = ft_strlen(s) - i;
-	ret = malloc(len + 1);
+	ret = ft_malloc(len + 1);
 	if (!ret)
-		return (free(s), NULL);
+		return (NULL);
 	i++;
 	j = 0;
 	while (s[i])
 		ret[j++] = s[i++];
 	ret[j] = '\0';
-	return (free(s), ret);
+	return (ret);
 }
 
 static int	check(char *s)
@@ -67,7 +67,7 @@ static char	*ft_read(char *s, char *buffer, int fd)
 		buffer[readed] = '\0';
 		s = ft_join(s, buffer);
 		if (!s)
-			return (free(buffer), NULL);
+			return (NULL);
 		if (check(s))
 			break ;
 	}
@@ -80,12 +80,9 @@ char	*get_next_line(int fd)
 	char		*buffer;
 
 	if (BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
-		return (free(s), s = NULL);
-	buffer = malloc(BUFFER_SIZE + 1 * sizeof(char));
-	if (!buffer)
-		return (free(s), NULL);
+		return (NULL);
+	buffer = ft_malloc(BUFFER_SIZE + 1 * sizeof(char));
 	s = ft_read(s, buffer, fd);
-	free(buffer);
 	buffer = s;
 	buffer = ft_sub(buffer);
 	s = ft_nextline(s);

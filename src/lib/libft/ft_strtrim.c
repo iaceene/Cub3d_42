@@ -44,9 +44,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		start++;
 	while (len > start && ft_spliter(s1[len - 1], set))
 		len--;
-	trimed = malloc(len - start + 1);
-	if (!trimed)
-		return (NULL);
+	trimed = ft_malloc(len - start + 1);
 	while (start < len)
 		trimed[index++] = s1[start++];
 	trimed[index] = '\0';
