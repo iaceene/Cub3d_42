@@ -1,4 +1,4 @@
-MLX_DIR = ./src/lib/mlx
+MLX_DIR = ./src/lib/.mlx
 MLX_LIB = $(MLX_DIR)/libmlx.a
 
 LIBFT_DIR = ./src/lib/libft
