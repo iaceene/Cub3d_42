@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include <math.h>
-#include "../lib/mlx/mlx.h"
+#include "../lib/.mlx/mlx.h"
 #include "../lib/libft/libft.h"
 #include "../lib/gnl/get_next_line.h"
 #include "../lib/malloc/ft_malloc.h"
