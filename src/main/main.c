@@ -1,18 +1,15 @@
 #include "../include/cub3d.h"
 
-int main()
+void	clean_up(void)
 {
-	void    *mlx;
-	void    *win;
+	ft_malloc(-1);
+}
 
-	mlx = mlx_init();
-	if (!mlx)
-		return (1);
+int main(int ac, char **av)
+{
+	t_cub cub;
 
-	win = mlx_new_window(mlx, 800, 600, "Simple Window");
-	if (!win)
-		return (1);
-
-	mlx_loop(mlx);
+	if (map_parsing(ac, av, &cub))
+		return (clean_up(), 1);
 	return (0);
 }

@@ -11,6 +11,7 @@ MLX_FLAGS = -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm -lbsd
 SRCS =	./src/lib/gnl/get_next_line.c\
 		./src/lib/gnl/get_next_line_utils.c\
 		./src/lib/malloc/ft_malloc.c\
+		./src/components/parsing/map_parsing.c\
 		./src/main/main.c
 OBJS = $(SRCS:.c=.o)
 NAME = cub3D

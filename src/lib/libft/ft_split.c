@@ -51,9 +51,7 @@ static char	*ft_allocate(char *str, char c, int *index)
 		saved_index++;
 		i++;
 	}
-	splited = malloc(i + 1);
-	if (!splited)
-		return (NULL);
+	splited = ft_malloc(i + 1);
 	splited[i] = '\0';
 	i = 0;
 	while (str[*index] && !ft_isspliter(str[*index], c))
@@ -63,18 +61,6 @@ static char	*ft_allocate(char *str, char c, int *index)
 		i++;
 	}
 	return (splited);
-}
-
-static char	**ft_free(char **splites, int index)
-{
-	index--;
-	while (index >= 0)
-	{
-		free(splites[index]);
-		index--;
-	}
-	free(splites);
-	return (NULL);
 }
 
 char	**ft_split(char const *s, char c)
@@ -89,17 +75,13 @@ char	**ft_split(char const *s, char c)
 	i = 0;
 	index = 0;
 	count_spiltes = ft_count((char *)s, c);
-	splites = malloc(sizeof(char *) * (count_spiltes + 1));
-	if (!splites)
-		return (NULL);
+	splites = ft_malloc(sizeof(char *) * (count_spiltes + 1));
 	splites[count_spiltes] = NULL;
 	while (i < count_spiltes)
 	{
 		while (s[index] && ft_isspliter(s[index], c))
 			index++;
 		splites[i] = ft_allocate((char *)s, c, &index);
-		if (!splites[i])
-			return (ft_free(splites, i));
 		i++;
 	}
 	return (splites);
