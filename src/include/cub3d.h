@@ -51,6 +51,8 @@ typedef struct s_texture
     char    *ea_path;
     char    *floor_clr;
     char    *sky_clr;
+    int     floor_grb[3];
+    int     sky_grb[3];
 }   t_texture;
 
 typedef struct s_data

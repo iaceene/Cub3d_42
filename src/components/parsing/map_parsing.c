@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:38:14 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/29 19:23:32 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/29 20:50:08 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,12 +224,33 @@ int	extractor(t_cub *cub)
 	return (0);
 }
 
+int	check_file_ext(char *name)
+{
+	while (*name && *name != '.')
+		name++;
+	if (*name)
+	{
+		if (!ft_strncmp(name, ".xpm", ft_strlen(".xpm"))
+			&& !name[ft_strlen(".xpm")])
+			return (0);
+	}
+	else
+	{
+		ft_putstr_fd("Error\nfile : ", 2);
+		ft_putstr_fd(name, 2);
+		ft_putstr_fd(" has invalid extention\n", 2);
+	}
+	return (1);
+}
+
 int	check_file(char *filename)
 {
 	int	fd;
 	
 	if (!filename)
 		return (ft_putendl_fd("Error\nTextur not found", 2), 1);
+	if (check_file_ext(filename))
+		return (1);
 	fd = open(filename, 0);
 	if (fd == -1)
 	{
@@ -252,9 +273,57 @@ int	check_texture(t_cub *cub)
 	return (0);
 }
 
+int	get_len(char **s)
+{
+	int i;
+
+	if (!s)
+		return (0);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+int	check_grb_rang(t_cub *cub)
+{
+	int i;
+
+	i = 0;
+	while (i < 3)
+	{
+		if (cub->texture->sky_grb[i] == -1
+			|| cub->texture->floor_grb[i] == -1)
+		return (ft_putendl_fd("Error\nInvalid RGB range", 2) , 1);
+		i++;
+	}
+	return (0);
+}
+
+int	check_rgb(t_cub *cub)
+{
+	char	**clr1;
+	char	**clr2;
+	int		i;
+
+	i = 0;
+	clr1 = ft_split(cub->texture->floor_clr, ',');
+	clr2 = ft_split(cub->texture->sky_clr, ',');
+	if (!clr1 || !clr2
+		|| get_len(clr1) != 3 || get_len(clr2) != 3)
+		return (ft_putendl_fd("Error\nInvalid color format", 2), 1);
+	while (i < 3)
+	{
+		cub->texture->floor_grb[i] = ft_atoi(clr1[i]);
+		cub->texture->sky_grb[i] = ft_atoi(clr2[i]);
+		i++;
+	}
+	return (check_grb_rang(cub));
+}
+
 int	check_colors(t_cub *cub)
 {
-	t_texture *texture;
+	t_texture	*texture;
 
 	texture = cub->texture;
 	if (!texture->floor_clr || !texture->sky_clr)
@@ -267,7 +336,7 @@ int	check_colors(t_cub *cub)
 			ft_putendl_fd("Error\ncolors not found", 2);
 		return (1);
 	}
-	return (0);	
+	return (check_rgb(cub));	
 }
 
 int map_parsing(int ac, char **av, t_cub *cub)
