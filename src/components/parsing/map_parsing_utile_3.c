@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:03:11 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/29 21:04:42 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/29 22:04:18 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ t_lines	*map_extracter(t_lines *line, char ***map)
 	int		i;
 
 	len = get_map_len(line);
+	if (!len)
+		return (NULL);
 	i = 0;
 	*map = ft_malloc((sizeof(char *) * len) + 1);
 	new = *map;
@@ -47,15 +49,18 @@ int	extractor(t_cub *cub)
 		return (1);
 	line = textures_extracter(line, textur);
 	if (!line)
-		return (ft_putendl_fd("Error\n No map Found", 2), 1);
+		return (ft_putendl_fd("Error\nNo map Found", 2), 1);
 	line = map_extracter(line, &cub->data.map.map);
 	if (!line)
-		return (ft_putendl_fd("Error", 2), 1);
+		return (ft_putendl_fd("Error\nNo map Found", 2), 1);
 	return (0);
 }
 
 int	check_file_ext(char *name)
 {
+	char	*tmp;
+
+	tmp = name;
 	while (*name && *name != '.')
 		name++;
 	if (*name)
@@ -64,12 +69,9 @@ int	check_file_ext(char *name)
 			&& !name[ft_strlen(".xpm")])
 			return (0);
 	}
-	else
-	{
-		ft_putstr_fd("Error\nfile : ", 2);
-		ft_putstr_fd(name, 2);
-		ft_putstr_fd(" has invalid extention\n", 2);
-	}
+	ft_putstr_fd("Error\nfile : ", 2);
+	ft_putstr_fd(tmp, 2);
+	ft_putstr_fd(" has invalid extention\n", 2);
 	return (1);
 }
 
