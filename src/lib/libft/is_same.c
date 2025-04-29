@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   is_same.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/29 17:43:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/29 17:43:13 by yaajagro         ###   ########.fr       */
+/*   Created: 2025/04/29 18:23:42 by yaajagro          #+#    #+#             */
+/*   Updated: 2025/04/29 18:26:37 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "libft.h"
 
-void	clean_up(void)
+int	is_same(char *s1, char *s2)
 {
-	ft_malloc(-1);
-}
+	int	i;
 
-int main(int ac, char **av)
-{
-	t_cub cub;
-
-	if (map_parsing(ac, av, &cub))
-		return (clean_up(), 1);
-	clean_up();
+	i = 0;
+	if (!s1 || !s2)
+		return (0);
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (0);
+		i++;
+	}
+	if (!s1[i] && !s2[i])
+		return (1);
 	return (0);
 }

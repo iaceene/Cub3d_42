@@ -10,6 +10,7 @@ SRC =  ft_strlen.c \
 	ft_strmapi.c \
 	ft_strtrim.c \
 	ft_atoi.c \
+	is_same.c \
 	ft_itoa.c \
 	ft_isalpha.c \
 	ft_putendl_fd.c \

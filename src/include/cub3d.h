@@ -20,6 +20,13 @@ typedef struct s_map
     int height;
 } t_map;
 
+typedef struct s_lines
+{
+    char            *val;
+    struct s_lines  *next;
+}   t_lines;
+
+
 typedef struct s_player
 {
     double x;
@@ -36,22 +43,25 @@ typedef struct s_img
     int endian;
 } t_img;
 
+typedef struct s_texture
+{
+    char    *no_path;
+    char    *so_path;
+    char    *we_path;
+    char    *ea_path;
+    char    *floor_clr;
+    char    *sky_clr;
+}   t_texture;
+
 typedef struct s_data
 {
     void *mlx;
     void *win;
     t_img img;
     t_map map;
-    t_player player;
-} t_data;
-
-typedef struct s_texture
-{
-    char *path;
-    int width;
-    int height;
-    unsigned int *data;
-} t_texture;
+    t_lines     *lines;
+    t_player    player;
+}   t_data;
 
 typedef struct s_ray
 {
@@ -64,7 +74,7 @@ typedef struct s_ray
 typedef struct s_cub
 {
     t_data data;
-    t_texture textures[4];
+    t_texture   *texture;
     int num_textures;
 } t_cub;
 

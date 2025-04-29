@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:07:27 by yaajagro          #+#    #+#             */
-/*   Updated: 2024/11/06 19:50:44 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:26:47 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_putstr_fd(char *s, int fd);
+int		is_same(char *s1, char *s2);
 void	*ft_calloc(size_t count, size_t size);
 // struct
 t_list	*ft_lstnew(void *content);

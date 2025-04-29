@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 01:57:06 by yaajagro          #+#    #+#             */
-/*   Updated: 2024/11/13 14:56:59 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:44:04 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_join(char *s1, char *s2)
 	while (s2[j])
 		ret[i++] = s2[j++];
 	ret[i] = '\0';
-	return (free(s1), ret);
+	return (ret);
 }
 
 char	*ft_sub_helper(char *s, char *ret, int line, int i)
