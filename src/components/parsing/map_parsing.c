@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:38:14 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/29 21:05:08 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:19:27 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int map_parsing(int ac, char **av, t_cub *cub)
 		return (1);
 	// if (check_texture(cub) || check_colors(cub)
 	// 	|| check_map(cub))
-	if (check_colors(cub))
+	if (check_map(cub))
 		return (1);
 	return (0);
 }

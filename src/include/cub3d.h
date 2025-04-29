@@ -86,6 +86,7 @@ char	*read_map(int fd);
 int		check_file_extention(char *str);
 int		init_map(t_cub *cub, char *filename);
 t_lines	*new_line(char *val);
+int		check_map(t_cub *cub);
 void	ft_add_line(t_lines **head, t_lines *new);
 int		valid_chars(char c);
 int		only_walls(char *line);
