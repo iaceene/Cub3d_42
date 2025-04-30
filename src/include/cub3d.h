@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/30 18:17:10 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:28:07 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,6 @@ typedef struct s_lines
 	struct s_lines  *next;
 }   t_lines;
 
-
-typedef struct s_player
-{
-	double x;
-	double y;
-	double angle;
-} t_player;
-
 typedef struct s_img
 {
 	void *img;
@@ -57,12 +49,12 @@ typedef struct s_img
 
 typedef struct s_texture
 {
-	int no;
-	int so;
-	int we;
-	int ea;
-	int fn;
-	int cn;
+	int 	no;
+	int 	so;
+	int 	we;
+	int 	ea;
+	int 	fn;
+	int 	cn;
 	char    *no_path;
 	char    *so_path;
 	char    *we_path;
@@ -80,16 +72,7 @@ typedef struct s_data
 	t_img img;
 	t_map map;
 	t_lines     *lines;
-	t_player    player;
 }   t_data;
-
-typedef struct s_ray
-{
-	double angle;
-	double distance;
-	int hit_x;
-	int hit_y;
-} t_ray;
 
 typedef struct s_cub
 {
@@ -116,6 +99,10 @@ int		extractor(t_cub *cub);
 int		check_file_ext(char *name);
 int		check_file(char *filename);
 int		check_texture(t_cub *cub);
+int		check_comas(char *clr1, char *clr2);
+void	reset_texture(t_texture *textur);
+int		valid_chars(char c);
+int		get_map_len(t_lines *line);
 
 
 #endif
