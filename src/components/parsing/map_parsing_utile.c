@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 20:59:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/29 21:00:38 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:29:25 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	init_map(t_cub *cub, char *filename)
 
 	if (check_file_extention(filename))
 		return (ft_putendl_fd("Error\nInvalid Extention", 2), 1);
-	fd = open(filename,	0);
+	fd = open(filename, 0);
 	if (fd == -1)
 		return (ft_putendl_fd("Error\nFailed to open map file", 2), 1);
 	cub->data.map.map = ft_split(read_map(fd), '\n');

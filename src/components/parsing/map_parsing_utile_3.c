@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:03:11 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/30 17:42:49 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:24:48 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_lines	*map_extracter(t_lines *line, char ***map)
 {
-	int 	len;
+	int		len;
 	char	**new;
 	int		i;
 
@@ -35,16 +35,6 @@ t_lines	*map_extracter(t_lines *line, char ***map)
 	}
 	new[i] = NULL;
 	return (line);
-}
-
-void	reset_texture(t_texture *textur)
-{
-	textur->cn = 0;
-	textur->no = 0;
-	textur->ea = 0;
-	textur->fn = 0;
-	textur->so = 0;
-	textur->we = 0;
 }
 
 int	extractor(t_cub *cub)
@@ -89,7 +79,7 @@ int	check_file_ext(char *name)
 int	check_file(char *filename)
 {
 	int	fd;
-	
+
 	if (!filename)
 		return (ft_putendl_fd("Error\nTextur not found", 2), 1);
 	if (check_file_ext(filename))
@@ -107,11 +97,11 @@ int	check_file(char *filename)
 
 int	check_texture(t_cub *cub)
 {
-	t_texture *texture;
+	t_texture	*texture;
 
 	texture = cub->texture;
 	if (check_file(texture->ea_path) || check_file(texture->so_path)
-	|| check_file(texture->we_path) || check_file(texture->no_path))
+		|| check_file(texture->we_path) || check_file(texture->no_path))
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:38:14 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/30 18:13:39 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:32:31 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	get_len(char **s)
 {
-	int i;
+	int	i;
 
 	if (!s)
 		return (0);
@@ -26,49 +26,16 @@ int	get_len(char **s)
 
 int	check_grb_rang(t_cub *cub)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 3)
 	{
 		if (cub->texture->sky_grb[i] == -1
 			|| cub->texture->floor_grb[i] == -1)
-		return (ft_putendl_fd("Error\nInvalid RGB range", 2) , 1);
+			return (ft_putendl_fd("Error\nInvalid RGB range", 2), 1);
 		i++;
 	}
-	return (0);
-}
-
-int	count_comas(char *s)
-{
-	int	i;
-
-	i = 1;
-	if (!s)
-		return (0);
-	while (*s)
-	{
-		if (*s == ',')
-			i++;
-		s++;
-	}
-	return (i);
-}
-
-int	check_comas(char *clr1, char *clr2)
-{
-	int	count;
-
-	if (!clr1 || !clr2)
-		return (ft_putendl_fd("Error\nColor missed!", 2), 1);
-	count = count_comas(clr1);
-	if (count != 3)
-		return (ft_putendl_fd("Error", 2), 
-		ft_putendl_fd(clr1, 2), 1);
-	count = count_comas(clr2);
-	if (count != 3)
-		return (ft_putendl_fd("Error", 2), 
-		ft_putendl_fd(clr2, 2), 1);
 	return (0);
 }
 
@@ -110,10 +77,10 @@ int	check_colors(t_cub *cub)
 			ft_putendl_fd("Error\ncolors not found", 2);
 		return (1);
 	}
-	return (check_rgb(cub));	
+	return (check_rgb(cub));
 }
 
-int map_parsing(int ac, char **av, t_cub *cub)
+int	map_parsing(int ac, char **av, t_cub *cub)
 {
 	if (ac != 2)
 		return (ft_putendl_fd("Error\nUsage: ./cub3D <map.cub>", 2), 1);

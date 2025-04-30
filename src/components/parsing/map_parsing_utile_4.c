@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:15:15 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/29 21:46:45 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:26:37 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,23 @@ int	palyer_chars(char c)
 {
 	return (c == 'W' || c == 'S' || c == 'E'
 		|| c == 'N');
+}
+
+int	valid_chars(char c)
+{
+	return (c == ' ' || c == '0' || c == '1'
+		|| c == 'W' || c == 'S' || c == 'E'
+		|| c == 'N');
+}
+
+void	reset_texture(t_texture *textur)
+{
+	textur->cn = 0;
+	textur->no = 0;
+	textur->ea = 0;
+	textur->fn = 0;
+	textur->so = 0;
+	textur->we = 0;
 }
 
 int	check_map(t_cub *cub)
@@ -38,12 +55,12 @@ int	check_map(t_cub *cub)
 		while (map[i][j])
 		{
 			if (count > 1)
-				return (ft_putendl_fd("Error\nMultiple players Dedected", 2) ,1);
+				return (ft_putendl_fd("Error\nMultiple players Dedected", 2), 1);
 			if (palyer_chars(map[i][j]))
 				count++;
-			j++;	
+			j++;
 		}
 		i++;
 	}
-	return (0);	
+	return (0);
 }
