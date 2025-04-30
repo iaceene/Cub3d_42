@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:01:07 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/29 21:02:46 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:59:29 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,57 @@ int	parse_lines(t_cub *cub)
 	return (0);
 }
 
+int	add_more_tex(char *path, t_texture *tex, int flg)
+{
+	if (!path)
+		return (1);
+	if (flg == 4 && !tex->ea)	
+	{
+		tex->ea++;
+		tex->ea_path = path;
+		return (0);
+	}
+	if (flg == 5 && !tex->fn)	
+	{
+		tex->fn++;
+		tex->floor_clr = path;
+		return (0);
+	}
+	if (flg == 6 && !tex->cn)	
+	{
+		tex->cn++;
+		tex->sky_clr = path;
+		return (0);
+	}
+	return (ft_putendl_fd("Error\nDuplicate texture found!", 2),
+		ft_malloc(-1), exit(1), 1);
+}
+
+int	add_texture(char *path, t_texture *tex, int flg)
+{
+	if (!path)
+		return (1);
+	if (flg == 1 && !tex->no)	
+	{
+		tex->no++;
+		tex->no_path = path;
+		return (0);
+	}
+	if (flg == 2 && !tex->so)	
+	{
+		tex->so++;
+		tex->so_path = path;
+		return (0);
+	}
+	if (flg == 3 && !tex->we)	
+	{
+		tex->we++;
+		tex->we_path = path;
+		return (0);
+	}
+	return (add_more_tex(path, tex, flg));
+}
+
 t_lines	*textures_extracter(t_lines *line, t_texture *textur)
 {
 	while (line && line->next && !is_same(line->val, "MAP BEGIN"))
@@ -69,19 +120,20 @@ t_lines	*textures_extracter(t_lines *line, t_texture *textur)
 		if (!is_same(line->val, "TEXTUR BEGIN"))
 		{
 			if (!ft_strncmp(line->val, "NO ", ft_strlen("NO ")))
-				textur->no_path = ft_split(line->val, ' ')[1];
+				add_texture(ft_split(line->val, ' ')[1], textur, 1);
 			else if (!ft_strncmp(line->val, "SO ", ft_strlen("SO ")))
-				textur->so_path = ft_split(line->val, ' ')[1];
+				add_texture(ft_split(line->val, ' ')[1], textur, 2);
 			else if (!ft_strncmp(line->val, "WE ", ft_strlen("WE ")))
-				textur->we_path = ft_split(line->val, ' ')[1];
+				add_texture(ft_split(line->val, ' ')[1], textur, 3);
 			else if (!ft_strncmp(line->val, "EA ", ft_strlen("EA ")))
-				textur->ea_path = ft_split(line->val, ' ')[1];
+				add_texture(ft_split(line->val, ' ')[1], textur, 4);
 			else if (!ft_strncmp(line->val, "F ", ft_strlen("F ")))
-				textur->floor_clr = ft_split(line->val, ' ')[1];
+				add_texture(ft_split(line->val, ' ')[1], textur, 5);
 			else if (!ft_strncmp(line->val, "C ", ft_strlen("C ")))
-				textur->sky_clr = ft_split(line->val, ' ')[1];
+				add_texture(ft_split(line->val, ' ')[1], textur, 6);
 			else
-				return (ft_putendl_fd("Error\nInvalid texture", 2), NULL);
+				return (ft_putendl_fd("Error\nInvalid texture", 2), 
+					ft_malloc(-1), exit(1), NULL);
 		}
 		line = line->next;
 	}

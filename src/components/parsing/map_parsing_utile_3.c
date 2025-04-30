@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:03:11 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/29 22:04:18 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:42:49 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,23 @@ t_lines	*map_extracter(t_lines *line, char ***map)
 	return (line);
 }
 
+void	reset_texture(t_texture *textur)
+{
+	textur->cn = 0;
+	textur->no = 0;
+	textur->ea = 0;
+	textur->fn = 0;
+	textur->so = 0;
+	textur->we = 0;
+}
+
 int	extractor(t_cub *cub)
 {
 	t_lines		*line;
 	t_texture	*textur;
 
 	textur = ft_malloc(sizeof(t_texture));
+	reset_texture(textur);
 	cub->texture = textur;
 	line = cub->data.lines;
 	if (!line)

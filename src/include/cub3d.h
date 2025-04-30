@@ -45,6 +45,12 @@ typedef struct s_img
 
 typedef struct s_texture
 {
+	int no;
+	int so;
+	int we;
+	int ea;
+	int fn;
+	int cn;
 	char    *no_path;
 	char    *so_path;
 	char    *we_path;
