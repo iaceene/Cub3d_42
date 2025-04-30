@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:38:14 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/29 21:57:29 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:13:39 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,39 @@ int	check_grb_rang(t_cub *cub)
 	return (0);
 }
 
+int	count_comas(char *s)
+{
+	int	i;
+
+	i = 1;
+	if (!s)
+		return (0);
+	while (*s)
+	{
+		if (*s == ',')
+			i++;
+		s++;
+	}
+	return (i);
+}
+
+int	check_comas(char *clr1, char *clr2)
+{
+	int	count;
+
+	if (!clr1 || !clr2)
+		return (ft_putendl_fd("Error\nColor missed!", 2), 1);
+	count = count_comas(clr1);
+	if (count != 3)
+		return (ft_putendl_fd("Error", 2), 
+		ft_putendl_fd(clr1, 2), 1);
+	count = count_comas(clr2);
+	if (count != 3)
+		return (ft_putendl_fd("Error", 2), 
+		ft_putendl_fd(clr2, 2), 1);
+	return (0);
+}
+
 int	check_rgb(t_cub *cub)
 {
 	char	**clr1;
@@ -46,6 +79,8 @@ int	check_rgb(t_cub *cub)
 	int		i;
 
 	i = 0;
+	if (check_comas(cub->texture->sky_clr, cub->texture->floor_clr))
+		return (1);
 	clr1 = ft_split(cub->texture->floor_clr, ',');
 	clr2 = ft_split(cub->texture->sky_clr, ',');
 	if (!clr1 || !clr2
