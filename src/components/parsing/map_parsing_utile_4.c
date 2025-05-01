@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:15:15 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/30 18:26:37 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:08:59 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,38 @@ void	reset_texture(t_texture *textur)
 	textur->fn = 0;
 	textur->so = 0;
 	textur->we = 0;
+}
+
+int	only_walls_map(char *s)
+{
+	if (!s)
+		return (0);
+	while (*s)
+	{
+		if (*s != '1')
+			return (0);
+		s++;
+	}
+	return (1);
+}
+
+int	check_walls(char **map)
+{
+	int	y;
+
+	y = 0;
+	while (map[y])
+	{
+		if (map[y] && map[y + 1] && ft_strlen(map[y]) < ft_strlen(map[y + 1]))
+		{
+			if (!only_walls_map(*(map + y + 1) + ft_strlen(map[y])))
+				return (ft_putstr_fd("Error\nInvalid map : ", 2), 
+					ft_putendl_fd(ft_strjoin(ft_strjoin(map[y], " <<< line : "),
+					ft_itoa(y)), 2), 1);
+		}
+		y++;
+	}
+	return (0);
 }
 
 int	check_map(t_cub *cub)
@@ -62,5 +94,7 @@ int	check_map(t_cub *cub)
 		}
 		i++;
 	}
-	return (0);
+	if (!count)
+		return (ft_putendl_fd("Error\nMap has no player", 2), 1);
+	return (check_walls(map));
 }
