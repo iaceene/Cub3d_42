@@ -59,6 +59,30 @@
 | Textures |  | ✔️ |
 | Final cleanup | ✔️ | ✔️ |
 
+## CHATGPT
+
+In MLX (MiniLibX), you can draw a circle using the `mlx_pixel_put` function, but there's no built-in circle drawing function. However, you can implement it by calculating the points that lie on the circumference of a circle using the circle equation:
+
+$$
+(x - cx)^2 + (y - cy)^2 = r^2
+$$
+
+Where:
+
+* $(cx, cy)$ is the center of the circle.
+* $r$ is the radius of the circle.
+
+To draw a circle, you'll want to iterate through angles (typically 360 degrees or 0 to 2π radians) and calculate the corresponding points using parametric equations.
+
+
+### Explanation:
+
+* `mlx_pixel_put(mlx, win, x, y, 0xFFFFFF);` is used to plot each point on the circle. The color `0xFFFFFF` represents white.
+* We iterate over angles from 0 to 2π (360 degrees) to get the coordinates of the points on the circle's circumference.
+* The circle is drawn by using the parametric equations for `x` and `y` based on the angle.
+
+
+
 ## Links
 
 - Minilibx: [hsmits MiniLibX documentation](https://harm-smits.github.io/42docs/libs/minilibx)

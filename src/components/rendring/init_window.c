@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 18:49:14 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/02 23:13:32 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ int	close_window(void	*pram)
 {
 	t_cub *cub;
 
+	printf(COLOR_RED    "[CLOSING WINDOW]" COLOR_RESET "\n");
 	cub = (t_cub *)pram;
 	mlx_destroy_window(cub->data.mlx, cub->data.win);
 	ft_malloc(-1);
-	printf(COLOR_RED    "[CLOSING WINDOW]" COLOR_RESET "\n");
+	printf(COLOR_GREEN    "[WINDOW CLOSED]" COLOR_RESET "\n");
 	exit(0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 22:43:29 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/02 23:16:02 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,32 @@ void fill_tile(t_img *img, int clr, int y, int x)
 			width++;
 		}
 		hight++;
+	}
+}
+
+void	draw_circle(t_img *img, int xp, int yp, int color)
+{
+	int		center_x;
+	int		center_y;
+	int		x;
+	int		y;
+	int		dis;
+
+	fill_tile(img, 0, yp, xp);
+	center_x = xp * 64 + 64 / 2;
+	center_y = yp * 64 + 64 / 2;
+	y = -20;
+	while (y <= 10)
+	{
+		x = -20;
+		while (x <= 10)
+		{
+			dis = x * x + y * y;
+			if (dis <= 10 * 10)
+				my_pixel_put(center_x + x, center_y + y, img, color);
+			x++;
+		}
+		y++;
 	}
 }
 
@@ -67,11 +93,11 @@ void	render_map(t_cub *cub)
 		while(map[map_y][map_x])
 		{
 			if (map[map_y][map_x] == '1')
-				fill_tile(&img, 0, map_y, map_x);
+				fill_tile(&img, 0xFFFFFF, map_y, map_x);
 			else if (map[map_y][map_x] == '0')
-				fill_tile(&img, 0xFFFF00, map_y, map_x);
+				fill_tile(&img, 0, map_y, map_x);
 			else
-				fill_tile(&img, 0xFF0000, map_y, map_x);
+				draw_circle(&img, map_x, map_y, 0xFF0000);
 			map_x++;
 		}
 		map_y++;
