@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 18:22:39 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:35:28 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ typedef struct s_data
 
 typedef struct s_cub
 {
+	int		screen_h;
+	int		screen_w;
 	t_data data;
 	t_texture   *texture;
 	int num_textures;

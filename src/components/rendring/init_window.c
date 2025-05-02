@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 18:14:15 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:49:14 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ int	init_window(t_cub *cub)
 	if (!cub->data.mlx)
 		return (ft_putendl_fd("Error\nFail to create connection", 2), 1);
 	mlx_get_screen_size(cub->data.mlx, &hight, &width);
-	cub->data.win = mlx_new_window(cub->data.mlx, hight, width, "Cub3d");
+	cub->screen_h = hight;
+	cub->screen_w = width;
+	// cub->data.win = mlx_new_window(cub->data.mlx, hight, width, "Cub3d");
+	cub->data.win = mlx_new_window(cub->data.mlx, 21 * 64, 21 * 64, "Cub3d");
 	if (!cub->data.win)
 		return (ft_putendl_fd("Error\nFail to open window", 2), 1);
 	printf(COLOR_GREEN   "[WINDOW CREATED]  " COLOR_RESET "\n");
