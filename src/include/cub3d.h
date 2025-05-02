@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 18:35:28 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/02 22:33:48 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ typedef struct s_lines
 
 typedef struct s_img
 {
+	void *mlx;
+	void *win;
 	void *img;
 	char *addr;
 	int bits_per_pixel;
