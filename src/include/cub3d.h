@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/30 18:28:07 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:08:23 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,18 @@
 #include <sys/time.h>
 #include <time.h>
 #include <math.h>
+#include <X11/keysym.h>
+#include <X11/X.h>
 #include "../lib/.mlx/mlx.h"
 #include "../lib/libft/libft.h"
 #include "../lib/gnl/get_next_line.h"
 #include "../lib/malloc/ft_malloc.h"
+
+#define COLOR_RESET   "\x1b[0m"
+#define COLOR_YELLOW  "\x1b[33m"
+#define COLOR_GREEN   "\x1b[32m"
+#define COLOR_CYAN    "\x1b[36m"
+#define COLOR_RED     "\x1b[31m"
 
 typedef struct s_map
 {
@@ -103,6 +111,6 @@ int		check_comas(char *clr1, char *clr2);
 void	reset_texture(t_texture *textur);
 int		valid_chars(char c);
 int		get_map_len(t_lines *line);
-
+int		init_window(t_cub *cub);
 
 #endif
