@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 22:33:48 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/03 00:19:31 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,18 @@ typedef struct s_data
 	t_lines     *lines;
 }   t_data;
 
+typedef struct s_player
+{
+	int	x;
+	int	y;
+}   t_player;
+
 typedef struct s_cub
 {
 	int		screen_h;
 	int		screen_w;
 	t_data data;
+	t_player player;
 	t_texture   *texture;
 	int num_textures;
 } t_cub;
@@ -117,5 +124,7 @@ int		valid_chars(char c);
 int		get_map_len(t_lines *line);
 int		init_window(t_cub *cub);
 void	render_map(t_cub *cub);
+void	draw_circle(t_img *img, int xp, int yp, int color);
+void	my_pixel_put(int x, int y, t_img *img, int color);
 
 #endif

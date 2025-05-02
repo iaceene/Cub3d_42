@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 23:16:02 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/03 00:28:50 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ void	draw_circle(t_img *img, int xp, int yp, int color)
 	int		x;
 	int		y;
 	int		dis;
+	static int i;
 
-	fill_tile(img, 0, yp, xp);
+	if (!i)
+		fill_tile(img, 0, yp, xp);
+	i++;
 	center_x = xp * 64 + 64 / 2;
 	center_y = yp * 64 + 64 / 2;
 	y = -20;
@@ -64,29 +67,29 @@ void	draw_circle(t_img *img, int xp, int yp, int color)
 	}
 }
 
-int	init_image(t_img *img, t_cub *cub)
+int	init_image(t_cub *cub)
 {
-	img->img = mlx_new_image(cub->data.mlx, 64 * 21, 64 * 21);
-	if (!img->img)
+	cub->data.img.img = mlx_new_image(cub->data.mlx, 64 * 21, 64 * 21);
+	if (!cub->data.img.img)
 		return (perror("Fail to open img"), 1);
-	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
-		&img->line_length, &img->endian);
-	img->mlx = cub->data.mlx;
-	img->win = cub->data.win;
+	cub->data.img.addr = mlx_get_data_addr(cub->data.img.img, &cub->data.img.bits_per_pixel,
+		&cub->data.img.line_length, &cub->data.img.endian);
+	cub->data.img.mlx = cub->data.mlx;
+	cub->data.img.win = cub->data.win;
 	return (0);
 }
 
-void	render_map(t_cub *cub)
+void	display_map(t_cub *cub)
 {
 	t_img	img;
 	char	**map;
 	int		map_x;
 	int		map_y;
 
-	map_y = 0;
+	
 	map = cub->data.map.map;
-	if (init_image(&img, cub))
-		return ;
+	img = cub->data.img;
+	map_y = 0;
 	while (map[map_y])
 	{
 		map_x = 0;
@@ -97,10 +100,21 @@ void	render_map(t_cub *cub)
 			else if (map[map_y][map_x] == '0')
 				fill_tile(&img, 0, map_y, map_x);
 			else
+			{
 				draw_circle(&img, map_x, map_y, 0xFF0000);
+				cub->player.x = map_x;
+				cub->player.y = map_y;
+			}
 			map_x++;
 		}
 		map_y++;
 	}
-	mlx_put_image_to_window(img.mlx, img.win, img.img, 0, 0);
+}
+
+void	render_map(t_cub *cub)
+{
+	if (init_image(cub))
+		return ;
+	display_map(cub);
+	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }

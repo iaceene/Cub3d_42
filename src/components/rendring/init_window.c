@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 23:13:32 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/03 00:31:43 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,42 @@ int	close_window(void	*pram)
 	exit(0);
 }
 
+void	move_down(t_cub *cub)
+{
+	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
+	cub->player.y++;
+	my_pixel_put(cub->player.x * 64,cub->player.y * 64, &cub->data.img, 0xFF0000);
+	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
+}
+
+void	move_up(t_cub *cub)
+{
+	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
+	if (cub->player.y <= 0)
+		return ;
+	cub->player.y--;
+	my_pixel_put(cub->player.x * 64,cub->player.y * 64, &cub->data.img, 0xFF0000);
+	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
+}
+
+void	move_left(t_cub *cub)
+{
+	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
+	if (cub->player.x <= 0)
+		return ;
+	cub->player.x--;
+	my_pixel_put(cub->player.x * 64,cub->player.y * 64, &cub->data.img, 0xFF0000);
+	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
+}
+
+void	move_right(t_cub *cub)
+{
+	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
+	cub->player.x++;
+	my_pixel_put(cub->player.x * 64,cub->player.y * 64, &cub->data.img, 0xFF0000);
+	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
+}
+
 int	key_bind(int key, void *pram)
 {
 	t_cub *cub;
@@ -32,13 +68,13 @@ int	key_bind(int key, void *pram)
 	if (key == XK_Escape)
 		close_window(cub);
 	if (key == XK_w)
-		printf("up\n");
+		move_up(cub);
 	if (key == XK_s)
-		printf("down\n");
+		move_down(cub);
 	if (key == XK_d)
-		printf("left\n");
+		move_right(cub);
 	if (key == XK_a)
-		printf("right\n");
+		move_left(cub);
 	return (0);
 }
 
