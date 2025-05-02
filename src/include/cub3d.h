@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 18:08:23 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:22:39 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,6 @@ void	reset_texture(t_texture *textur);
 int		valid_chars(char c);
 int		get_map_len(t_lines *line);
 int		init_window(t_cub *cub);
+void	render_map(t_cub *cub);
 
 #endif

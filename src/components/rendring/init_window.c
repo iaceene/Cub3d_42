@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 18:08:02 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:14:15 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@ int	key_bind(int key, void *pram)
 	cub = (t_cub *)pram;
 	if (key == XK_Escape)
 		close_window(cub);
+	if (key == XK_w)
+		printf("up\n");
+	if (key == XK_s)
+		printf("down\n");
+	if (key == XK_d)
+		printf("left\n");
+	if (key == XK_a)
+		printf("right\n");
 	return (0);
 }
 
@@ -37,6 +45,7 @@ int	cub_window(t_cub *cub)
 {
 	mlx_hook(cub->data.win, 17, 0, close_window, cub);
 	mlx_hook(cub->data.win, 2, 1L<<0, key_bind, cub);
+	render_map(cub);
 	mlx_loop(cub->data.mlx);
 	return (0);
 }

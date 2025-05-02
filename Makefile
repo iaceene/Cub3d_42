@@ -18,6 +18,7 @@ SRCS =	./src/lib/gnl/get_next_line.c\
         ./src/components/parsing/map_parsing_utile_5.c\
 		./src/components/parsing/map_parsing.c\
 		./src/components/rendring/init_window.c\
+		./src/components/rendring/render_map.c\
 		./src/main/main.c
 OBJS = $(SRCS:.c=.o)
 NAME = cub3D
