@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/03 21:47:52 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/03 21:49:18 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void clear_image(t_cub *cub)
 int draw_loop(t_cub *cub)
 {
 	move_player(cub);
-	clear_image(cub);
+	// clear_image(cub);
 	render_map(cub);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 	return (0);
