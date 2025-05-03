@@ -41,24 +41,24 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(MLX_LIB):
-	@$(MAKE) -C $(MLX_DIR)
+	@$(MAKE) -s -C $(MLX_DIR)
 
 $(LIBFT_LIB):
-	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -s -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_FLAGS)
 	@echo "$(NAME) compiled successfully"
 
 clean:
-	@$(MAKE) -C $(MLX_DIR) clean
-	@$(MAKE) -C $(LIBFT_DIR) clean
+	@$(MAKE) -s -C $(MLX_DIR) clean
+	@$(MAKE) -s -C $(LIBFT_DIR) clean
 	@rm -rf $(OBJ_DIR)
 	@echo "Object files removed"
 
 fclean: clean
-	@$(MAKE) -C $(MLX_DIR) clean
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -s -C $(MLX_DIR) clean
+	@$(MAKE) -s -C $(LIBFT_DIR) fclean
 	@rm -f $(NAME)
 	@echo "$(NAME) removed"
 
