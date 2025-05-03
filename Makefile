@@ -1,30 +1,44 @@
-MLX_DIR = ./src/lib/.mlx
-MLX_LIB = $(MLX_DIR)/libmlx.a
+# Directories
+MLX_DIR		= ./src/lib/.mlx
+MLX_LIB		= $(MLX_DIR)/libmlx.a
+LIBFT_DIR	= ./src/lib/libft
+LIBFT_LIB	= $(LIBFT_DIR)/libft.a
+SRC_DIR		= ./src
+OBJ_DIR		= ./obj
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror
+MLX_FLAGS	= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm -lbsd
 
-LIBFT_DIR = ./src/lib/libft
-LIBFT_LIB = $(LIBFT_DIR)/libft.a
-
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
-MLX_FLAGS = -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm -lbsd
-
-SRCS =	./src/lib/gnl/get_next_line.c\
-		./src/lib/gnl/get_next_line_utils.c\
-		./src/lib/malloc/ft_malloc.c\
-		./src/components/parsing/map_parsing_utile.c\
-        ./src/components/parsing/map_parsing_utile_2.c\
-        ./src/components/parsing/map_parsing_utile_3.c\
-        ./src/components/parsing/map_parsing_utile_4.c\
-        ./src/components/parsing/map_parsing_utile_5.c\
-		./src/components/parsing/map_parsing.c\
-		./src/components/rendring/init_window.c\
-		./src/components/rendring/render_map.c\
-		./src/main/main.c
-OBJS = $(SRCS:.c=.o)
-NAME = cub3D
+SRCS		= \
+			$(SRC_DIR)/lib/gnl/get_next_line.c \
+			$(SRC_DIR)/lib/gnl/get_next_line_utils.c \
+			$(SRC_DIR)/lib/malloc/ft_malloc.c \
+			$(SRC_DIR)/components/parsing/map_parsing_utile.c \
+			$(SRC_DIR)/components/parsing/map_parsing_utile_2.c \
+			$(SRC_DIR)/components/parsing/map_parsing_utile_3.c \
+			$(SRC_DIR)/components/parsing/map_parsing_utile_4.c \
+			$(SRC_DIR)/components/parsing/map_parsing_utile_5.c \
+			$(SRC_DIR)/components/parsing/map_parsing.c \
+			$(SRC_DIR)/components/rendring/init_window.c \
+			$(SRC_DIR)/components/rendring/render_map.c \
+			$(SRC_DIR)/main/main.c
 
 
-all: $(MLX_LIB) $(LIBFT_LIB) $(NAME)
+OBJS		= $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+
+NAME		= cub3D
+
+all: $(MLX_LIB) $(LIBFT_LIB) $(OBJ_DIR) $(NAME)
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)/lib/gnl
+	@mkdir -p $(OBJ_DIR)/lib/malloc
+	@mkdir -p $(OBJ_DIR)/components/parsing
+	@mkdir -p $(OBJ_DIR)/components/rendring
+	@mkdir -p $(OBJ_DIR)/main
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(MLX_LIB):
 	@$(MAKE) -C $(MLX_DIR)
@@ -33,17 +47,20 @@ $(LIBFT_LIB):
 	@$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_FLAGS)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_FLAGS)
+	@echo "$(NAME) compiled successfully"
 
 clean:
 	@$(MAKE) -C $(MLX_DIR) clean
 	@$(MAKE) -C $(LIBFT_DIR) clean
-	rm -f $(OBJS)
+	@rm -rf $(OBJ_DIR)
+	@echo "Object files removed"
 
 fclean: clean
 	@$(MAKE) -C $(MLX_DIR) clean
 	@$(MAKE) -C $(LIBFT_DIR) fclean
-	rm -f $(NAME)
+	@rm -f $(NAME)
+	@echo "$(NAME) removed"
 
 re: fclean all
 
