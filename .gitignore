@@ -1,3 +1,5 @@
 **/*.o
-Cub3d
+**/*.a
+**/*mlx-test
+cub3D
 .vscode/
