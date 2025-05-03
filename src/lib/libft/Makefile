@@ -54,21 +54,21 @@ NAME = libft.a
 all: $(NAME)
 
 $(NAME): $(SRC_O)
-	ar -rc $(NAME) $(SRC_O)
+	@ar -rc $(NAME) $(SRC_O)
 
 %.o: %.c libft.h
-	$(CC) $(C_FLAGS) -c $< -o $@
+	@$(CC) $(C_FLAGS) -c $< -o $@
 
 bonus: $(B_SRC_O)
-	ar -rc $(NAME) $(B_SRC_O)
+	@ar -rc $(NAME) $(B_SRC_O)
 
 $(B_SRC_O): %.o: %.c libft.h
 	$(CC) $(C_FLAGS) -c $< -o $@
 clean:
-	rm -f $(SRC_O) $(B_SRC_O)
+	@rm -f $(SRC_O) $(B_SRC_O)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
