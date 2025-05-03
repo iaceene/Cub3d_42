@@ -85,6 +85,7 @@ To draw a circle, you'll want to iterate through angles (typically 360 degrees o
 
 ## Links
 
+- Permadi: [Raycasting](https://www.permadi.com/tutorial/raycast/rayc1.html)
 - Minilibx: [hsmits MiniLibX documentation](https://harm-smits.github.io/42docs/libs/minilibx)
 - Minilibx: [gontjarow's MiniLibX tutorial](https://gontjarow.github.io/MiniLibX/)
 - Xlib (for MLX events): [The Xlib Manual](https://tronche.com/gui/x/xlib/)
