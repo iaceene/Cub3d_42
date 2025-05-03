@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/03 00:19:31 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/03 21:02:12 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,21 @@
 #define COLOR_GREEN   "\x1b[32m"
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_RED     "\x1b[31m"
+
+
+# define WIDTH 1280
+# define HEIGHT 720
+# define BLOCK 64
+# define DEBUG 0
+
+# define W 119
+# define A 97
+# define S 115
+# define D 100
+# define LEFT 65361
+# define RIGHT 65363
+
+# define PI 3.14159265359
 
 typedef struct s_map
 {
@@ -86,8 +101,13 @@ typedef struct s_data
 
 typedef struct s_player
 {
-	int	x;
-	int	y;
+	float	x;
+	float	y;
+
+	bool key_up;
+	bool key_down;
+	bool key_left;
+	bool key_right;
 }   t_player;
 
 typedef struct s_cub

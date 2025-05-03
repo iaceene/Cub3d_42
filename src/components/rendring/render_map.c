@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/03 00:28:50 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/03 21:26:35 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	display_map(t_cub *cub)
 	int		map_x;
 	int		map_y;
 
-	
 	map = cub->data.map.map;
 	img = cub->data.img;
 	map_y = 0;
@@ -99,16 +98,11 @@ void	display_map(t_cub *cub)
 				fill_tile(&img, 0xFFFFFF, map_y, map_x);
 			else if (map[map_y][map_x] == '0')
 				fill_tile(&img, 0, map_y, map_x);
-			else
-			{
-				draw_circle(&img, map_x, map_y, 0xFF0000);
-				cub->player.x = map_x;
-				cub->player.y = map_y;
-			}
 			map_x++;
 		}
 		map_y++;
 	}
+	draw_circle(&img, cub->player.x / 64, cub->player.y / 64, 0xFF0000);
 }
 
 void	render_map(t_cub *cub)
