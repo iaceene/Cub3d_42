@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:03:11 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/30 18:24:48 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/03 18:41:56 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_lines	*map_extracter(t_lines *line, char ***map)
 	if (!len)
 		return (NULL);
 	i = 0;
+	len++;
 	*map = ft_malloc((sizeof(char *) * len) + 1);
 	new = *map;
 	while (line && !is_same(line->val, "MAP END"))
