@@ -4,7 +4,7 @@ MLX_LIB		= $(MLX_DIR)/libmlx.a
 SRC_DIR		= ./src
 OBJ_DIR		= ./obj
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror #-g3 -fsanitize=address
+CFLAGS		= -g3 -fsanitize=address
 MLX_FLAGS	= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm -lbsd
 
 SRCS		= $(SRC_DIR)/main/main.c

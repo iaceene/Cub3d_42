@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 18:10:00 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/04 18:59:40 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/04 20:06:32 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,25 +95,11 @@ void init_image(t_list *data)
 
 void    draw_player(t_list *data)
 {
-    int hight;
     int x = data->p.x;
     int y = data->p.y;
-    int width;
 
-    hight = 0;
-    while (hight < TILE_SIZE)
-    {
-        width = 0;
-        while (width < TILE_SIZE)
-        {
-            if (width == TILE_SIZE / 2)
-                my_pixel_put(x * TILE_SIZE + width, y * TILE_SIZE + hight, data->img, 0);
-            else if (hight == TILE_SIZE / 2)
-                my_pixel_put(x * TILE_SIZE + width, y * TILE_SIZE + hight, data->img, 0);
-            width++;
-        }
-        hight++;
-    }
+
+    my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0);
     mlx_put_image_to_window(data->mlx, data->win, data->img->img, 0, 0);
 }
 
@@ -178,8 +164,8 @@ int main()
     data.mlx = mlx_init();
     data.win = mlx_new_window(data.mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "test");
     data.img = NULL;
-    data.p.x = 1;
-    data.p.y = 1;
+    data.p.x = 0;
+    data.p.y = 0;
     data.p.pos_pix_x = 32;
     data.p.pos_pix_y = 32;
     fill_background(&data);
