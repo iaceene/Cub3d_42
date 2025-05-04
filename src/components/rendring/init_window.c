@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/04 15:24:12 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/04 16:32:18 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void init_player(t_player *player)
 
 int key_press(int key, t_cub *cub)
 {
+	if (key == XK_Escape)
+		close_window(cub);
 	if (key == 119 || key == 65362)
 		cub->player.key_up = true;
 	if (key == 115 || key == 65364)
@@ -48,6 +50,8 @@ int key_press(int key, t_cub *cub)
 
 int key_release(int key, t_cub *cub)
 {
+	if (key == XK_Escape)
+		close_window(cub);
 	if (key == 119 || key == 65362)
 		cub->player.key_up = false;
 	if (key == 115 || key == 65364)
@@ -135,16 +139,46 @@ bool touch_one(float px, float py, t_cub *cub)
 	return false;
 }
 
-void draw_map(t_cub *cub)	
+void draw_map(t_cub *cub)
 {
-	char **map = cub->data.map.map;
-	int color = 0x0000FF;
-	for (int y = 0; map[y]; y++)
-		for (int x = 0; map[y][x]; x++)
+	char **map;
+	int color;
+	int y;
+	int x;
+
+	map = cub->data.map.map;
+	color = 0x0000FF;
+	x = 0;
+	y = 0;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
 			if (map[y][x] == '1')
 				draw_square(x * BLOCK, y * BLOCK, BLOCK, color, cub);
+			x++;
+		}
+		y++;
+	}
 }
 
+void draw_line(t_cub *cub, float start_x, int i)
+{
+	float cos_angle = cos(start_x);
+	float sin_angle = sin(start_x);
+	float ray_x = cub->player.x;
+	float ray_y = cub->player.y;
+
+(void)i;
+	while (!touch_one(ray_x, ray_y, cub))
+	{
+		my_pixel_put(ray_x, ray_y, &cub->data.img, 0xFF0000);
+		ray_x += cos_angle;
+		ray_y += sin_angle;
+	}
+	
+}
 int draw_loop(t_cub *cub)
 {
 	move_player(cub);
@@ -152,17 +186,16 @@ int draw_loop(t_cub *cub)
 	draw_square(cub->player.x, cub->player.y, 10, 0x0000FF, cub);
 	draw_map(cub);
 
-	float ray_x = cub->player.x;
-	float ray_y = cub->player.y;
-	float cos_angle = cos(cub->player.angle);
-	float sin_angle = cos(cub->player.angle);
-
-	while (!touch_one(ray_x, ray_y, cub))
+	float fraction = PI / 3 / WIDTH;
+	float start_x = cub->player.angle - PI / 6;
+	int i = 0;
+	while (i < WIDTH)
 	{
-		my_pixel_put(ray_x, ray_y, &cub->data.img, 0xFF0000);
-		ray_x += cos_angle;
-		ray_y += sin_angle;
+		draw_line(cub, start_x, i);
+		start_x += fraction;
+		i++;
 	}
+
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 	return (0);
 }
