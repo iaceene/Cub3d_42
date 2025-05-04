@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/03 21:26:35 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/04 14:23:31 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,17 @@ void	draw_circle(t_img *img, int xp, int yp, int color)
 	}
 }
 
-int	init_image(t_cub *cub)
-{
-	cub->data.img.img = mlx_new_image(cub->data.mlx, 64 * 21, 64 * 21);
-	if (!cub->data.img.img)
-		return (perror("Fail to open img"), 1);
-	cub->data.img.addr = mlx_get_data_addr(cub->data.img.img, &cub->data.img.bits_per_pixel,
-		&cub->data.img.line_length, &cub->data.img.endian);
-	cub->data.img.mlx = cub->data.mlx;
-	cub->data.img.win = cub->data.win;
-	return (0);
-}
+// int	init_image(t_cub *cub)
+// {
+// 	cub->data.img.img = mlx_new_image(cub->data.mlx, 64 * 21, 64 * 21);
+// 	if (!cub->data.img.img)
+// 		return (perror("Fail to open img"), 1);
+// 	cub->data.img.addr = mlx_get_data_addr(cub->data.img.img, &cub->data.img.bits_per_pixel,
+// 		&cub->data.img.line_length, &cub->data.img.endian);
+// 	cub->data.img.mlx = cub->data.mlx;
+// 	cub->data.img.win = cub->data.win;
+// 	return (0);
+// }
 
 void	display_map(t_cub *cub)
 {
@@ -107,8 +107,8 @@ void	display_map(t_cub *cub)
 
 void	render_map(t_cub *cub)
 {
-	if (init_image(cub))
-		return ;
+	// if (init_image(cub))
+	// 	return ;
 	display_map(cub);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/03 21:02:12 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/04 15:08:45 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,14 @@
 #define COLOR_RED     "\x1b[31m"
 
 
-# define WIDTH 1280
-# define HEIGHT 720
+
+#define WIDTH (21 * 64)  // Or your preferred width
+#define HEIGHT (21 * 64) // Or your preferred height
+
+
+// # define WIDTH 1280
+// # define HEIGHT 720
+
 # define BLOCK 64
 # define DEBUG 0
 
@@ -103,11 +109,15 @@ typedef struct s_player
 {
 	float	x;
 	float	y;
+	float angle;
 
 	bool key_up;
 	bool key_down;
 	bool key_left;
 	bool key_right;
+
+	bool left_rotate;
+	bool right_rotate;
 }   t_player;
 
 typedef struct s_cub
