@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/03 00:19:31 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:13:01 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int		valid_chars(char c);
 int		get_map_len(t_lines *line);
 int		init_window(t_cub *cub);
 void	render_map(t_cub *cub);
-void	draw_circle(t_img *img, int xp, int yp, int color);
+void	draw_player(t_img *img, int xp, int yp, int color);
 void	my_pixel_put(int x, int y, t_img *img, int color);
 
 #endif

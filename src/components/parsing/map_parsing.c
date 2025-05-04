@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:38:14 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 23:18:59 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:21:04 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,27 @@ int	check_colors(t_cub *cub)
 	return (check_rgb(cub));
 }
 
+void set_map_size(t_cub *cub)
+{
+	char		**map;
+	size_t		x;
+	int			y;
+
+	if (!cub)
+		return ;
+	map = cub->data.map.map;
+	x = 0;
+	y = 0;
+	while (map[y])
+	{
+		if (ft_strlen(map[y]) > x)
+			x = ft_strlen(map[y]);
+		y++;
+	}
+	cub->data.map.width = (int)x;
+	cub->data.map.height = y;
+}
+
 int	map_parsing(int ac, char **av, t_cub *cub)
 {
 	if (ac != 2)
@@ -94,5 +115,6 @@ int	map_parsing(int ac, char **av, t_cub *cub)
 	if (check_colors(cub)
 		|| check_map(cub))
 		return (1);
+	set_map_size(cub);
 	return (0);
 }

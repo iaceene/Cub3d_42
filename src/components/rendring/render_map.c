@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/03 00:28:50 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:11:58 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,29 +38,19 @@ void fill_tile(t_img *img, int clr, int y, int x)
 	}
 }
 
-void	draw_circle(t_img *img, int xp, int yp, int color)
+void	draw_player(t_img *img, int xp, int yp, int color)
 {
-	int		center_x;
-	int		center_y;
-	int		x;
-	int		y;
-	int		dis;
-	static int i;
+	// fill_tile(img, 0x00FFFF, yp, xp);
 
-	if (!i)
-		fill_tile(img, 0, yp, xp);
-	i++;
-	center_x = xp * 64 + 64 / 2;
-	center_y = yp * 64 + 64 / 2;
-	y = -20;
-	while (y <= 10)
+	int x = 0;
+	int y = 0;
+
+	while (y < 64)
 	{
-		x = -20;
-		while (x <= 10)
+		x = 0;
+		while (x < 64)
 		{
-			dis = x * x + y * y;
-			if (dis <= 10 * 10)
-				my_pixel_put(center_x + x, center_y + y, img, color);
+			my_pixel_put(xp * 64 + x, yp * 64 + y , img, color);
 			x++;
 		}
 		y++;
@@ -101,7 +91,7 @@ void	display_map(t_cub *cub)
 				fill_tile(&img, 0, map_y, map_x);
 			else
 			{
-				draw_circle(&img, map_x, map_y, 0xFF0000);
+				draw_player(&img, map_x, map_y, 0xFF0000);
 				cub->player.x = map_x;
 				cub->player.y = map_y;
 			}

@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/03 00:31:43 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/04 17:31:54 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,13 @@ int	close_window(void	*pram)
 void	move_down(t_cub *cub)
 {
 	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
+	if (cub->player.y >= cub->data.map.height - 1)
+		return ;
+	if (cub->data.map.map[cub->player.y + 1][cub->player.x] == '1')
+		return ;
+	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0);
 	cub->player.y++;
-	my_pixel_put(cub->player.x * 64,cub->player.y * 64, &cub->data.img, 0xFF0000);
+	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0xFF0000);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
@@ -37,8 +42,11 @@ void	move_up(t_cub *cub)
 	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
 	if (cub->player.y <= 0)
 		return ;
+	if (cub->data.map.map[cub->player.y - 1][cub->player.x] == '1')
+		return ;
+	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0);
 	cub->player.y--;
-	my_pixel_put(cub->player.x * 64,cub->player.y * 64, &cub->data.img, 0xFF0000);
+	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0xFF0000);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
@@ -47,16 +55,24 @@ void	move_left(t_cub *cub)
 	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
 	if (cub->player.x <= 0)
 		return ;
+	if (cub->data.map.map[cub->player.y][cub->player.x - 1] == '1')
+		return ;
+	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0);
 	cub->player.x--;
-	my_pixel_put(cub->player.x * 64,cub->player.y * 64, &cub->data.img, 0xFF0000);
+	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0xFF0000);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
 void	move_right(t_cub *cub)
 {
 	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
+	if (cub->player.x >= cub->data.map.width - 1)
+		return ;
+	if (cub->data.map.map[cub->player.y][cub->player.x + 1] == '1')
+		return ;
+	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0);
 	cub->player.x++;
-	my_pixel_put(cub->player.x * 64,cub->player.y * 64, &cub->data.img, 0xFF0000);
+	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0xFF0000);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
