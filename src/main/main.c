@@ -136,6 +136,39 @@ int is_wall(int x, int y, t_list *data)
     return (0);
 }
 
+void draw_walls(t_list *data)
+{
+    int y;
+    int x;
+
+    y = 0;
+    x = 0;
+    int i = 0;
+    while (y < WINDOW_HEIGHT)
+    {
+        x = 0;
+        while (x < WINDOW_WIDTH)
+        {
+            if ((y >= 0 && y <= 3)
+            || (x >= 0 && x <= 3)
+            || (y + 3 == WINDOW_HEIGHT)
+            || (y + 2 == WINDOW_HEIGHT)
+            || (y + 1 == WINDOW_HEIGHT)
+            || (x + 3 == WINDOW_WIDTH)
+            || (x + 2 == WINDOW_WIDTH)
+            || (x + 1 == WINDOW_WIDTH))
+            {
+                my_pixel_put(x, y, data->img, 0x00FF00);
+                data->wall[i].x = x;
+                data->wall[i].y = y;
+                i++;
+            }
+            x++;
+        }
+        y++;
+    }
+}
+
 void    clear_player(t_list *data)
 {
     int x = data->p.x;
@@ -191,12 +224,19 @@ int close_window(void *param)
     exit(0);
 }
 
+void print_log(int Px, int Py)
+{
+    printf("[log] Player X = %d Y = %d\n", Px, Py);
+}
+
 void move_down(t_list *data)
 {
     if (is_wall(data->p.pos_pix_x, data->p.pos_pix_y + 1, data))
         return ;
     clear_player(data);
+    draw_walls(data);
     data->p.pos_pix_y += MOVE_SPEED;
+    print_log(data->p.pos_pix_x, data->p.pos_pix_y);
     draw_player(data);
 }
 
@@ -205,7 +245,9 @@ void move_up(t_list *data)
     if (is_wall(data->p.pos_pix_x, data->p.pos_pix_y - 1, data))
         return ;
     clear_player(data);
+    draw_walls(data);
     data->p.pos_pix_y -= MOVE_SPEED;
+    print_log(data->p.pos_pix_x, data->p.pos_pix_y);
     draw_player(data);
 }
 
@@ -214,7 +256,9 @@ void move_right(t_list *data)
     if (is_wall(data->p.pos_pix_x + 1, data->p.pos_pix_y, data))
         return ;
     clear_player(data);
+    draw_walls(data);
     data->p.pos_pix_x += MOVE_SPEED;
+    print_log(data->p.pos_pix_x, data->p.pos_pix_y);
     draw_player(data);
 }
 
@@ -223,7 +267,9 @@ void move_left(t_list *data)
     if (is_wall(data->p.pos_pix_x - 1, data->p.pos_pix_y, data))
         return ;
     clear_player(data);
+    draw_walls(data);
     data->p.pos_pix_x -= MOVE_SPEED;
+    print_log(data->p.pos_pix_x, data->p.pos_pix_y);
     draw_player(data);
 }
 
@@ -242,39 +288,6 @@ int key_bind(int key, void *param)
 	if (key == XK_a)
 		move_left(data);
     return (0);
-}
-
-void draw_walls(t_list *data)
-{
-    int y;
-    int x;
-
-    y = 0;
-    x = 0;
-    int i = 0;
-    while (y < WINDOW_HEIGHT)
-    {
-        x = 0;
-        while (x < WINDOW_WIDTH)
-        {
-            if ((y >= 0 && y <= 3)
-            || (x >= 0 && x <= 3)
-            || (y + 3 == WINDOW_HEIGHT)
-            || (y + 2 == WINDOW_HEIGHT)
-            || (y + 1 == WINDOW_HEIGHT)
-            || (x + 3 == WINDOW_WIDTH)
-            || (x + 2 == WINDOW_WIDTH)
-            || (x + 1 == WINDOW_WIDTH))
-            {
-                my_pixel_put(x, y, data->img, 0x00FF00);
-                data->wall[i].x = x;
-                data->wall[i].y = y;
-                i++;
-            }
-            x++;
-        }
-        y++;
-    }
 }
 
 int main()
