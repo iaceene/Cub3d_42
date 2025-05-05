@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/05 16:23:03 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:33:52 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_RED     "\x1b[31m"
 
-#define MOVE_SPEED 20
+#define MOVE_SPEED 1
 #define TILE_SIZE 64
 // #define MAP_WIDTH 24
 // #define MAP_HEIGHT 10
@@ -45,7 +45,14 @@ typedef struct s_map
 	char **map;
 	int width;
 	int height;
+	size_t	map_points;
 } t_map;
+
+typedef struct s_wall
+{
+	int	x;
+	int	y;
+} t_wall;
 
 typedef struct s_lines
 {
@@ -106,6 +113,7 @@ typedef struct s_cub
 	t_data data;
 	t_player player;
 	t_texture   *texture;
+	t_wall	*wall;
 	int num_textures;
 } t_cub;
 
@@ -130,6 +138,7 @@ int		check_texture(t_cub *cub);
 int		check_comas(char *clr1, char *clr2);
 void	reset_texture(t_texture *textur);
 int		valid_chars(char c);
+int		palyer_chars(char c);
 int		get_map_len(t_lines *line);
 int		init_window(t_cub *cub);
 void	render_map(t_cub *cub);

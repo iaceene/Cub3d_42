@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/05 16:16:30 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:29:08 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,78 @@ void	display_map(t_cub *cub)
 				fill_tile(&img, 0xFFFFFF, map_y, map_x);
 			else if (map[map_y][map_x] == '0')
 				fill_tile(&img, 0, map_y, map_x);
-			else
-			{
-				cub->player.x = map_x;
-				cub->player.y = map_y;
-				cub->player.x_bit = 32;
-				cub->player.y_bit = 32;
-				draw_player(&img, cub->player, 0xFFFFFF);
-			}
 			map_x++;
 		}
 		map_y++;
+	}
+}
+
+void	set_player(t_cub *cub)
+{
+	char	**map;
+	int		x;
+	int		y;
+
+	y = 0;
+	map = cub->data.map.map;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (palyer_chars(map[y][x]))
+			{
+				cub->player.x = x;
+				cub->player.y = y;
+			}
+			x++;
+		}
+		y++;
+	}
+	cub->player.x_bit = 32;
+	cub->player.y_bit = 32;
+}
+
+void	set_point_wall(t_cub *cub, int x, int y)
+{
+	int	yw;
+	int xw;
+	int	i;
+
+	yw = 0;
+	i = 0;
+	while (yw < 64)
+	{
+		xw = 0;
+		while (xw < 64)
+		{
+			cub->wall[i].x = x * 64 + xw;
+			cub->wall[i].y = y * 64 + yw;
+			xw++;
+			i++;
+		}
+		yw++;
+	}
+}
+
+void	set_walls_points(t_cub *cub)
+{
+	char	**map;
+	int		x;
+	int		y;
+
+	y = 0;
+	map = cub->data.map.map;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == '1')
+				set_point_wall(cub, x, y);
+			x++;
+		}
+		y++;
 	}
 }
 
@@ -107,5 +168,9 @@ void	render_map(t_cub *cub)
 	if (init_image(cub))
 		return ;
 	display_map(cub);
+	set_player(cub);
+	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
+	cub->wall = ft_malloc(sizeof(t_wall) * cub->data.map.map_points);
+	set_walls_points(cub);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
