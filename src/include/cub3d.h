@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/04 15:08:45 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/05 10:35:18 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@
 // # define HEIGHT 720
 
 # define BLOCK 64
-# define DEBUG 0
 
 # define W 119
 # define A 97
@@ -51,6 +50,18 @@
 # define D 100
 # define LEFT 65361
 # define RIGHT 65363
+
+
+// For X11/Linux:
+#define KEY_W 119
+#define KEY_A 97
+#define KEY_S 115
+#define KEY_D 100
+#define KEY_UP 65362
+#define KEY_DOWN 65364
+#define KEY_LEFT 65361
+#define KEY_RIGHT 65363
+#define KEY_ESC 65307
 
 # define PI 3.14159265359
 

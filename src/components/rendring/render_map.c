@@ -6,15 +6,18 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/04 14:23:31 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/05 14:41:27 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-void	my_pixel_put(int x, int y, t_img *img, int color)
+void my_pixel_put(int x, int y, t_img *img, int color)
 {
-	int	offset;
+	int offset;
+
+	if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+        return;
 
 	offset = (y * img->line_length) + (x * (img->bits_per_pixel / 8));
 	*(unsigned int *)(img->addr + offset) = color;
@@ -22,8 +25,8 @@ void	my_pixel_put(int x, int y, t_img *img, int color)
 
 void fill_tile(t_img *img, int clr, int y, int x)
 {
-	int 	hight;
-	int 	width;
+	int hight;
+	int width;
 
 	hight = 0;
 	while (hight < 64)
@@ -38,13 +41,13 @@ void fill_tile(t_img *img, int clr, int y, int x)
 	}
 }
 
-void	draw_circle(t_img *img, int xp, int yp, int color)
+void draw_circle(t_img *img, int xp, int yp, int color)
 {
-	int		center_x;
-	int		center_y;
-	int		x;
-	int		y;
-	int		dis;
+	int center_x;
+	int center_y;
+	int x;
+	int y;
+	int dis;
 	static int i;
 
 	if (!i)
@@ -79,12 +82,12 @@ void	draw_circle(t_img *img, int xp, int yp, int color)
 // 	return (0);
 // }
 
-void	display_map(t_cub *cub)
+void display_map(t_cub *cub)
 {
-	t_img	img;
-	char	**map;
-	int		map_x;
-	int		map_y;
+	t_img img;
+	char **map;
+	int map_x;
+	int map_y;
 
 	map = cub->data.map.map;
 	img = cub->data.img;
@@ -92,7 +95,7 @@ void	display_map(t_cub *cub)
 	while (map[map_y])
 	{
 		map_x = 0;
-		while(map[map_y][map_x])
+		while (map[map_y][map_x])
 		{
 			if (map[map_y][map_x] == '1')
 				fill_tile(&img, 0xFFFFFF, map_y, map_x);
@@ -105,7 +108,7 @@ void	display_map(t_cub *cub)
 	draw_circle(&img, cub->player.x / 64, cub->player.y / 64, 0xFF0000);
 }
 
-void	render_map(t_cub *cub)
+void render_map(t_cub *cub)
 {
 	// if (init_image(cub))
 	// 	return ;
