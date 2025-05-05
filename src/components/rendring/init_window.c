@@ -6,11 +6,16 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/04 17:36:53 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:22:50 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
+
+void	log_state(t_cub *cub)
+{
+	printf("[X = %d]\n[Y = %d\n]", cub->player.x, cub->player.y_bit);
+}
 
 int	close_window(void	*pram)
 {
@@ -26,53 +31,38 @@ int	close_window(void	*pram)
 
 void	move_down(t_cub *cub)
 {
-	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
-	if (cub->player.y >= cub->data.map.height - 1)
-		return ;
-	if (cub->data.map.map[cub->player.y + 1][cub->player.x] == '1')
-		return ;
-	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0);
-	cub->player.y++;
-	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0xFF0000);
+	log_state(cub);
+	draw_player(&cub->data.img, cub->player, 0);
+	cub->player.y_bit += MOVE_SPEED;
+	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
 void	move_up(t_cub *cub)
 {
-	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
-	if (cub->player.y <= 0)
-		return ;
-	if (cub->data.map.map[cub->player.y - 1][cub->player.x] == '1')
-		return ;
-	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0);
-	cub->player.y--;
-	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0xFF0000);
+	log_state(cub);
+	draw_player(&cub->data.img, cub->player, 0);
+	cub->player.y_bit -= MOVE_SPEED;
+	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
 void	move_left(t_cub *cub)
 {
-	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
-	if (cub->player.x <= 0)
-		return ;
-	if (cub->data.map.map[cub->player.y][cub->player.x - 1] == '1')
-		return ;
-	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0);
-	cub->player.x--;
-	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0xFF0000);
+	log_state(cub);
+	draw_player(&cub->data.img, cub->player, 0);
+	cub->player.x_bit -= MOVE_SPEED;
+	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
 void	move_right(t_cub *cub)
 {
-	printf("x = %d\ny = %d\n", cub->player.x, cub->player.y);
-	if (cub->player.x >= cub->data.map.width - 1)
-		return ;
-	if (cub->data.map.map[cub->player.y][cub->player.x + 1] == '1')
-		return ;
-	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0);
-	cub->player.x++;
-	draw_player(&cub->data.img, cub->player.x, cub->player.y, 0xFF0000);
+	log_state(cub);
+
+	draw_player(&cub->data.img, cub->player, 0);
+	cub->player.x_bit += MOVE_SPEED;
+	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 

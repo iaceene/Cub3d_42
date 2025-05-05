@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/04 17:11:58 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:16:30 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,22 @@ void fill_tile(t_img *img, int clr, int y, int x)
 	}
 }
 
-void	draw_player(t_img *img, int xp, int yp, int color)
+void	draw_player(t_img *img, t_player point, int color)
 {
-	// fill_tile(img, 0x00FFFF, yp, xp);
+	int i;
 
-	int x = 0;
-	int y = 0;
-
-	while (y < 64)
+	i = 0;
+	
+	my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit , img, color);
+	while (i < 4)
 	{
-		x = 0;
-		while (x < 64)
-		{
-			my_pixel_put(xp * 64 + x, yp * 64 + y , img, color);
-			x++;
-		}
-		y++;
+		my_pixel_put(point.x * TILE_SIZE + point.x_bit + i, point.y * TILE_SIZE + point.y_bit , img, color);
+		my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit + i, img, color);
+		my_pixel_put(point.x * TILE_SIZE + point.x_bit - i, point.y * TILE_SIZE + point.y_bit , img, color);
+		my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit - i, img, color);
+		i++;
 	}
+	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
 }
 
 int	init_image(t_cub *cub)
@@ -91,9 +90,11 @@ void	display_map(t_cub *cub)
 				fill_tile(&img, 0, map_y, map_x);
 			else
 			{
-				draw_player(&img, map_x, map_y, 0xFF0000);
 				cub->player.x = map_x;
 				cub->player.y = map_y;
+				cub->player.x_bit = 32;
+				cub->player.y_bit = 32;
+				draw_player(&img, cub->player, 0xFFFFFF);
 			}
 			map_x++;
 		}

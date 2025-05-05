@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/04 17:13:01 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:23:03 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@
 #define COLOR_GREEN   "\x1b[32m"
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_RED     "\x1b[31m"
+
+#define MOVE_SPEED 20
+#define TILE_SIZE 64
+// #define MAP_WIDTH 24
+// #define MAP_HEIGHT 10
+// #define WINDOW_WIDTH (TILE_SIZE * MAP_WIDTH)
+// #define WINDOW_HEIGHT (TILE_SIZE * MAP_HEIGHT)
 
 typedef struct s_map
 {
@@ -88,6 +95,8 @@ typedef struct s_player
 {
 	int	x;
 	int	y;
+	int	x_bit;
+	int y_bit;
 }   t_player;
 
 typedef struct s_cub
@@ -124,7 +133,7 @@ int		valid_chars(char c);
 int		get_map_len(t_lines *line);
 int		init_window(t_cub *cub);
 void	render_map(t_cub *cub);
-void	draw_player(t_img *img, int xp, int yp, int color);
+void	draw_player(t_img *img, t_player point, int color);
 void	my_pixel_put(int x, int y, t_img *img, int color);
 
 #endif
