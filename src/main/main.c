@@ -110,14 +110,14 @@ void    draw_player(t_list *data)
     int i = 0;
 
 
-    my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0);
+    my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0x00FF00);
     
-    while (i < 3)
+    while (i < 4)
     {
-        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x + i, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0);
-        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x - i, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0);
-        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y + i, data->img, 0);
-        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y - i, data->img, 0);
+        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x + i, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0x00FF00);
+        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x - i, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0x00FF00);
+        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y + i, data->img, 0x00FF00);
+        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y - i, data->img, 0x00FF00);
         i++;
     }
     mlx_put_image_to_window(data->mlx, data->win, data->img->img, 0, 0);
@@ -177,7 +177,7 @@ void    clear_player(t_list *data)
     int i = 0;
 
 
-    my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0xFFFFFF);
+    // my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0xFFFFFF);
     
     while (i < 3)
     {
@@ -185,6 +185,15 @@ void    clear_player(t_list *data)
         my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x - i, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0xFFFFFF);
         my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y + i, data->img, 0xFFFFFF);
         my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y - i, data->img, 0xFFFFFF);
+        i++;
+    }
+    i = 0;
+    while (i < 2)
+    {
+        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x + i, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0);
+        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x - i, y * TILE_SIZE + data->p.pos_pix_y, data->img, 0);
+        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y + i, data->img, 0);
+        my_pixel_put(x * TILE_SIZE + data->p.pos_pix_x, y * TILE_SIZE + data->p.pos_pix_y - i, data->img, 0);
         i++;
     }
     mlx_put_image_to_window(data->mlx, data->win, data->img->img, 0, 0);
