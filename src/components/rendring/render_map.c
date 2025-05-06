@@ -45,7 +45,21 @@ void	draw_player(t_img *img, t_player point, int color)
 	i = 0;
 	
 	my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit , img, color);
-	while (i < 4)
+
+	while (i < 5)
+	{
+		if (point.dir == 'E')
+			my_pixel_put(point.x * TILE_SIZE + point.x_bit + i, point.y * TILE_SIZE + point.y_bit , img, color);
+		if (point.dir == 'S')
+			my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit + i, img, color);
+		if (point.dir == 'W')	
+			my_pixel_put(point.x * TILE_SIZE + point.x_bit - i, point.y * TILE_SIZE + point.y_bit , img, color);
+		if (point.dir == 'N')
+			my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit - i, img, color);
+		i++;
+	}
+	i = 0;
+	while (i < 3)
 	{
 		my_pixel_put(point.x * TILE_SIZE + point.x_bit + i, point.y * TILE_SIZE + point.y_bit , img, color);
 		my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit + i, img, color);
@@ -111,6 +125,7 @@ void	set_player(t_cub *cub)
 			{
 				cub->player.x = x;
 				cub->player.y = y;
+				cub->player.dir = map[y][x];
 			}
 			x++;
 		}

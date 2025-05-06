@@ -35,6 +35,7 @@
 
 #define MOVE_SPEED 10
 #define TILE_SIZE 32
+#define FOV 32
 // #define MAP_WIDTH 24
 // #define MAP_HEIGHT 10
 // #define WINDOW_WIDTH (TILE_SIZE * MAP_WIDTH)
@@ -104,6 +105,7 @@ typedef struct s_player
 	int	y;
 	int	x_bit;
 	int y_bit;
+	char	dir;
 }   t_player;
 
 typedef struct s_cub
