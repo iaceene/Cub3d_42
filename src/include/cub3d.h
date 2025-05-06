@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/05 18:33:52 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:58:51 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@
 #define COLOR_RED     "\x1b[31m"
 
 #define MOVE_SPEED 10
-#define TILE_SIZE 32
+#define CAM_SPEED 10
+#define TILE_SIZE 64
 #define FOV 32
+#define PI 3.14159265
 // #define MAP_WIDTH 24
 // #define MAP_HEIGHT 10
 // #define WINDOW_WIDTH (TILE_SIZE * MAP_WIDTH)
@@ -106,6 +108,8 @@ typedef struct s_player
 	int	x_bit;
 	int y_bit;
 	char	dir;
+	int		angl;
+	struct s_cub *cub;
 }   t_player;
 
 typedef struct s_cub

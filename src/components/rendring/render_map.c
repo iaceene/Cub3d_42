@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/05 18:29:08 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:58:24 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,35 +38,24 @@ void fill_tile(t_img *img, int clr, int y, int x)
 	}
 }
 
-void	draw_player(t_img *img, t_player point, int color)
+void draw_player(t_img *img, t_player point, int color)
 {
 	int i;
+	float x;
+	float y;
+	float angle_rad;
+
+	angle_rad = point.angl * PI / 180.0;
 
 	i = 0;
-	
-	my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit , img, color);
+	while (i < 20)
+	{
+		x = point.x * TILE_SIZE + point.x_bit + cos(angle_rad) * i;
+		y = point.y * TILE_SIZE + point.y_bit - sin(angle_rad) * i;
+		my_pixel_put((int)x, (int)y, img, color);
+		i++;
+	}
 
-	while (i < 5)
-	{
-		if (point.dir == 'E')
-			my_pixel_put(point.x * TILE_SIZE + point.x_bit + i, point.y * TILE_SIZE + point.y_bit , img, color);
-		if (point.dir == 'S')
-			my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit + i, img, color);
-		if (point.dir == 'W')	
-			my_pixel_put(point.x * TILE_SIZE + point.x_bit - i, point.y * TILE_SIZE + point.y_bit , img, color);
-		if (point.dir == 'N')
-			my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit - i, img, color);
-		i++;
-	}
-	i = 0;
-	while (i < 3)
-	{
-		my_pixel_put(point.x * TILE_SIZE + point.x_bit + i, point.y * TILE_SIZE + point.y_bit , img, color);
-		my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit + i, img, color);
-		my_pixel_put(point.x * TILE_SIZE + point.x_bit - i, point.y * TILE_SIZE + point.y_bit , img, color);
-		my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit - i, img, color);
-		i++;
-	}
 	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
 }
 
@@ -179,12 +168,25 @@ void	set_walls_points(t_cub *cub)
 	}
 }
 
+void	set_field_view(t_cub *cub)
+{
+	if (cub->player.dir == 'N')
+		cub->player.angl = 90;
+	if (cub->player.dir == 'S')
+		cub->player.angl = -90;
+	if (cub->player.dir == 'W')
+		cub->player.angl = 180;
+	if (cub->player.dir == 'E')
+		cub->player.angl = 0;
+}
+
 void	render_map(t_cub *cub)
 {
 	if (init_image(cub))
 		return ;
 	display_map(cub);
 	set_player(cub);
+	set_field_view(cub);
 	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 	cub->wall = ft_malloc(sizeof(t_wall) * cub->data.map.map_points);
 	set_walls_points(cub);

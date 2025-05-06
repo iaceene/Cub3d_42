@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/05 18:33:33 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:04:36 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,15 @@ void move_player(t_cub *cub, int dx, int dy)
     mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
+void	move_cam(t_cub *cub, int i)
+{
+	if (!i)
+		cub->player.angl -= CAM_SPEED;
+	else
+		cub->player.angl += CAM_SPEED;
+	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
+}
+
 int	key_bind(int key, void *pram)
 {
 	t_cub *cub;
@@ -74,6 +83,10 @@ int	key_bind(int key, void *pram)
 		move_player(cub, MOVE_SPEED, 0);
 	if (key == XK_a)
 		move_player(cub, -MOVE_SPEED, 0);
+	if (key == XK_Left)
+		move_cam(cub, 1);
+	if (key == XK_Right)
+		move_cam(cub, 0);
 	return (0);
 }
 
@@ -97,6 +110,7 @@ int	init_window(t_cub *cub)
 	mlx_get_screen_size(cub->data.mlx, &hight, &width);
 	cub->screen_h = hight;
 	cub->screen_w = width;
+	cub->player.cub = cub;
 	cub->data.map.map_points = cub->data.map.width * TILE_SIZE * cub->data.map.height * TILE_SIZE;
 	// cub->data.win = mlx_new_window(cub->data.mlx, hight, width, "Cub3d");
 	cub->data.win = mlx_new_window(cub->data.mlx, cub->data.map.width * TILE_SIZE, cub->data.map.height * TILE_SIZE, "Cub3d");
