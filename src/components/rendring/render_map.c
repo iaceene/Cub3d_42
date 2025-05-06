@@ -26,12 +26,12 @@ void fill_tile(t_img *img, int clr, int y, int x)
 	int 	width;
 
 	hight = 0;
-	while (hight < 64)
+	while (hight < TILE_SIZE)
 	{
 		width = 0;
-		while (width < 64)
+		while (width < TILE_SIZE)
 		{
-			my_pixel_put(x * 64 + width, y * 64 + hight, img, clr);
+			my_pixel_put(x * TILE_SIZE + width, y * TILE_SIZE + hight, img, clr);
 			width++;
 		}
 		hight++;
@@ -58,7 +58,7 @@ void	draw_player(t_img *img, t_player point, int color)
 
 int	init_image(t_cub *cub)
 {
-	cub->data.img.img = mlx_new_image(cub->data.mlx, 64 * 21, 64 * 21);
+	cub->data.img.img = mlx_new_image(cub->data.mlx, TILE_SIZE * 21, TILE_SIZE * 21);
 	if (!cub->data.img.img)
 		return (perror("Fail to open img"), 1);
 	cub->data.img.addr = mlx_get_data_addr(cub->data.img.img, &cub->data.img.bits_per_pixel,
@@ -116,27 +116,26 @@ void	set_player(t_cub *cub)
 		}
 		y++;
 	}
-	cub->player.x_bit = 32;
-	cub->player.y_bit = 32;
+	cub->player.x_bit = TILE_SIZE / 2;
+	cub->player.y_bit = TILE_SIZE / 2;
 }
 
-void	set_point_wall(t_cub *cub, int x, int y)
+void	set_point_wall(t_cub *cub, int x, int y, int *i)
 {
 	int	yw;
 	int xw;
-	int	i;
 
 	yw = 0;
-	i = 0;
-	while (yw < 64)
+	while (yw < TILE_SIZE)
 	{
 		xw = 0;
-		while (xw < 64)
+		while (xw < TILE_SIZE)
 		{
-			cub->wall[i].x = x * 64 + xw;
-			cub->wall[i].y = y * 64 + yw;
+			cub->wall[*i].x = x * TILE_SIZE + xw;
+			cub->wall[*i].y = y * TILE_SIZE + yw;
 			xw++;
-			i++;
+			// printf("[%d, %d]\n", cub->wall[i].x, cub->wall[i].y);
+			(*i)++;
 		}
 		yw++;
 	}
@@ -145,10 +144,12 @@ void	set_point_wall(t_cub *cub, int x, int y)
 void	set_walls_points(t_cub *cub)
 {
 	char	**map;
+	int		i;
 	int		x;
 	int		y;
 
 	y = 0;
+	i = 0;
 	map = cub->data.map.map;
 	while (map[y])
 	{
@@ -156,7 +157,7 @@ void	set_walls_points(t_cub *cub)
 		while (map[y][x])
 		{
 			if (map[y][x] == '1')
-				set_point_wall(cub, x, y);
+				set_point_wall(cub, x, y, &i);
 			x++;
 		}
 		y++;

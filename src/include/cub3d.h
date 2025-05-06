@@ -33,8 +33,8 @@
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_RED     "\x1b[31m"
 
-#define MOVE_SPEED 1
-#define TILE_SIZE 64
+#define MOVE_SPEED 10
+#define TILE_SIZE 32
 // #define MAP_WIDTH 24
 // #define MAP_HEIGHT 10
 // #define WINDOW_WIDTH (TILE_SIZE * MAP_WIDTH)
@@ -141,6 +141,7 @@ int		valid_chars(char c);
 int		palyer_chars(char c);
 int		get_map_len(t_lines *line);
 int		init_window(t_cub *cub);
+void	display_map(t_cub *cub);
 void	render_map(t_cub *cub);
 void	draw_player(t_img *img, t_player point, int color);
 void	my_pixel_put(int x, int y, t_img *img, int color);
