@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/07 08:57:45 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/07 09:32:52 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,19 @@
 #define KEY_ESC 65307
 
 # define PI 3.14159265359
+
+
+/* ================== MINIMAP COLORS ================== */
+#define WALL_COLOR 0x3A5F0B   // Earthy green for walls
+#define PLAYER_COLOR 0xFF6B6B  // Coral red for player
+#define RAY_COLOR 0xF7FF00     // Bright yellow for direction ray
+#define EMPTY_SPACE 0x1A1A2E   // Dark navy for empty space
+
+/* ================== 3D VIEW COLORS ================== */
+#define SKY_COLOR 0x87CEEB     // Light sky blue
+#define FLOOR_COLOR 0x36454F   // Charcoal gray
+#define WALL_TOP_COLOR 0x6B8E23 // Olive drab (darker green)
+#define WALL_BOTTOM_COLOR 0x98FB98 // Pale green (lighter green)
 
 
 

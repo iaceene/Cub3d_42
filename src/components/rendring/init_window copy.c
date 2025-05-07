@@ -256,78 +256,78 @@ int close_window(t_cub *cub)
 // 	float ray_y = cub->player.y;
 
 // 	while (!touch_one(ray_x, ray_y, cub))
-// 	{
-// 		// my_pixel_put(ray_x, ray_y, &cub->data.img, 0xFF0000);
-// 		ray_x += cos_angle;
-// 		ray_y += sin_angle;
-// 	}
-// 	float dist = fixed_dist(cub->player.x, cub->player.y, ray_x, ray_y, cub);
-// 	float height = (BLOCK / dist) * (WIDTH / 2);
-// 	int start_y = (HEIGHT - height) / 2;
-// 	int end = start_y + height;
+	{
+		// my_pixel_put(ray_x, ray_y, &cub->data.img, 0xFF0000);
+		ray_x += cos_angle;
+		ray_y += sin_angle;
+	}
+	float dist = fixed_dist(cub->player.x, cub->player.y, ray_x, ray_y, cub);
+	float height = (BLOCK / dist) * (WIDTH / 2);
+	int start_y = (HEIGHT - height) / 2;
+	int end = start_y + height;
 
-// 	while (start_y < end && start_y < WIDTH)
-// 	{
-// 		my_pixel_put(i, start_y, &cub->data.img, 255);
-// 		start_y++;
-// 	}
-// }
+	while (start_y < end && start_y < WIDTH)
+	{
+		my_pixel_put(i, start_y, &cub->data.img, 255);
+		start_y++;
+	}
+}
 
-// int game_loop(t_cub *cub)
-// {
-// 	handle_movement(cub);
-// 	clear_image(cub);
+int game_loop(t_cub *cub)
+{
+	handle_movement(cub);
+	clear_image(cub);
 
-// 	float fraction = PI / 3 / WIDTH;
-// 	float start_x = cub->player.angle - PI / 6;
-// 	int i = 0;
-// 	while (i < WIDTH)
-// 	{
-// 		cast_ray(cub, start_x, i);
-// 		start_x += fraction;
-// 		i++;
-// 	}
+	float fraction = PI / 3 / WIDTH;
+	float start_x = cub->player.angle - PI / 6;
+	int i = 0;
+	while (i < WIDTH)
+	{
+		cast_ray(cub, start_x, i);
+		start_x += fraction;
+		i++;
+	}
 
-// 	draw_minimap(cub);
-// 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
-// 	return (0);
-// }
+	draw_minimap(cub);
+	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
+	return (0);
+}
 
-// int hook_window(t_cub *cub)
-// {
-// 	mlx_hook(cub->data.win, 17, 0, close_window, cub);
-// 	mlx_hook(cub->data.win, 2, 1L << 0, key_press, cub);
-// 	mlx_hook(cub->data.win, 3, 1L << 1, key_release, cub);
-// 	mlx_loop_hook(cub->data.mlx, game_loop, cub);
+int hook_window(t_cub *cub)
+{
+	mlx_hook(cub->data.win, 17, 0, close_window, cub);
+	mlx_hook(cub->data.win, 2, 1L << 0, key_press, cub);
+	mlx_hook(cub->data.win, 3, 1L << 1, key_release, cub);
+	mlx_loop_hook(cub->data.mlx, game_loop, cub);
 
-// 	mlx_loop(cub->data.mlx);
-// 	return (0);
-// }
+	mlx_loop(cub->data.mlx);
+	return (0);
+}
 
-// int init_image(t_cub *cub)
-// {
-// 	cub->data.img.img = mlx_new_image(cub->data.mlx, WIDTH, HEIGHT);
-// 	if (!cub->data.img.img)
-// 		return (perror("Fail to open img"), 1);
-// 	cub->data.img.addr = mlx_get_data_addr(cub->data.img.img, &cub->data.img.bits_per_pixel,
-// 										   &cub->data.img.line_length, &cub->data.img.endian);
-// 	cub->data.img.mlx = cub->data.mlx;
-// 	cub->data.img.win = cub->data.win;
-// 	return (0);
-// }
+int init_image(t_cub *cub)
+{
+	cub->data.img.img = mlx_new_image(cub->data.mlx, WIDTH, HEIGHT);
+	if (!cub->data.img.img)
+		return (perror("Fail to open img"), 1);
+	cub->data.img.addr = mlx_get_data_addr(cub->data.img.img, &cub->data.img.bits_per_pixel,
+										   &cub->data.img.line_length, &cub->data.img.endian);
+	cub->data.img.mlx = cub->data.mlx;
+	cub->data.img.win = cub->data.win;
+	return (0);
+}
 
-// int init_window(t_cub *cub)
-// {
-// 	cub->data.mlx = mlx_init();
-// 	if (!cub->data.mlx)
-// 		return (ft_putendl_fd("Error\nFail to create connection", 2), 1);
-// 	cub->data.win = mlx_new_window(cub->data.mlx, WIDTH, HEIGHT, "Cub3d");
-// 	if (!cub->data.win)
-// 		return (ft_putendl_fd("Error\nFail to open window", 2), 1);
-// 	init_player(&cub->player, cub);
-// 	if (init_image(cub))
-// 		return 1;
-// 	if (hook_window(cub))
-// 		return (1);
-// 	return (0);
-// }	
+int init_window(t_cub *cub)
+{
+	cub->data.mlx = mlx_init();
+	if (!cub->data.mlx)
+		return (ft_putendl_fd("Error\nFail to create connection", 2), 1);
+	cub->data.win = mlx_new_window(cub->data.mlx, WIDTH, HEIGHT, "Cub3d");
+	if (!cub->data.win)
+		return (ft_putendl_fd("Error\nFail to open window", 2), 1);
+	init_player(&cub->player, cub);
+	if (init_image(cub))
+		return 1;
+	if (hook_window(cub))
+		return (1);
+	return (0);
+}	
