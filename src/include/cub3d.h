@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/05 10:35:18 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/07 08:57:45 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 #define COLOR_RESET   "\x1b[0m"
 #define COLOR_YELLOW  "\x1b[33m"
 #define COLOR_GREEN   "\x1b[32m"
-#define COLOR_CYAN    "\x1b[36m"
+#define COLOR_CYAN    "\x1b[36m" 
 #define COLOR_RED     "\x1b[31m"
 
 
@@ -38,11 +38,11 @@
 #define WIDTH (21 * 64)  // Or your preferred width
 #define HEIGHT (21 * 64) // Or your preferred height
 
-
+ 
 // # define WIDTH 1280
 // # define HEIGHT 720
 
-# define BLOCK 64
+# define BLOCK 1000
 
 # define W 119
 # define A 97
@@ -64,6 +64,18 @@
 #define KEY_ESC 65307
 
 # define PI 3.14159265359
+
+
+
+
+
+
+#define MAP_WIDTH 40
+#define MAP_HEIGHT 40
+#define BLOCK_SIZE 10 // Adjust based on your window size
+#define PLAYER_SIZE 10
+
+
 
 typedef struct s_map
 {
@@ -145,7 +157,6 @@ int 	map_parsing(int ac, char **av, t_cub *cub);
 int 	init_map(t_cub *cub, char *filename);
 char	*read_map(int fd);
 int		check_file_extention(char *str);
-int		init_map(t_cub *cub, char *filename);
 t_lines	*new_line(char *val);
 int		check_map(t_cub *cub);
 void	ft_add_line(t_lines **head, t_lines *new);
@@ -161,11 +172,31 @@ int		check_file(char *filename);
 int		check_texture(t_cub *cub);
 int		check_comas(char *clr1, char *clr2);
 void	reset_texture(t_texture *textur);
-int		valid_chars(char c);
-int		get_map_len(t_lines *line);
+
+
 int		init_window(t_cub *cub);
-void	render_map(t_cub *cub);
-void	draw_circle(t_img *img, int xp, int yp, int color);
-void	my_pixel_put(int x, int y, t_img *img, int color);
+int		event_hook_window(t_cub *cub);
+int		init_image(t_cub *cub);
+void	initialize_player(t_player *player, t_cub *cub);
+int key_release(int key, t_cub *cub);
+int key_press(int key, t_cub *cub);
+int close_window(t_cub *cub);
+void handle_movement(t_cub *cub);
+bool touch_one(float px, float py, t_cub *cub);
+float use_distance(float x, float y);
+float use_fixed_dist(float x1, float y1, float x2, float y2, t_cub *game);
+float world_to_minimap_x(float x);
+float world_to_minimap_y(float y);
+void my_pixel_put(int x, int y, t_img *img, int color);
+void clear_image(t_cub *cub);
+void render_draw_square(int x, int y, int size, int color, t_cub *cub);
+void render_draw_minimap(t_cub *cub);
+void cast_ray(t_cub *cub, float start_x, int i);
+int game_loop(t_cub *cub);
+
+
+
+
+
 
 #endif

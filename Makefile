@@ -6,7 +6,7 @@ LIBFT_LIB	= $(LIBFT_DIR)/libft.a
 SRC_DIR		= ./src
 OBJ_DIR		= ./obj
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror # -g3 -fsanitize=address
 MLX_FLAGS	= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm -lbsd
 
 SRCS		= \
@@ -19,9 +19,14 @@ SRCS		= \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_4.c \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_5.c \
 			$(SRC_DIR)/components/parsing/map_parsing.c \
-			$(SRC_DIR)/components/rendring/init_window.c \
-			$(SRC_DIR)/components/rendring/render_map.c \
-			$(SRC_DIR)/main/main.c
+			$(SRC_DIR)/components/rendring/core/init.c \
+        	$(SRC_DIR)/components/rendring/player/controls.c \
+        	$(SRC_DIR)/components/rendring/player/movement.c \
+        	$(SRC_DIR)/components/rendring/utils/map_utils.c \
+        	$(SRC_DIR)/components/rendring/graphics.c \
+        	$(SRC_DIR)/components/rendring/minimap.c \
+        	$(SRC_DIR)/components/rendring/raycaster.c \
+			$(SRC_DIR)/main/main.c \
 
 
 OBJS		= $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
@@ -35,6 +40,9 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/lib/malloc
 	@mkdir -p $(OBJ_DIR)/components/parsing
 	@mkdir -p $(OBJ_DIR)/components/rendring
+	@mkdir -p $(OBJ_DIR)/components/rendring/core
+	@mkdir -p $(OBJ_DIR)/components/rendring/player
+	@mkdir -p $(OBJ_DIR)/components/rendring/utils
 	@mkdir -p $(OBJ_DIR)/main
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -46,7 +54,7 @@ $(MLX_LIB):
 $(LIBFT_LIB):
 	@$(MAKE) -s -C $(LIBFT_DIR)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) ./src/include/cub3d.h
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_FLAGS)
 	@echo "$(NAME) compiled successfully"
 
