@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/06 18:58:51 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:39:54 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@
 #define MOVE_SPEED 10
 #define CAM_SPEED 10
 #define TILE_SIZE 64
-#define FOV 32
+#define FOV_ANGLE 60.0f  // Field of view angle (typically 60 degrees)
+#define RAY_COUNT 120  
 #define PI 3.14159265
 // #define MAP_WIDTH 24
 // #define MAP_HEIGHT 10
@@ -103,12 +104,12 @@ typedef struct s_data
 
 typedef struct s_player
 {
-	int	x;
-	int	y;
-	int	x_bit;
-	int y_bit;
 	char	dir;
-	int		angl;
+	float x;
+	float y;
+	float angl;
+	float x_bit;
+	float y_bit; 
 	struct s_cub *cub;
 }   t_player;
 
@@ -151,5 +152,6 @@ void	display_map(t_cub *cub);
 void	render_map(t_cub *cub);
 void	draw_player(t_img *img, t_player point, int color);
 void	my_pixel_put(int x, int y, t_img *img, int color);
+int		is_wall_point(t_cub *cub, int x, int y);
 
 #endif

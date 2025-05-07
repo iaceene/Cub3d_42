@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/07 17:31:09 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:40:13 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	log_state(t_cub *cub)
 {
-	printf("[%d %d]\n", cub->player.x * TILE_SIZE + cub->player.x_bit,
+	printf("[%f %f]\n", cub->player.x * TILE_SIZE + cub->player.x_bit,
 		cub->player.y * TILE_SIZE + cub->player.y_bit);
 }
 
@@ -27,7 +27,7 @@ int	is_wall_point(t_cub *cub, int x, int y)
 	while (i < cub->data.map.map_points)
 	{
 		if (x == cub->wall[i].x && y == cub->wall[i].y)
-			return(1);
+			return(printf("Wall\n"), 1);
 		i++;
 	}
 	return (0);
@@ -77,6 +77,7 @@ void move_player(t_cub *cub, float speed, int flag)
 
 void	move_cam(t_cub *cub, int i)
 {
+    display_map(cub);
 	if (!i)
 		cub->player.angl -= CAM_SPEED;
 	else

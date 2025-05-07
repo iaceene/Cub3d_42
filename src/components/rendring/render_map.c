@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/07 17:15:05 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:41:40 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,25 +38,33 @@ void fill_tile(t_img *img, int clr, int y, int x)
 	}
 }
 
-void draw_player(t_img *img, t_player point, int color)
-{
-	int i;
-	float x;
-	float y;
-	float angle_rad;
+void draw_player(t_img *img, t_player point, int color) {
+    size_t i;
+    float x;
+    float y;
+    float angle_rad;
+    float start_angle;
+    float end_angle;
+    float step;
 
-	angle_rad = point.angl * PI / 180.0;
+    angle_rad = point.angl * PI / 180.0;
+    start_angle = angle_rad - (FOV_ANGLE / 2.0) * PI / 180.0;  // Starting angle
+    end_angle = angle_rad + (FOV_ANGLE / 2.0) * PI / 180.0;    // Ending angle
+    step = 1.0;  // Step size (distance between rays)
 
-	i = 0;
-	while (i < 20)
-	{
-		x = point.x * TILE_SIZE + point.x_bit + cos(angle_rad) * i;
-		y = point.y * TILE_SIZE + point.y_bit - sin(angle_rad) * i;
-		my_pixel_put((int)x, (int)y, img, color);
-		i++;
-	}
-	printf("%f %d\n", angle_rad, point.angl);
-	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
+    // Loop through angles from start_angle to end_angle to cast rays
+    for (float angle = start_angle; angle <= end_angle; angle += FOV_ANGLE / 100.0) {
+        i = 0;
+        while (i < 100) {  // Distance range
+            x = point.x * TILE_SIZE + point.x_bit + cos(angle) * i;
+            y = point.y * TILE_SIZE + point.y_bit - sin(angle) * i;
+            printf("line P [X=%d Y=%d] at angle %f\n", (int)x, (int)y, angle * 180.0 / PI);
+            my_pixel_put((int)x, (int)y, img, color);
+            i++;
+        }
+    }
+
+    mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
 }
 
 int	init_image(t_cub *cub)
@@ -89,7 +97,7 @@ void	display_map(t_cub *cub)
 		{
 			if (map[map_y][map_x] == '1')
 				fill_tile(&img, 0xFFFFFF, map_y, map_x);
-			else if (map[map_y][map_x] == '0')
+			else
 				fill_tile(&img, 0, map_y, map_x);
 			map_x++;
 		}
@@ -138,7 +146,6 @@ void	set_point_wall(t_cub *cub, int x, int y, int *i)
 			cub->wall[*i].x = x * TILE_SIZE + xw;
 			cub->wall[*i].y = y * TILE_SIZE + yw;
 			xw++;
-			// printf("[%d, %d]\n", cub->wall[i].x, cub->wall[i].y);
 			(*i)++;
 		}
 		yw++;
@@ -166,9 +173,11 @@ void	set_walls_points(t_cub *cub)
 		}
 		y++;
 	}
+	printf(COLOR_GREEN "[LAST POINT X=%d, Y=%d]\n" COLOR_RESET,
+		cub->wall[i - 1].x, cub->wall[i - 1].y);
 }
 
-void	set_field_view(t_cub *cub)
+void	set_dirction(t_cub *cub)
 {
 	if (cub->player.dir == 'N')
 		cub->player.angl = 90;
@@ -186,9 +195,9 @@ void	render_map(t_cub *cub)
 		return ;
 	display_map(cub);
 	set_player(cub);
-	set_field_view(cub);
-	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
+	set_dirction(cub);
 	cub->wall = ft_malloc(sizeof(t_wall) * cub->data.map.map_points);
 	set_walls_points(cub);
+	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
