@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/06 18:58:24 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:15:05 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void draw_player(t_img *img, t_player point, int color)
 		my_pixel_put((int)x, (int)y, img, color);
 		i++;
 	}
-
+	printf("%f %d\n", angle_rad, point.angl);
 	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
 }
 
