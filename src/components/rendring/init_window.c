@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/07 17:27:08 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:31:09 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,24 +45,33 @@ int	close_window(void	*pram)
 	exit(0);
 }
 
-void move_player(t_cub *cub, float speed)
+void move_player(t_cub *cub, float speed, int flag)
 {
-	float angle_rad;
-	float dx;
-	float dy;
-	
-	angle_rad = cub->player.angl * PI / 180.0;
-	dy = -sin(angle_rad) * speed;
-	dx = cos(angle_rad) * speed;
-	if (is_wall_point(cub, cub->player.x * TILE_SIZE + cub->player.x_bit + dx,
-					  cub->player.y * TILE_SIZE + cub->player.y_bit + dy))
-		return;
-	draw_player(&cub->data.img, cub->player, 0);
-	display_map(cub);
-	cub->player.x_bit += dx;
-	cub->player.y_bit += dy;
-	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
-	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
+    float angle_rad;
+    float dx;
+    float dy;
+    
+    angle_rad = cub->player.angl * PI / 180.0;
+    if (flag) 
+	{
+        dy = cos(angle_rad) * speed;
+        dx = sin(angle_rad) * speed;
+    } 
+	else 
+	{
+        dy = -sin(angle_rad) * speed;
+        dx = cos(angle_rad) * speed;
+    }
+    if (is_wall_point(cub, cub->player.x * TILE_SIZE + cub->player.x_bit + dx,
+                      cub->player.y * TILE_SIZE + cub->player.y_bit + dy))
+        return;
+        
+    draw_player(&cub->data.img, cub->player, 0);
+    display_map(cub);
+    cub->player.x_bit += dx;
+    cub->player.y_bit += dy;
+    draw_player(&cub->data.img, cub->player, 0xFFFFFF);
+    mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
 
@@ -77,28 +86,25 @@ void	move_cam(t_cub *cub, int i)
 
 int key_bind(int key, void *pram)
 {
-	t_cub *cub;
+    t_cub *cub;
 
-	cub = (t_cub *)pram;
-	if (key == XK_Escape)
-		close_window(cub);
-	if (key == XK_w)
-		move_player(cub, MOVE_SPEED);
-	if (key == XK_s)
-		move_player(cub, -MOVE_SPEED);
-	if (key == XK_d)
-		move_player(cub, MOVE_SPEED);
-	if (key == XK_a)
-		move_player(cub, -MOVE_SPEED);
-	if (key == XK_Left)
-		move_cam(cub, 1);
-	if (key == XK_Right)
-		move_cam(cub, 0);
-	else
-		return 0;
-	return (0);
+    cub = (t_cub *)pram;
+    if (key == XK_Escape)
+        close_window(cub);
+    if (key == XK_w)
+        move_player(cub, MOVE_SPEED, 0);
+    if (key == XK_s)
+        move_player(cub, -MOVE_SPEED, 0);
+    if (key == XK_d)
+        move_player(cub, MOVE_SPEED, 1);
+    if (key == XK_a)
+        move_player(cub, -MOVE_SPEED, 1);
+    if (key == XK_Left)
+        move_cam(cub, 1);
+    if (key == XK_Right)
+        move_cam(cub, 0);
+    return (0);
 }
-
 
 int	cub_window(t_cub *cub)
 {
