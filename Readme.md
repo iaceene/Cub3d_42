@@ -1,3 +1,29 @@
+---
+
+# 👨‍💻 Author ✍🏼
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/KanekiEzz/"><img src="https://avatars.githubusercontent.com/u/110631781?s=400&u=0cd1de60c073f367d291df9c6ccef5c18ac64e41&v=4" width="100px;" alt="100px"/>
+      <br />
+    </a>
+      <br />
+      <a href="https://profile.intra.42.fr/users/iezzam" title="Intra 42">
+        iezzam42  🇲🇦
+      </a>
+    </td>
+        <td align="center"><a href="https://github.com/iaceene/"><img src="https://github.com/user-attachments/assets/0ef5b1d1-5a67-448e-a559-53d8b186e429" width="100px;" alt="100px"/>
+      <br />
+    </a>
+      <br />
+      <a href="https://profile.intra.42.fr/users/yaajagro" title="Intra 42">
+        yaajagro42  🇲🇦
+      </a>
+    </td>
+  </tr>
+</table>
+
+---
 
 ## 📋 Cub3D Project Board
 
