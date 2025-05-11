@@ -1,6 +1,6 @@
 ---
 
-# 👨‍💻 Author ✍🏼
+# 👨‍💻 Authors ✍🏼
 
 <table>
   <tr>
