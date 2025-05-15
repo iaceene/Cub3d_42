@@ -35,12 +35,19 @@
 
 
 
-#define WIDTH (21 * 64)  // Or your preferred width
-#define HEIGHT (21 * 64) // Or your preferred height
+#define SKY_BOTTOM 0x87CEEB
+#define FLOOR_TOP 0x696969
+#define FLOOR_BOTTOM 0x36454F
+
+
+
+// #define WIDTH (21 * 64) 
+// #define HEIGHT (21 * 64)
+
 
  
-// # define WIDTH 1280
-// # define HEIGHT 720
+# define WIDTH 1280
+# define HEIGHT 720
 
 # define BLOCK 1000
 

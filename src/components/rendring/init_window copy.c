@@ -331,3 +331,134 @@ int init_window(t_cub *cub)
 		return (1);
 	return (0);
 }	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// *********************************************
+#include "../../include/cub3d.h"
+
+
+void load_texture(t_cub *cub, t_img *img, char *path)
+{
+    int w, h;
+    img->img = mlx_xpm_file_to_image(cub->data.mlx, path, &w, &h);
+    if (!img->img)
+    {
+        fprintf(stderr, "Failed to load texture: %s\n", path);
+        exit(1);
+    }
+    img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
+}
+
+void init_textures(t_cub *cub)
+{
+    cub->texture = malloc(sizeof(t_texture));
+    cub->texture->no_path = ft_strdup(IMG_NORTH);
+    cub->texture->so_path = ft_strdup(IMG_SOUTH);
+    cub->texture->we_path = ft_strdup(IMG_WEST);
+    cub->texture->ea_path = ft_strdup(IMG_EAST);
+
+    load_texture(cub, &cub->texture->no_img, cub->texture->no_path);
+    load_texture(cub, &cub->texture->so_img, cub->texture->so_path);
+    load_texture(cub, &cub->texture->we_img, cub->texture->we_path);
+    load_texture(cub, &cub->texture->ea_img, cub->texture->ea_path);
+}
+
+void cast_ray(t_cub *cub, float ray_angle, int column)
+{
+    float ray_x = cub->player.x;
+    float ray_y = cub->player.y;
+    float cos_angle = cos(ray_angle);
+    float sin_angle = sin(ray_angle);
+
+    while (!touch_one(ray_x, ray_y, cub))
+    {
+        ray_x += cos_angle;
+        ray_y += sin_angle;
+    }
+
+    float dist = use_fixed_dist(cub->player.x, cub->player.y, ray_x, ray_y, cub);
+    float wall_height = (BLOCK / dist) * (WIDTH / 2);
+    int start_y = (HEIGHT - wall_height) / 2;
+    int end_y = start_y + wall_height;
+    if (start_y < 0)
+        start_y = 0;
+    if (end_y > HEIGHT)
+        end_y = HEIGHT;
+
+    t_img *tex = &cub->texture->we_img; // Default texture
+
+    // Basic wall orientation logic
+    float hit_x = fmod(ray_x, BLOCK);
+    float hit_y = fmod(ray_y, BLOCK);
+    if (fabs(hit_x) < fabs(hit_y))
+        tex = (cos_angle > 0) ? &cub->texture->we_img : &cub->texture->ea_img;
+    else
+        tex = (sin_angle > 0) ? &cub->texture->so_img : &cub->texture->no_img;
+
+    int tex_width = 64;
+    int tex_height = 64;
+    int tex_x = (int)((fmod(ray_x, BLOCK) / BLOCK) * tex_width);
+    if (tex_x < 0)
+        tex_x = 0;
+    if (tex_x >= tex_width)
+        tex_x = tex_width - 1;
+
+    for (int y = start_y; y < end_y; y++)
+    {
+        int d = y * 256 - HEIGHT * 128 + wall_height * 128;
+        int tex_y = ((d * tex_height) / (int)wall_height) / 256;
+        int pixel = *(unsigned int *)(tex->addr + tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8));
+        my_pixel_put(column, y, &cub->data.img, pixel);
+    }
+}
+
+void draw_background(t_cub *cub)
+{
+    int y = 0;
+    int screen_middle = HEIGHT / 2;
+
+    while (y < HEIGHT)
+    {
+        int x = 0;
+        while (x < WIDTH)
+        {
+            if (y < screen_middle)
+                my_pixel_put(x, y, &cub->data.img, FLOOR_TOP);
+            else
+                my_pixel_put(x, y, &cub->data.img, FLOOR_BOTTOM);
+            x++;
+        }
+        y++;
+    }
+}
+
+int game_loop(t_cub *cub)
+{
+    handle_movement(cub);
+    clear_image(cub);
+    draw_background(cub);
+
+    float fraction = PI / 3 / WIDTH;
+    float start_x = cub->player.angle - PI / 6;
+    for (int i = 0; i < WIDTH; i++)
+    {
+        cast_ray(cub, start_x, i);
+        start_x += fraction;
+    }
+
+    render_draw_minimap(cub);
+    mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
+    return (0);
+}

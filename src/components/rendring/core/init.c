@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/07 09:13:16 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/15 10:47:29 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int init_window(t_cub *cub)
 	init_player(&cub->player, cub);
 	if (init_image(cub))
 		return 1;
+	// init_textures(cub); 
 	if (event_hook_window(cub))
 		return (1);
 	return (0);
