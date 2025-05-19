@@ -67,7 +67,6 @@ void draw_split_background(t_cub *cub)
         y++;
     }
 }
-// In raycaster.c (or wherever you draw the HUD)
 void my_pixel_put_img(t_img *img, int x, int y, int color)
 {
     char *dst;
@@ -106,18 +105,17 @@ void draw_weapon(t_cub *cub, int scale)
         }
     }
 
-    // Animate on each game loop tick
     if (cub->weapon_anim_active)
     {
         cub->weapon_anim_tick++;
-        if (cub->weapon_anim_tick > 5) // delay between frames
+        if (cub->weapon_anim_tick > 5)
         {
             cub->weapon_anim_tick = 0;
             cub->weapon_anim_frame++;
             if (cub->weapon_anim_frame >= MAX_ANIM_FRAMES)
             {
                 cub->weapon_anim_frame = 0;
-                cub->weapon_anim_active = 0; // End animation
+                cub->weapon_anim_active = 0;
             }
         }
     }

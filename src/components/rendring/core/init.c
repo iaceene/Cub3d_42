@@ -71,45 +71,6 @@ int event_hook_window(t_cub *cub)
 }
 
 
-// int init_textures(t_cub *cub)
-// {
-//     char *paths[MAX_WEAPONS] = {
-//         "./textures/player/weapon.xpm",
-//         "./textures/player/weapon_axe_sentienttest.xpm",
-//         "./textures/player/weapon_cleaver_sentienttest.xpm"
-//     };
-// 	cub->texture->weapon = malloc(sizeof(t_img) * MAX_WEAPONS);
-// 	if (!cub->texture->weapon)
-// 	{
-// 		ft_putendl_fd("Error\nMemory allocation failed for weapon textures", 2);
-// 		exit(1);
-// 	}
-
-//     for (int i = 0; i < MAX_WEAPONS; i++)
-//     {
-//         cub->texture->weapon[i].img = mlx_xpm_file_to_image(
-//             cub->data.mlx,
-//             paths[i],
-//             &cub->texture->weapon[i].width,
-//             &cub->texture->weapon[i].height
-//         );
-//         if (!cub->texture->weapon[i].img)
-//         {
-//             ft_putendl_fd("Error\nFailed to load weapon texture", 2);
-//             exit(1);
-//         }
-//         cub->texture->weapon[i].addr = mlx_get_data_addr(
-//             cub->texture->weapon[i].img,
-//             &cub->texture->weapon[i].bits_per_pixel,
-//             &cub->texture->weapon[i].line_length,
-//             &cub->texture->weapon[i].endian
-//         );
-//     }
-
-//     cub->current_weapon_index = 0;
-//     return 0;
-// }
-
 int init_textures(t_cub *cub)
 {
     char *paths[MAX_WEAPONS][MAX_ANIM_FRAMES] = {
@@ -130,7 +91,6 @@ int init_textures(t_cub *cub)
         }
     };
 
-    // Allocate array for all weapon frames
     cub->texture->weapon = malloc(sizeof(t_img) * MAX_WEAPONS * MAX_ANIM_FRAMES);
     if (!cub->texture->weapon)
     {
@@ -166,7 +126,6 @@ int init_textures(t_cub *cub)
         }
     }
 
-    // Set initial state
     cub->current_weapon_index = 0;
     cub->weapon_anim_frame = 0;
     cub->weapon_anim_active = 0;
