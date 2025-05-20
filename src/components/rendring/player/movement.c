@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:55:45 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/19 14:15:48 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/20 16:33:17 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void handle_movement(t_cub *cub)
 	}
 	if (cub->player.key_right)
 	{
-		new_x -= sin_angle * speed;
+		new_x -= sin_angle * speed ;
 		new_y += cos_angle * speed;
 	}
 

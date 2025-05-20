@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/19 14:17:33 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/20 16:31:55 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,40 @@ int init_textures(t_cub *cub)
     return 0;
 }
 
+void init_texture_wall(t_cub *cub)
+{
+    cub->texture->no_img.img = mlx_xpm_file_to_image(cub->data.mlx,
+        cub->texture->no_path, &cub->texture->no_img.width, &cub->texture->no_img.height);
+    if (!cub->texture->no_img.img)
+        perror("Failed to load north texture");
+    cub->texture->no_img.addr = mlx_get_data_addr(cub->texture->no_img.img,
+        &cub->texture->no_img.bits_per_pixel, &cub->texture->no_img.line_length,
+        &cub->texture->no_img.endian);
 
+    cub->texture->so_img.img = mlx_xpm_file_to_image(cub->data.mlx,
+        cub->texture->so_path, &cub->texture->so_img.width, &cub->texture->so_img.height);
+    if (!cub->texture->so_img.img)
+        perror("Failed to load south texture");
+    cub->texture->so_img.addr = mlx_get_data_addr(cub->texture->so_img.img,
+        &cub->texture->so_img.bits_per_pixel, &cub->texture->so_img.line_length,
+        &cub->texture->so_img.endian);
+
+    cub->texture->we_img.img = mlx_xpm_file_to_image(cub->data.mlx,
+        cub->texture->we_path, &cub->texture->we_img.width, &cub->texture->we_img.height);
+    if (!cub->texture->we_img.img)
+        perror("Failed to load west texture");
+    cub->texture->we_img.addr = mlx_get_data_addr(cub->texture->we_img.img,
+        &cub->texture->we_img.bits_per_pixel, &cub->texture->we_img.line_length,
+        &cub->texture->we_img.endian);
+
+    cub->texture->ea_img.img = mlx_xpm_file_to_image(cub->data.mlx,
+        cub->texture->ea_path, &cub->texture->ea_img.width, &cub->texture->ea_img.height);
+    if (!cub->texture->ea_img.img)
+        perror("Failed to load east texture");
+    cub->texture->ea_img.addr = mlx_get_data_addr(cub->texture->ea_img.img,
+        &cub->texture->ea_img.bits_per_pixel, &cub->texture->ea_img.line_length,
+        &cub->texture->ea_img.endian);
+}
 
 int init_window(t_cub *cub)
 {
@@ -147,7 +180,8 @@ int init_window(t_cub *cub)
 	init_player(&cub->player, cub);
 	if (init_image(cub))
 		return 1;
-	init_textures(cub); 
+	init_textures(cub);
+    init_texture_wall(cub);
 	if (event_hook_window(cub))
 		return (1);
 	return (0);

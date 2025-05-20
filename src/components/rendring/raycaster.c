@@ -6,37 +6,74 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/19 11:41:24 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/20 16:33:39 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-void cast_ray(t_cub *cub, float start_x, int i)
+void cast_ray(t_cub *cub, float ray_angle, int screen_x)
 {
-    float cos_angle = cos(start_x);
-    float sin_angle = sin(start_x);
     float ray_x = cub->player.x;
     float ray_y = cub->player.y;
-    int j = 0;
+    float ray_dx = cos(ray_angle);
+    float ray_dy = sin(ray_angle);
+
+    int side;
+    float wall_x;
 
     while (!touch_one(ray_x, ray_y, cub))
     {
-        ray_x += cos_angle;
-        ray_y += sin_angle;
-        j++;
+        if (touch_one(ray_x + ray_dx, ray_y, cub))
+        {
+            side = 0;
+            wall_x = ray_y;
+            break;
+        }
+        if (touch_one(ray_x, ray_y + ray_dy, cub))
+        {
+            side = 1;
+            wall_x = ray_x;
+            break;
+        }
+        ray_x += ray_dx;
+        ray_y += ray_dy;
     }
-    float dist = use_fixed_dist(cub->player.x, cub->player.y, ray_x, ray_y, cub);
-    float height = (BLOCK / dist) * (WIDTH / 2);
-    int start_y = (HEIGHT - height) / 2;
-    int end = start_y + height;
 
-    while (start_y < end && start_y < HEIGHT)
+    float dist = use_fixed_dist(cub->player.x, cub->player.y, ray_x, ray_y, cub);
+    float wall_height = (BLOCK / dist) * (WIDTH / 2);
+    int start_y = (HEIGHT - wall_height) / 2;
+    if (start_y < 0) start_y = 0;
+    int end_y = start_y + wall_height;
+    if (end_y > HEIGHT) end_y = HEIGHT;
+
+    t_img *tex;
+    float wall_hit;
+    
+    if (side == 0)
     {
-        my_pixel_put(i, start_y, &cub->data.img, SKY_BOTTOM);
-        start_y++;
+        tex = ray_dx < 0 ? &cub->texture->we_img : &cub->texture->ea_img;
+        wall_hit = fmod(ray_y, BLOCK) / BLOCK;
+    }
+    else
+    {
+        tex = ray_dy < 0 ? &cub->texture->no_img : &cub->texture->so_img;
+        wall_hit = fmod(ray_x, BLOCK) / BLOCK;
+    }
+
+    int tex_x = (int)(wall_hit * tex->width);
+    if ((side == 0 && ray_dx > 0) || (side == 1 && ray_dy < 0))
+        tex_x = tex->width - tex_x - 1;
+
+    for (int y = start_y; y < end_y; y++)
+    {
+        int tex_y = (y - start_y) * tex->height / (end_y - start_y);
+        char *pixel = tex->addr + (tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8));
+        int color = *(unsigned int *)pixel;
+        my_pixel_put(screen_x, y, &cub->data.img, color);
     }
 }
+
 
 int create_trgb(int t, int r, int g, int b)
 {
@@ -74,9 +111,8 @@ void my_pixel_put_img(t_img *img, int x, int y, int color)
     if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
         return;
     dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-    *(unsigned int*)dst = color;
+    *(unsigned int *)dst = color;
 }
-
 
 void draw_weapon(t_cub *cub, int scale)
 {
@@ -91,7 +127,7 @@ void draw_weapon(t_cub *cub, int scale)
         for (int x = 0; x < weapon->width; x++)
         {
             char *src_pixel = weapon->addr + (y * weapon->line_length + x * (weapon->bits_per_pixel / 8));
-            unsigned int color = *(unsigned int*)src_pixel;
+            unsigned int color = *(unsigned int *)src_pixel;
 
             if ((color & 0x00FFFFFF) != 0)
             {
@@ -121,28 +157,23 @@ void draw_weapon(t_cub *cub, int scale)
     }
 }
 
-
-
-
 int game_loop(t_cub *cub)
 {
     handle_movement(cub);
     clear_image(cub);
     draw_split_background(cub);
-    int scale = 3;
 
-    float fraction = PI / 3 / WIDTH;
-    float start_x = cub->player.angle - PI / 6;
-    int i = 0;
-    while (i < WIDTH)
+    float ray_step = (PI / 3) / WIDTH;
+    float ray_angle = cub->player.angle - (PI / 6);
+
+    for (int x = 0; x < WIDTH; x++)
     {
-        cast_ray(cub, start_x, i);
-        start_x += fraction;
-        i++;
+        cast_ray(cub, ray_angle, x);
+        ray_angle += ray_step;
     }
 
     render_draw_minimap(cub);
-    draw_weapon(cub, scale);
+    draw_weapon(cub, 3);
     mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
-    return (0);
+    return 0;
 }
