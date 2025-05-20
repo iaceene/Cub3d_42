@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/20 16:33:39 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/20 17:15:29 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,15 @@ void cast_ray(t_cub *cub, float ray_angle, int screen_x)
     float dist = use_fixed_dist(cub->player.x, cub->player.y, ray_x, ray_y, cub);
     float wall_height = (BLOCK / dist) * (WIDTH / 2);
     int start_y = (HEIGHT - wall_height) / 2;
-    if (start_y < 0) start_y = 0;
+    if (start_y < 0)
+        start_y = 0;
     int end_y = start_y + wall_height;
-    if (end_y > HEIGHT) end_y = HEIGHT;
+    if (end_y > HEIGHT)
+        end_y = HEIGHT;
 
     t_img *tex;
     float wall_hit;
-    
+
     if (side == 0)
     {
         tex = ray_dx < 0 ? &cub->texture->we_img : &cub->texture->ea_img;
@@ -65,15 +67,18 @@ void cast_ray(t_cub *cub, float ray_angle, int screen_x)
     if ((side == 0 && ray_dx > 0) || (side == 1 && ray_dy < 0))
         tex_x = tex->width - tex_x - 1;
 
+    float step = (float)tex->height / wall_height;
+    float tex_pos = (start_y - HEIGHT / 2 + wall_height / 2) * step;
+
     for (int y = start_y; y < end_y; y++)
     {
-        int tex_y = (y - start_y) * tex->height / (end_y - start_y);
+        int tex_y = (int)tex_pos & (tex->height - 1); // safer than modulo
+        tex_pos += step;
         char *pixel = tex->addr + (tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8));
         int color = *(unsigned int *)pixel;
         my_pixel_put(screen_x, y, &cub->data.img, color);
     }
 }
-
 
 int create_trgb(int t, int r, int g, int b)
 {
