@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:55:45 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/20 16:33:17 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/20 17:37:51 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int close_window(t_cub *cub)
 
 void handle_movement(t_cub *cub)
 {
-
 	int speed = 250;
 	float rotation_speed = 0.2;
 	float cos_angle = cos(cub->player.angle);
 	float sin_angle = sin(cub->player.angle);
+
 	float new_x = cub->player.x;
 	float new_y = cub->player.y;
 
@@ -38,33 +38,36 @@ void handle_movement(t_cub *cub)
 	if (cub->player.angle < 0)
 		cub->player.angle = 2 * PI;
 
+	float move_x = 0;
+	float move_y = 0;
+
 	if (cub->player.key_up)
 	{
-		new_x += cos_angle * speed;
-		new_y += sin_angle * speed;
+		move_x += cos_angle * speed;
+		move_y += sin_angle * speed;
 	}
 	if (cub->player.key_down)
 	{
-		new_x -= cos_angle * speed;
-		new_y -= sin_angle * speed;
+		move_x -= cos_angle * speed;
+		move_y -= sin_angle * speed;
 	}
 	if (cub->player.key_left)
 	{
-		new_x += sin_angle * speed;
-		new_y -= cos_angle * speed;
+		move_x += sin_angle * speed;
+		move_y -= cos_angle * speed;
 	}
 	if (cub->player.key_right)
 	{
-		new_x -= sin_angle * speed ;
-		new_y += cos_angle * speed;
+		move_x -= sin_angle * speed;
+		move_y += cos_angle * speed;
 	}
 
-	if (!touch_one(new_x, new_y, cub))
-	{
-		cub->player.x = new_x;
-		cub->player.y = new_y;
-	}
+	if (!touch_one(cub->player.x + move_x, cub->player.y, cub))
+		cub->player.x += move_x;
+	if (!touch_one(cub->player.x, cub->player.y + move_y, cub))
+		cub->player.y += move_y;
 }
+
 
 
 int mouse_move(int x, int y, t_cub *cub)

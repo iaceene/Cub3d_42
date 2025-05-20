@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/20 16:31:55 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/20 18:13:19 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,39 @@
 
 void init_player(t_player *player, t_cub *cub)
 {
-    player->angle = PI / 2;
-
     player->key_up = false;
     player->key_down = false;
     player->key_left = false;
     player->key_right = false;
-
     player->left_rotate = false;
     player->right_rotate = false;
 
-    int y = 0;
-    int x = 0;
-    while (cub->data.map.map[y])
+    for (int y = 0; cub->data.map.map[y]; y++)
     {
-        x = 0;
-        while (cub->data.map.map[y][x])
+        for (int x = 0; cub->data.map.map[y][x]; x++)
         {
-            if (cub->data.map.map[y][x] == 'N')
+            char dir = cub->data.map.map[y][x];
+            if (dir == 'N' || dir == 'S' || dir == 'E' || dir == 'W')
             {
                 player->x = x * BLOCK + BLOCK / 2;
                 player->y = y * BLOCK + BLOCK / 2;
+
+                if (dir == 'N')
+                    player->angle = PI / 2;
+                else if (dir == 'S')
+                    player->angle = 3 * PI / 2;
+                else if (dir == 'E')
+                    player->angle = 0;
+                else if (dir == 'W')
+                    player->angle = PI;
+
                 cub->data.map.map[y][x] = '0';
                 return;
             }
-            x++;
         }
-        y++;
     }
 }
+
 
 
 int init_image(t_cub *cub)
