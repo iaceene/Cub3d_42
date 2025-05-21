@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:37:28 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/19 10:00:56 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/21 19:23:57 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 int key_press(int key, t_cub *cub)
 {
+	// if (key == 101)
+    //     try_open_door(cub);
 	if (key == XK_Escape)
 		close_window(cub);
 	if (key == XK_w)

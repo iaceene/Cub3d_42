@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/20 18:13:19 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/21 19:13:30 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,19 @@ void init_texture_wall(t_cub *cub)
         &cub->texture->ea_img.bits_per_pixel, &cub->texture->ea_img.line_length,
         &cub->texture->ea_img.endian);
 }
+void init_texture_door(t_cub *cub)
+{
+    cub->texture->door_img.img = mlx_xpm_file_to_image(cub->data.mlx,
+        "./textures/door/door.xpm", &cub->texture->door_img.width, &cub->texture->door_img.height);
+    if (!cub->texture->door_img.img)
+    {
+        ft_putendl_fd("Error\nFailed to load door texture", 2);
+        exit(1);
+    }
+    cub->texture->door_img.addr = mlx_get_data_addr(cub->texture->door_img.img,
+        &cub->texture->door_img.bits_per_pixel, &cub->texture->door_img.line_length,
+        &cub->texture->door_img.endian);
+}
 
 int init_window(t_cub *cub)
 {
@@ -186,6 +199,7 @@ int init_window(t_cub *cub)
 		return 1;
 	init_textures(cub);
     init_texture_wall(cub);
+    init_texture_door(cub);
 	if (event_hook_window(cub))
 		return (1);
 	return (0);

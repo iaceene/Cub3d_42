@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:35:35 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/20 17:19:51 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/21 18:55:21 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 
 bool touch_one(float px, float py, t_cub *cub)
 {
-	int x = px / BLOCK;
-	int y = py / BLOCK;
+    int x = px / BLOCK;
+    int y = py / BLOCK;
 
-	if (cub->data.map.map[y][x] == '1')
-		return true;
+    if (cub->data.map.map[y][x] == '1')
+        return true;
+    if (cub->data.map.map[y][x] == '2')
+        return true;
 	return false;
 }
+
 
 float use_distance(float x, float y)
 {

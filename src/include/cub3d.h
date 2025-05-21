@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/20 17:37:57 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/21 19:22:42 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 #define COLOR_GREEN   "\x1b[32m"
 #define COLOR_CYAN    "\x1b[36m" 
 #define COLOR_RED     "\x1b[31m"
-
+#define DOOR_COLOR 0xF88379
 
 
 
@@ -142,6 +142,7 @@ typedef struct s_texture
 	t_img   so_img;
 	t_img   we_img;
 	t_img   ea_img;
+	t_img   door_img;
 }   t_texture;
 
 typedef struct s_data
@@ -171,6 +172,7 @@ typedef struct s_player
 
 #define MAX_WEAPONS 3
 #define MAX_ANIM_FRAMES 3
+#define MAX_DOOR_FRAMES 4
 typedef struct s_cub
 {
 	int		screen_h;
@@ -186,6 +188,15 @@ typedef struct s_cub
     // ... 
 	    int weapon_anim_active; // 1 if animating
     int weapon_anim_tick;   
+
+
+	int door_anim_active;    // 1 if door animation running
+    int door_anim_frame;     // current door animation frame
+    int door_anim_tick;      // ticks counter for animation speed control
+    int door_x;              // door map x coordinate being animated
+    int door_y;              // door map y coordinate being animated
+
+    t_img door_textures[MAX_DOOR_FRAMES]; // door animation textures
 } t_cub;
 
 
@@ -241,8 +252,6 @@ void cast_ray(t_cub *cub, float start_x, int i);
 int game_loop(t_cub *cub);
 int mouse_move(int x, int y, t_cub *cub);
 int mouse_scroll(int button, int x, int y, t_cub *cub);
-
-
 
 
 
