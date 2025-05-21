@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/21 19:13:30 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/21 20:33:26 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,39 @@ void init_texture_door(t_cub *cub)
         &cub->texture->door_img.endian);
 }
 
+
+void init_texture_door_anim(t_cub *cub)
+{
+    char *door_paths[MAX_DOOR_FRAMES] = {
+        "./textures/door/door.xpm",
+        "./textures/door/door_0.xpm",
+        "./textures/door/door_01.xpm",
+        "./textures/door/door_02.xpm"
+    };
+
+    for (int i = 0; i < MAX_DOOR_FRAMES; i++)
+    {
+        cub->door_textures[i].img = mlx_xpm_file_to_image(cub->data.mlx,
+            door_paths[i], &cub->door_textures[i].width, &cub->door_textures[i].height);
+        if (!cub->door_textures[i].img)
+        {
+            ft_putendl_fd("Error loading door animation texture", 2);
+            while (--i >= 0)
+                mlx_destroy_image(cub->data.mlx, cub->door_textures[i].img);
+            exit(EXIT_FAILURE);
+        }
+        cub->door_textures[i].addr = mlx_get_data_addr(cub->door_textures[i].img,
+            &cub->door_textures[i].bits_per_pixel, &cub->door_textures[i].line_length,
+            &cub->door_textures[i].endian);
+    }
+
+    cub->door_anim_active = 0;
+    cub->door_anim_frame = 0;
+    cub->door_anim_tick = 0;
+}
+
+
+
 int init_window(t_cub *cub)
 {
 	cub->data.mlx = mlx_init();
@@ -200,6 +233,7 @@ int init_window(t_cub *cub)
 	init_textures(cub);
     init_texture_wall(cub);
     init_texture_door(cub);
+    init_texture_door_anim(cub);
 	if (event_hook_window(cub))
 		return (1);
 	return (0);

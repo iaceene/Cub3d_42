@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:55:45 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/21 19:22:31 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/21 20:43:39 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,4 +117,24 @@ int mouse_scroll(int button, int x, int y, t_cub *cub)
         }
     }
     return (0);
+}
+
+
+
+void try_open_door(t_cub *cub)
+{
+    int px = (int)(cub->player.x / BLOCK);
+    int py = (int)(cub->player.y / BLOCK);
+
+    int fx = px + (int)round(cos(cub->player.angle));
+    int fy = py + (int)round(sin(cub->player.angle));
+
+    if (cub->data.map.map[fy][fx] == '2' && !cub->door_anim_active)
+    {
+        cub->door_anim_active = 1;
+        cub->door_anim_frame = 0;
+        cub->door_anim_tick = 0;
+        cub->door_x = fx;
+        cub->door_y = fy;
+    }
 }

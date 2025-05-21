@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/21 19:22:42 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/21 20:36:46 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,8 @@ void cast_ray(t_cub *cub, float start_x, int i);
 int game_loop(t_cub *cub);
 int mouse_move(int x, int y, t_cub *cub);
 int mouse_scroll(int button, int x, int y, t_cub *cub);
+
+void try_open_door(t_cub *cub);
 
 
 
