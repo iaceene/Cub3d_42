@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/21 20:25:23 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/21 20:44:48 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void draw_door(t_cub *cub, int screen_x, float ray_dx, float ray_dy,
         tex = &cub->door_textures[0];
 
     if (!tex || !tex->img)
-        return; // Safety check: texture missing
+        return;
 
     float wall_hit;
     if (side == 0)
@@ -319,17 +319,16 @@ void update_door_animation(t_cub *cub)
         return;
 
     cub->door_anim_tick++;
-    if (cub->door_anim_tick > 8) // adjust speed here
+    if (cub->door_anim_tick > 8)
     {
         cub->door_anim_tick = 0;
         cub->door_anim_frame++;
 
-        if (cub->door_anim_frame >= 4) // Number of door frames
+        if (cub->door_anim_frame >= 4)
         {
             cub->door_anim_frame = 0;
             cub->door_anim_active = 0;
 
-            // Door fully opened, change map tile to '0' (empty)
             cub->data.map.map[cub->door_y][cub->door_x] = '0';
         }
     }
@@ -354,10 +353,7 @@ int game_loop(t_cub *cub)
 
     render_draw_minimap(cub);
     draw_weapon(cub, 3);
-
-    // Update door animation here
     update_door_animation(cub);
-
     mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
     return 0;
 }
