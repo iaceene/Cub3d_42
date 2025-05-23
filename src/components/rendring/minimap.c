@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:46:23 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/21 16:23:13 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:07:41 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void draw_minimap_walls(t_cub *cub, int center_x, int center_y, int radius)
             if (map_y >= 0 && map_y < MAP_HEIGHT && cub->data.map.map[map_y])
             {
                 size_t row_len = ft_strlen(cub->data.map.map[map_y]);
-                if (map_x >= 0 && map_x < (int)row_len && cub->data.map.map[map_y][map_x] == '1')
+                if (map_x >= 0  &&map_x < (int)row_len && cub->data.map.map[map_y][map_x] == '1')
                 {
                     const int screen_x = center_x + dx * BLOCK_SIZE;
                     const int screen_y = center_y + dy * BLOCK_SIZE;

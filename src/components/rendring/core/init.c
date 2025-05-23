@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/21 20:33:26 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/23 14:39:34 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,8 @@ void init_texture_door_anim(t_cub *cub)
 
 
 
+
+
 int init_window(t_cub *cub)
 {
 	cub->data.mlx = mlx_init();
@@ -235,6 +237,6 @@ int init_window(t_cub *cub)
     init_texture_door(cub);
     init_texture_door_anim(cub);
 	if (event_hook_window(cub))
-		return (1);
+        return (1);
 	return (0);
 }	

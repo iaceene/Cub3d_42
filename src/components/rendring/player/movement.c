@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:55:45 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/21 20:43:39 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/23 18:38:29 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int close_window(t_cub *cub)
 	exit(0);
 	return (0);
 }
-
 
 void handle_movement(t_cub *cub)
 {
@@ -67,8 +66,6 @@ void handle_movement(t_cub *cub)
 	}
 }
 
-
-
 int mouse_move(int x, int y, t_cub *cub)
 {
 	static int last_x = -1;
@@ -88,38 +85,35 @@ int mouse_move(int x, int y, t_cub *cub)
 	return (0);
 }
 
-
 int mouse_scroll(int button, int x, int y, t_cub *cub)
 {
-    (void)x;
-    (void)y;
-	
-    if (button == 4)
-    {
-        cub->current_weapon_index--;
-        if (cub->current_weapon_index < 0)
-            cub->current_weapon_index = MAX_WEAPONS - 1;
-    }
-    else if (button == 5)
-    {
-        cub->current_weapon_index++;
-        if (cub->current_weapon_index >= MAX_WEAPONS)
-            cub->current_weapon_index = 0;
-    }
+	(void)x;
+	(void)y;
+
+	if (button == 4)
+	{
+		cub->current_weapon_index--;
+		if (cub->current_weapon_index < 0)
+			cub->current_weapon_index = MAX_WEAPONS - 1;
+	}
+	else if (button == 5)
+	{
+		cub->current_weapon_index++;
+		if (cub->current_weapon_index >= MAX_WEAPONS)
+			cub->current_weapon_index = 0;
+	}
 	else if (button == 1)
-    {
+	{
 		printf("button [%d]\n", button);
-        if (!cub->weapon_anim_active)
-        {
-            cub->weapon_anim_active = 1;
-            cub->weapon_anim_frame = 0;
-            cub->weapon_anim_tick = 0;
-        }
-    }
-    return (0);
+		if (!cub->weapon_anim_active)
+		{
+			cub->weapon_anim_active = 1;
+			cub->weapon_anim_frame = 0;
+			cub->weapon_anim_tick = 0;
+		}
+	}
+	return (0);
 }
-
-
 
 void try_open_door(t_cub *cub)
 {
@@ -128,6 +122,7 @@ void try_open_door(t_cub *cub)
 
     int fx = px + (int)round(cos(cub->player.angle));
     int fy = py + (int)round(sin(cub->player.angle));
+	cub->door_opened = 0;
 
     if (cub->data.map.map[fy][fx] == '2' && !cub->door_anim_active)
     {
@@ -136,5 +131,9 @@ void try_open_door(t_cub *cub)
         cub->door_anim_tick = 0;
         cub->door_x = fx;
         cub->door_y = fy;
-    }
+
+        cub->door_open_timer = 1;
+        cub->door_should_close = 0;
+		cub->door_opened = 1;
+	}
 }

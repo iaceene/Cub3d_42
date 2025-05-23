@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/21 20:44:48 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/23 18:41:50 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ void draw_door(t_cub *cub, int screen_x, float ray_dx, float ray_dy,
         y++;
     }
 }
-
 
 char get_tile_at(float x, float y, t_cub *cub)
 {
@@ -261,7 +260,7 @@ void draw_weapon(t_cub *cub, int scale)
         frame = cub->weapon_anim_frame;
     else
         frame = 0;
-    
+
     t_img *weapon = &cub->texture->weapon[cub->current_weapon_index * MAX_ANIM_FRAMES + frame];
 
     int x_start = (WIDTH - weapon->width * scale) / 2;
@@ -334,6 +333,27 @@ void update_door_animation(t_cub *cub)
     }
 }
 
+void update_door_close(t_cub *cub)
+{
+    if (!cub->door_opened)
+        return;
+
+    if (cub->door_anim_active)
+        return;
+
+    int px = (int)(cub->player.x / BLOCK);
+    int py = (int)(cub->player.y / BLOCK);
+
+    if (abs(px - cub->door_x) <= 1 && abs(py - cub->door_y) <= 1)
+        return;
+
+    cub->door_anim_tick = 0;
+    cub->door_anim_frame = 0;
+    cub->door_anim_active = 0;
+    cub->door_opened = 0;
+    cub->data.map.map[cub->door_y][cub->door_x] = '2';
+}
+
 int game_loop(t_cub *cub)
 {
     handle_movement(cub);
@@ -350,10 +370,10 @@ int game_loop(t_cub *cub)
         ray_angle += ray_step;
         x++;
     }
-
     render_draw_minimap(cub);
     draw_weapon(cub, 3);
     update_door_animation(cub);
+    update_door_close(cub);
     mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
     return 0;
 }

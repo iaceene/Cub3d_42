@@ -6,11 +6,12 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:37:28 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/21 20:35:02 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/23 14:08:54 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/cub3d.h"
+
 
 int key_press(int key, t_cub *cub)
 {
