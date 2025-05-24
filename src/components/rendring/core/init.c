@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/24 19:05:48 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/24 21:28:16 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void init_texture_door(t_cub *cub)
 void init_texture_door_anim(t_cub *cub)
 {
     char *door_paths[MAX_DOOR_FRAMES] = {
-        "./textures/door/door.xpm",
+        "./textures/door/__door1.xpm",
         "./textures/door/door_0.xpm",
         "./textures/door/door_01.xpm",
         "./textures/door/door_02.xpm"
