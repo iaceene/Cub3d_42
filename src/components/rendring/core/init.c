@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/23 14:39:34 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/24 19:05:48 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,10 @@ void init_texture_wall(t_cub *cub)
     cub->texture->no_img.img = mlx_xpm_file_to_image(cub->data.mlx,
         cub->texture->no_path, &cub->texture->no_img.width, &cub->texture->no_img.height);
     if (!cub->texture->no_img.img)
+    {
         perror("Failed to load north texture");
+        exit(1);
+    }
     cub->texture->no_img.addr = mlx_get_data_addr(cub->texture->no_img.img,
         &cub->texture->no_img.bits_per_pixel, &cub->texture->no_img.line_length,
         &cub->texture->no_img.endian);

@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/23 18:41:50 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/24 17:43:51 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,17 +116,6 @@ void draw_door(t_cub *cub, int screen_x, float ray_dx, float ray_dy,
     }
 }
 
-char get_tile_at(float x, float y, t_cub *cub)
-{
-    int map_x = (int)x / BLOCK;
-    int map_y = (int)y / BLOCK;
-
-    if (map_y < 0 || map_y >= cub->data.map.height ||
-        map_x < 0 || map_x >= cub->data.map.width)
-        return ' ';
-
-    return cub->data.map.map[map_y][map_x];
-}
 
 void cast_ray(t_cub *cub, float ray_angle, int screen_x)
 {
@@ -328,10 +317,11 @@ void update_door_animation(t_cub *cub)
             cub->door_anim_frame = 0;
             cub->door_anim_active = 0;
 
-            cub->data.map.map[cub->door_y][cub->door_x] = '0';
+            cub->data.map.map[cub->door_y][cub->door_x] = 'D';
         }
     }
 }
+
 
 void update_door_close(t_cub *cub)
 {
@@ -344,14 +334,19 @@ void update_door_close(t_cub *cub)
     int px = (int)(cub->player.x / BLOCK);
     int py = (int)(cub->player.y / BLOCK);
 
-    if (abs(px - cub->door_x) <= 1 && abs(py - cub->door_y) <= 1)
-        return;
+    int fx = px + (int)round(cos(cub->player.angle));
+    int fy = py + (int)round(sin(cub->player.angle));
+    int player_is_facing_door = (fx == cub->door_x && fy == cub->door_y);
+    int player_is_on_door = (px == cub->door_x && py == cub->door_y);
 
-    cub->door_anim_tick = 0;
-    cub->door_anim_frame = 0;
-    cub->door_anim_active = 0;
-    cub->door_opened = 0;
-    cub->data.map.map[cub->door_y][cub->door_x] = '2';
+    if (!player_is_facing_door && !player_is_on_door)
+    {
+        cub->door_anim_tick = 0;
+        cub->door_anim_frame = 0;
+        cub->door_anim_active = 0;
+        cub->door_opened = 0;
+        cub->data.map.map[cub->door_y][cub->door_x] = '2';
+    }
 }
 
 int game_loop(t_cub *cub)

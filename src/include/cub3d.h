@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/23 17:19:52 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/24 17:38:05 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ typedef struct s_cub
 	int door_anim_frame;
 	int door_anim_tick;
 	int door_x;
-	int door_y;	
+	int door_y;
 	int door_opened;
 	t_img door_textures[MAX_DOOR_FRAMES];
 } t_cub;
