@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/26 14:38:53 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/26 15:53:06 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,27 @@ bool is_block(float px, float py, t_cub *cub, char type)
     if (cub->data.map.map[y][x] == type)
         return (true);
     return (false);
+}
+
+int apply_radial_light(int color, float world_x, float world_y, t_cub *cub)
+{
+    float dx = world_x - cub->player.x;
+    float dy = world_y - cub->player.y;
+    float dist = sqrtf(dx * dx + dy * dy);
+
+    float light_radius = 5.0f; // adjust this for how far light reaches
+    float brightness = 1.0f - (dist / light_radius);
+
+    if (brightness < 0.2f)
+        brightness = 0.2f; // minimum light level
+    if (brightness > 1.0f)
+        brightness = 1.0f;
+
+    int r = ((color >> 16) & 0xFF) * brightness;
+    int g = ((color >> 8) & 0xFF) * brightness;
+    int b = (color & 0xFF) * brightness;
+
+    return (r << 16) | (g << 8) | b;
 }
 
 void draw_wall(t_cub *cub, int screen_x, float ray_dx, float ray_dy,
@@ -208,7 +229,6 @@ int create_trgb(int t, int r, int g, int b)
 void draw_split_background(t_cub *cub)
 {
     int screen_middle = HEIGHT / 2;
-
     int floor_width = cub->texture->floor_img.width;
     int floor_height = cub->texture->floor_img.height;
 
@@ -217,13 +237,15 @@ void draw_split_background(t_cub *cub)
 
     float planeX = cos(cub->player.angle + PI / 2) * 0.66f;
     float planeY = sin(cub->player.angle + PI / 2) * 0.66f;
-    int y = screen_middle;
 
+    float light_radius = 2.0f;
+    float max_brightness = 1.0f;
+    float min_brightness = 0.1f;
+    int y = screen_middle;
     while (y < HEIGHT)
     {
         float rayDirZ = (float)(y - HEIGHT / 2);
         float rowDistance = (float)(HEIGHT / 2) / rayDirZ;
-
         int x = 0;
         while (x < WIDTH)
         {
@@ -234,16 +256,22 @@ void draw_split_background(t_cub *cub)
             float floorY = posY + rowDistance * rayDirY;
             int tx = (int)(floorX * floor_width) % floor_width;
             int ty = (int)(floorY * floor_height) % floor_height;
-
             if (tx < 0)
                 tx += floor_width;
             if (ty < 0)
                 ty += floor_height;
-
             char *pixel_addr = cub->texture->floor_img.addr + (ty * cub->texture->floor_img.line_length) + (tx * (cub->texture->floor_img.bits_per_pixel / 8));
             unsigned int color = *(unsigned int *)pixel_addr;
-
-            my_pixel_put(x, y, &cub->data.img, color);
+            float dx = floorX - posX;
+            float dy = floorY - posY;
+            float dist = sqrtf(dx * dx + dy * dy);
+            float brightness = 1.0f - (dist / light_radius);
+            brightness = fmaxf(fminf(brightness, max_brightness), min_brightness);
+            int r = ((color >> 16) & 0xFF) * brightness;
+            int g = ((color >> 8) & 0xFF) * brightness;
+            int b = (color & 0xFF) * brightness;
+            int shaded_color = (r << 16) | (g << 8) | b;
+            my_pixel_put(x, y, &cub->data.img, shaded_color);
             x++;
         }
         y++;
@@ -280,9 +308,12 @@ void draw_weapon(t_cub *cub)
     int x_start = (WIDTH - scaled_width) / 2;
     int y_start = HEIGHT - scaled_height / 1.2;
 
-    for (int y = 0; y < scaled_height; y++)
+    int y = 0;
+
+    while (y < scaled_height)
     {
-        for (int x = 0; x < scaled_width; x++)
+        int x = 0; 
+        while (x < scaled_width)
         {
             int orig_x = x * 2;
             int orig_y = y * 2;
@@ -294,7 +325,9 @@ void draw_weapon(t_cub *cub)
             {
                 my_pixel_put_img(&cub->data.img, x_start + x, y_start + y, color);
             }
+            x++;
         }
+        y++;
     }
 }
 
@@ -345,77 +378,11 @@ void update_door_close(t_cub *cub)
     }
 }
 
-// Gets color from a texture at specific coordinates
-int get_pixel_color(t_img *img, int x, int y)
-{
-    char *dst;
-
-    if (x < 0 || x >= img->width || y < 0 || y >= img->height)
-        return 0;
-    dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-    return *(unsigned int *)dst;
-}
-
-// Puts a pixel to the screen image
-void put_pixel_to_img(t_data *data, int x, int y, int color)
-{
-    char *dst;
-
-    if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
-        return;
-    dst = data->img.addr + (y * data->img.line_length + x * (data->img.bits_per_pixel / 8));
-    *(unsigned int *)dst = color;
-}
-#define BACKGROUND_ANIM_SPEED 1
-void draw_background(t_cub *cub)
-{
-    t_img *current_frame;
-    int x;
-    int y;
-
-    // Get the current animation frame
-    current_frame = &cub->background_textures[cub->background_anim_frame];
-
-    // Draw the background animation frame to cover the entire screen
-    y = 0;
-    while (y < HEIGHT)
-    {
-        x = 0;
-        while (x < WIDTH)
-        {
-            // Calculate the position in the texture (modulo for repeating pattern if needed)
-            int tex_x = x % current_frame->width;
-            int tex_y = y % current_frame->height;
-
-            // Get the color from the texture
-            int color = get_pixel_color(current_frame, tex_x, tex_y);
-
-            // Put the pixel to the screen
-            if (color != 0x000000)
-                put_pixel_to_img(&cub->data, x, y, color);
-
-            x++;
-        }
-        y++;
-    }
-
-    // Update animation frame counter
-    cub->background_anim_tick++;
-    if (cub->background_anim_tick >= BACKGROUND_ANIM_SPEED)
-    {
-        cub->background_anim_tick = 0;
-        cub->background_anim_frame = (cub->background_anim_frame + 1) % MAX_BACKGROUND_FRAMES;
-    }
-}
-
 int game_loop(t_cub *cub)
 {
-
     handle_movement(cub);
     clear_image(cub);
-
     draw_split_background(cub);
-
     float ray_step = (PI / 3) / WIDTH;
     float ray_angle = cub->player.angle - (PI / 6);
 
@@ -426,10 +393,6 @@ int game_loop(t_cub *cub)
         ray_angle += ray_step;
         x++;
     }
-    // static int i = 0;
-    // if (i <= 30)
-    //     draw_background(cub);
-    // i++;
     render_draw_minimap(cub);
     draw_weapon(cub);
     update_door_animation(cub);
