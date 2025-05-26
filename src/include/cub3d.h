@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/24 17:38:05 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/26 10:27:02 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 #define FLOOR_TOP 0x696969
 #define FLOOR_BOTTOM 0x36454F
 
-#define WIDTH 2280
+#define WIDTH 1999
 #define HEIGHT 720
 #define BLOCK 1000
 #define MINIMAP_WIDTH 200
@@ -129,6 +129,7 @@ typedef struct s_texture
 	t_img we_img;
 	t_img ea_img;
 	t_img door_img;
+	t_img floor_img;
 } t_texture;
 
 typedef struct s_data
@@ -153,12 +154,10 @@ typedef struct s_player
 	bool right_rotate;
 } t_player;
 
-
-
-
 #define MAX_WEAPONS 3
 #define MAX_ANIM_FRAMES 3
 #define MAX_DOOR_FRAMES 4
+#define MAX_BACKGROUND_FRAMES 57
 typedef struct s_cub
 {
 	int screen_h;
@@ -169,6 +168,7 @@ typedef struct s_cub
 	t_img weapon[MAX_WEAPONS][MAX_ANIM_FRAMES];
 	int current_weapon_index;
 	int weapon_anim_frame;
+	int weapon_anim_speed;
 	int weapon_anim_active;
 	int weapon_anim_tick;
 	int door_open_timer;
@@ -176,12 +176,15 @@ typedef struct s_cub
 	int door_anim_active;
 	int door_anim_frame;
 	int door_anim_tick;
+	int is_moving;
 	int door_x;
 	int door_y;
 	int door_opened;
 	t_img door_textures[MAX_DOOR_FRAMES];
+	t_img background_textures[MAX_BACKGROUND_FRAMES];
+	int background_anim_frame;
+	int background_anim_tick;
 } t_cub;
-
 
 int map_parsing(int ac, char **av, t_cub *cub);
 int init_map(t_cub *cub, char *filename);

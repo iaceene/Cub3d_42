@@ -3,8 +3,8 @@ SO ./textures/wall/wall_05.xpm
 WE ./textures/wall/wall_03.xpm
 EA ./textures/wall/wall_04.xpm
 
+C 135,206,235
 F 000,000,00
-C 000,000,00
 
 
 111111111111111111111
