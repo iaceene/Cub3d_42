@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:55:45 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/25 22:21:28 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/26 14:38:55 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ void try_open_door(t_cub *cub)
 		cub->door_x = fx;
 		cub->door_y = fy;
 
-		cub->door_open_timer = 1;
 		cub->door_should_close = 0;
 		cub->door_opened = 1;
 	}

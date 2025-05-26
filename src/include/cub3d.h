@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/26 10:27:02 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/26 13:39:02 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ typedef struct s_player
 
 #define MAX_WEAPONS 3
 #define MAX_ANIM_FRAMES 3
-#define MAX_DOOR_FRAMES 4
+#define MAX_DOOR_FRAMES 6
 #define MAX_BACKGROUND_FRAMES 57
 typedef struct s_cub
 {
@@ -171,7 +171,6 @@ typedef struct s_cub
 	int weapon_anim_speed;
 	int weapon_anim_active;
 	int weapon_anim_tick;
-	int door_open_timer;
 	int door_should_close;
 	int door_anim_active;
 	int door_anim_frame;
