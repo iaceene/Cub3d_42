@@ -169,11 +169,11 @@ typedef struct s_cub
 	t_player player;
 	t_texture *texture;
 	t_img weapon[MAX_WEAPONS][MAX_ANIM_FRAMES];
-	int  eye_anim_speed;
-	int  current_eye_index;
-	int  eye_anim_frame;
-	int  eye_anim_active;
-	int  eye_anim_tick;
+	int eye_anim_speed;
+	int current_eye_index;
+	int eye_anim_frame;
+	int eye_anim_active;
+	int eye_anim_tick;
 	int current_weapon_index;
 	int weapon_anim_frame;
 	int weapon_anim_speed;
@@ -191,6 +191,10 @@ typedef struct s_cub
 	t_img background_textures[MAX_BACKGROUND_FRAMES];
 	int background_anim_frame;
 	int background_anim_tick;
+	int eye_closed_timer;
+	int eye_open_timer;
+	int eye_pause_timer;	// How long we've been paused
+	int eye_pause_duration; // How long to pause between animations
 } t_cub;
 
 int map_parsing(int ac, char **av, t_cub *cub);

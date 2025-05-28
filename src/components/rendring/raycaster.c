@@ -12,37 +12,6 @@
 
 #include "../../include/cub3d.h"
 
-bool is_block(float px, float py, t_cub *cub, char type)
-{
-  int x = (int)(px) / BLOCK;
-  int y = (int)(py) / BLOCK;
-
-  if (cub->data.map.map[y][x] == type)
-    return (true);
-  return (false);
-}
-
-int apply_radial_light(int color, float world_x, float world_y, t_cub *cub)
-{
-  float dx = world_x - cub->player.x;
-  float dy = world_y - cub->player.y;
-  float dist = sqrtf(dx * dx + dy * dy);
-
-  float light_radius = 5.0f;
-  float brightness = 1.0f - (dist / light_radius);
-
-  if (brightness < 0.2f)
-    brightness = 0.2f;
-  if (brightness > 1.0f)
-    brightness = 1.0f;
-
-  int r = ((color >> 16) & 0xFF) * brightness;
-  int g = ((color >> 8) & 0xFF) * brightness;
-  int b = (color & 0xFF) * brightness;
-
-  return (r << 16) | (g << 8) | b;
-}
-
 void draw_wall(t_cub *cub, int screen_x, float ray_dx, float ray_dy,
                float ray_x, float ray_y, int side, float dist)
 {
@@ -221,11 +190,6 @@ void cast_ray(t_cub *cub, float ray_angle, int screen_x)
     draw_wall(cub, screen_x, ray_dir_x, ray_dir_y, hit_x, hit_y, side, dist);
 }
 
-int create_trgb(int t, int r, int g, int b)
-{
-  return (t << 24 | r << 16 | g << 8 | b);
-}
-
 void draw_split_background(t_cub *cub)
 {
   int screen_middle = HEIGHT / 2;
@@ -377,18 +341,37 @@ void update_door_close(t_cub *cub)
     cub->data.map.map[cub->door_y][cub->door_x] = '2';
   }
 }
+void update_eye_animation(t_cub *cub)
+{
+  static int direction = -1;
+  static int is_cycling = 1;
+
+  cub->eye_anim_tick++;
+
+  if (is_cycling && cub->eye_anim_tick > cub->eye_anim_speed)
+  {
+    cub->eye_anim_tick = 0;
+    cub->eye_anim_frame += direction;
+
+    if (cub->eye_anim_frame >= MAX_EYE - 1 || cub->eye_anim_frame <= 0)
+    {
+      is_cycling = 0;
+      cub->eye_pause_timer = 0;
+      direction *= -1;
+    }
+  }
+  else if (!is_cycling)
+  {
+    cub->eye_pause_timer++;
+    if (cub->eye_pause_timer > cub->eye_pause_duration)
+    {
+      is_cycling = 1;
+    }
+  }
+}
 
 void draw_eye(t_cub *cub)
 {
-  cub->eye_anim_tick++;
-  if (cub->eye_anim_tick > cub->eye_anim_speed)
-  {
-    cub->eye_anim_tick = 0;
-    cub->eye_anim_frame++;
-    if (cub->eye_anim_frame >= MAX_EYE)
-      cub->eye_anim_frame = 0;
-  }
-
   t_img *eye = &cub->texture->eye[cub->eye_anim_frame];
   if (!eye->addr)
     return;
@@ -402,14 +385,8 @@ void draw_eye(t_cub *cub)
 
       char *src_pixel = eye->addr + (tex_y * eye->line_length + tex_x * (eye->bits_per_pixel / 8));
       unsigned int color = *(unsigned int *)src_pixel;
-
-      // unsigned char r = (color >> 16) & 0xFF;
-      // unsigned char g = (color >> 8) & 0xFF;
-      // unsigned char b = color & 0xFF;
-
-      // if (!(g > r && g > b))
-        if ((color & 0x00FFFFFF) != 0)
-          my_pixel_put_img(&cub->data.img, x, y, color);
+      if (color == 0X000000)
+        my_pixel_put_img(&cub->data.img, x, y, color);
     }
   }
 }
@@ -419,6 +396,7 @@ int game_loop(t_cub *cub)
   handle_movement(cub);
   clear_image(cub);
   draw_split_background(cub);
+
   float ray_step = (PI / 3) / WIDTH;
   float ray_angle = cub->player.angle - (PI / 6);
 
@@ -429,11 +407,14 @@ int game_loop(t_cub *cub)
     ray_angle += ray_step;
     x++;
   }
+
   render_draw_minimap(cub);
   draw_weapon(cub);
+
+  update_eye_animation(cub);
   draw_eye(cub);
+
   update_door_animation(cub);
-  // update_door_close(cub);
   mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
   return 0;
 }

@@ -357,6 +357,11 @@ int init_textures_eye(t_cub *cub)
         "./textures/eye/35.xpm",
         "./textures/eye/36.xpm",
         "./textures/eye/37.xpm"};
+    cub->eye_anim_frame = 0; // Start with eye open
+    cub->eye_anim_tick = 0;
+    cub->eye_anim_speed = 20;      // Adjust for animation speed
+    cub->eye_pause_duration = 120; // 1 second at 60FPS
+    cub->eye_pause_timer = 0;
 
     cub->texture->eye = malloc(sizeof(t_img) * MAX_EYE);
     if (!cub->texture->eye)
