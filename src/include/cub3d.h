@@ -124,6 +124,7 @@ typedef struct s_texture
 	int floor_grb[3];
 	int sky_grb[3];
 	t_img *weapon;
+	t_img *eye;
 	t_img no_img;
 	t_img so_img;
 	t_img we_img;
@@ -158,6 +159,8 @@ typedef struct s_player
 #define MAX_ANIM_FRAMES 3
 #define MAX_DOOR_FRAMES 6
 #define MAX_BACKGROUND_FRAMES 57
+#define MAX_EYE 37
+
 typedef struct s_cub
 {
 	int screen_h;
@@ -166,6 +169,11 @@ typedef struct s_cub
 	t_player player;
 	t_texture *texture;
 	t_img weapon[MAX_WEAPONS][MAX_ANIM_FRAMES];
+	int  eye_anim_speed;
+	int  current_eye_index;
+	int  eye_anim_frame;
+	int  eye_anim_active;
+	int  eye_anim_tick;
 	int current_weapon_index;
 	int weapon_anim_frame;
 	int weapon_anim_speed;

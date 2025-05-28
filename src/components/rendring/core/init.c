@@ -206,8 +206,7 @@ void init_texture_door_anim(t_cub *cub)
         "./textures/door/3.xpm",
         "./textures/door/4.xpm",
         "./textures/door/5.xpm",
-        "./textures/door/6.xpm"
-    };
+        "./textures/door/6.xpm"};
 
     for (int i = 0; i < MAX_DOOR_FRAMES; i++)
     {
@@ -246,7 +245,7 @@ void put_large_text(t_cub *cub, int frame_number)
     unsigned int *src_pixels = (unsigned int *)mlx_get_data_addr(img, &bpp, &line_length, &endian);
 
     int win_x = WIDTH / 2 - img_width / 2;
-    int win_y = HEIGHT - img_height - 30; // 30 pixels margin from bottom
+    int win_y = HEIGHT - img_height - 30;
 
     unsigned int *dst_pixels = (unsigned int *)cub->data.img.addr;
     int dst_line_len = cub->data.img.line_length;
@@ -256,7 +255,7 @@ void put_large_text(t_cub *cub, int frame_number)
         for (int x = 0; x < img_width; x++)
         {
             unsigned int color = src_pixels[y * (line_length / 4) + x];
-            if ((color & 0x00FFFFFF) != 0x000000) // Skip black
+            if ((color & 0x00FFFFFF) != 0x000000)
             {
                 int dst_x = win_x + x;
                 int dst_y = win_y + y;
@@ -268,7 +267,6 @@ void put_large_text(t_cub *cub, int frame_number)
 
     mlx_destroy_image(cub->data.mlx, img);
 
-    // Show the updated image buffer
     mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }
 
@@ -287,7 +285,6 @@ void init_texture_background_anim(t_cub *cub)
         else if (progress >= 0.25f)
             text_frame = 2;
 
-        // Draw loading text (start1.xpm ... start4.xpm)
         put_large_text(cub, text_frame);
 
         snprintf(background_paths, sizeof(background_paths), "./textures/background/%d.xpm", i + 1);
@@ -304,16 +301,10 @@ void init_texture_background_anim(t_cub *cub)
             exit(EXIT_FAILURE);
         }
 
-        // Put the background image centered or at (0,0)
-        // If you want to center:
         int bg_x = WIDTH / 2 - cub->background_textures[i].width / 2;
         int bg_y = HEIGHT / 2 - cub->background_textures[i].height / 2;
-        // Or simply at top-left (0,0):
-        // int bg_x = 0, bg_y = 0;
-
         mlx_put_image_to_window(cub->data.mlx, cub->data.win,
                                 cub->background_textures[i].img, bg_x, bg_y);
-
         char frame_text[52];
         snprintf(frame_text, sizeof(frame_text), "Loading %.0f %%", progress * 100.0f);
         mlx_string_put(cub->data.mlx, cub->data.win,
@@ -326,43 +317,82 @@ void init_texture_background_anim(t_cub *cub)
     }
 }
 
-
-void see_texture_background(t_cub *cub)
+int init_textures_eye(t_cub *cub)
 {
-    // Clear the screen
+    const char *paths[MAX_EYE] = {
+        "./textures/eye/1.xpm",
+        "./textures/eye/2.xpm",
+        "./textures/eye/3.xpm",
+        "./textures/eye/4.xpm",
+        "./textures/eye/5.xpm",
+        "./textures/eye/6.xpm",
+        "./textures/eye/7.xpm",
+        "./textures/eye/8.xpm",
+        "./textures/eye/9.xpm",
+        "./textures/eye/10.xpm",
+        "./textures/eye/11.xpm",
+        "./textures/eye/12.xpm",
+        "./textures/eye/13.xpm",
+        "./textures/eye/14.xpm",
+        "./textures/eye/15.xpm",
+        "./textures/eye/16.xpm",
+        "./textures/eye/17.xpm",
+        "./textures/eye/18.xpm",
+        "./textures/eye/19.xpm",
+        "./textures/eye/20.xpm",
+        "./textures/eye/21.xpm",
+        "./textures/eye/22.xpm",
+        "./textures/eye/23.xpm",
+        "./textures/eye/24.xpm",
+        "./textures/eye/25.xpm",
+        "./textures/eye/26.xpm",
+        "./textures/eye/27.xpm",
+        "./textures/eye/28.xpm",
+        "./textures/eye/29.xpm",
+        "./textures/eye/30.xpm",
+        "./textures/eye/31.xpm",
+        "./textures/eye/32.xpm",
+        "./textures/eye/33.xpm",
+        "./textures/eye/34.xpm",
+        "./textures/eye/35.xpm",
+        "./textures/eye/36.xpm",
+        "./textures/eye/37.xpm"};
 
-    // mlx_clear_window(cub->data.mlx, cub->data.win);
-    // Display each texture in sequence with a small delay
-    for (int i = 0; i < MAX_BACKGROUND_FRAMES; i++)
+    cub->texture->eye = malloc(sizeof(t_img) * MAX_EYE);
+    if (!cub->texture->eye)
     {
-
-        if (cub->background_textures[i].img)
-        {
-            // Clear previous frame
-            mlx_clear_window(cub->data.mlx, cub->data.win);
-
-            // Display current frame
-            mlx_put_image_to_window(cub->data.mlx, cub->data.win,
-                                    cub->background_textures[i].img, 0, 0);
-
-            // Add frame number text
-            char frame_text[52];
-            snprintf(frame_text, sizeof(frame_text), "Loading %0.f %%", i * 1.9230);
-            mlx_string_put(cub->data.mlx, cub->data.win,
-                           WIDTH / 2 - 50, HEIGHT - 30, 0xFFFFFF, frame_text);
-
-            // Force display update and add small delay
-            mlx_do_sync(cub->data.mlx);
-            usleep(100000); // 100ms delay between frames
-        }
+        ft_putendl_fd("Error\nMemory allocation failed for eye textures", 2);
+        exit(1);
     }
 
-    // After showing all frames, display a completion message
-    mlx_clear_window(cub->data.mlx, cub->data.win);
-    mlx_string_put(cub->data.mlx, cub->data.win,
-                   WIDTH / 2 - 100, HEIGHT / 2, 0xFFFFFF, "The fun begins NOW!!");
-    mlx_do_sync(cub->data.mlx);
-    sleep(1); // Show message for 1 second
+    for (int f = 0; f < MAX_EYE; f++)
+    {
+        cub->texture->eye[f].img = mlx_xpm_file_to_image(
+            cub->data.mlx,
+            (char *)paths[f],
+            &cub->texture->eye[f].width,
+            &cub->texture->eye[f].height);
+
+        if (!cub->texture->eye[f].img)
+        {
+            ft_putendl_fd("Error\nFailed to load eye texture", 2);
+            exit(1);
+        }
+
+        cub->texture->eye[f].addr = mlx_get_data_addr(
+            cub->texture->eye[f].img,
+            &cub->texture->eye[f].bits_per_pixel,
+            &cub->texture->eye[f].line_length,
+            &cub->texture->eye[f].endian);
+    }
+    cub->eye_anim_speed = 1;
+
+    cub->current_eye_index = 1;
+    cub->eye_anim_frame = 1;
+    cub->eye_anim_active = 1;
+    cub->eye_anim_tick = 1;
+
+    return 0;
 }
 
 int init_window(t_cub *cub)
@@ -380,14 +410,12 @@ int init_window(t_cub *cub)
     if (init_image(cub))
         return 1;
     init_textures_weapon(cub);
+    init_textures_eye(cub);
     init_texture_wall(cub);
     init_texture_door(cub);
     init_texture_floor(cub);
     init_texture_door_anim(cub);
     init_texture_background_anim(cub);
-    // mlx_string_put(cub->data.mlx, cub->data.win,  WIDTH/ 2, HEIGHT / 2, 0X00FF00, "LOEDING");
-    // sleep(3);
-    // see_texture_background(cub);
     if (event_hook_window(cub))
         return (1);
     return (0);
