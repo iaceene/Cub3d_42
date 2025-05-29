@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:44:54 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/07 08:45:58 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/29 16:07:08 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,17 @@ void my_pixel_put(int x, int y, t_img *img, int color)
 	offset = (y * img->line_length) + (x * (img->bits_per_pixel / 8));
 	*(unsigned int *)(img->addr + offset) = color;
 }
+
+void my_pixel_put_img(t_img *img, int x, int y, int color)
+{
+  char *dst;
+
+  if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+    return;
+  dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+  *(unsigned int *)dst = color;
+}
+
 
 void clear_image(t_cub *cub)
 {

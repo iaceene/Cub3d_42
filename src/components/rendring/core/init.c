@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/26 13:41:57 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/29 16:47:59 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,11 +356,12 @@ int init_textures_eye(t_cub *cub)
         "./textures/eye/34.xpm",
         "./textures/eye/35.xpm",
         "./textures/eye/36.xpm",
-        "./textures/eye/37.xpm"};
-    cub->eye_anim_frame = 0; // Start with eye open
+        "./textures/eye/37.xpm"
+    };
+    cub->eye_anim_frame = 0;
     cub->eye_anim_tick = 0;
-    cub->eye_anim_speed = 20;      // Adjust for animation speed
-    cub->eye_pause_duration = 120; // 1 second at 60FPS
+    cub->eye_anim_speed = 120;
+    cub->eye_pause_duration = 120 * 2;
     cub->eye_pause_timer = 0;
 
     cub->texture->eye = malloc(sizeof(t_img) * MAX_EYE);
@@ -506,31 +507,35 @@ int init_textures_enemy(t_cub *cub)
     return 0;
 }
 
-
-void init_enemies(t_cub *cub)
+void init_enemies_position(t_cub *cub)
 {
     int enemy_index = 0;
     cub->enemy_count = 0;
-    for (int y = 0;cub->data.map.map[y] &&  y < HEIGHT; y++)
+    int y =0;
+    while(cub->data.map.map[y] && y < HEIGHT)
     {
-        for (int x = 0;cub->data.map.map[y][x] &&  x < WIDTH; x++)
+        int x =0;
+        while  (cub->data.map.map[y][x] && x < WIDTH)
         {
             if (cub->data.map.map[y][x] == '3')
             {
                 if (enemy_index < MAX_ENEMY)
                 {
-                    cub->enemies[enemy_index].x = x * BLOCK + BLOCK/2;
-                    cub->enemies[enemy_index].y = y * BLOCK + BLOCK/2;
+                    cub->enemies[enemy_index].x = x * BLOCK + BLOCK / 2;
+                    cub->enemies[enemy_index].y = y * BLOCK + BLOCK / 2;
+                    printf("x: %f\n", cub->enemies[enemy_index].x);
+                    printf("y: %f\n", cub->enemies[enemy_index].y);
                     cub->enemies[enemy_index].alive = 1;
                     cub->enemies[enemy_index].dist = 0;
                     cub->enemies[enemy_index].sprite_x = 0;
-                    
                     enemy_index++;
                     cub->enemy_count++;
                     cub->data.map.map[y][x] = '0';
                 }
             }
+            x++;
         }
+        y++;
     }
     printf("Initialized %d enemies from map positions\n", cub->enemy_count);
 }
@@ -557,7 +562,7 @@ int init_window(t_cub *cub)
     init_texture_door_anim(cub);
     init_texture_background_anim(cub);
     init_textures_enemy(cub);
-    init_enemies(cub);
+    init_enemies_position(cub);
     if (event_hook_window(cub))
         return (1);
     return (0);

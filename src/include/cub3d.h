@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/26 13:39:02 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/29 16:15:55 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,5 +267,16 @@ int mouse_move(int x, int y, t_cub *cub);
 int mouse_scroll(int button, int x, int y, t_cub *cub);
 
 void try_open_door(t_cub *cub);
-
+/*eye*/
+void update_eye_animation(t_cub *cub);
+void draw_eye(t_cub *cub);
+/*graphics*/
+void my_pixel_put_img(t_img *img, int x, int y, int color);
+/*floor_sky*/
+void draw_split_background(t_cub *cub);
+/*weapon*/
+void draw_weapon(t_cub *cub);
+/*door*/
+void update_door_animation(t_cub *cub);
+void update_door_close(t_cub *cub);
 #endif

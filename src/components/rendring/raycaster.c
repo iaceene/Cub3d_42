@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/* */
-/* :::      ::::::::   */
-/* raycaster.c                                        :+:      :+:    :+:   */
-/* +:+ +:+         +:+     */
-/* By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
-/* +#+#+#+#+#+   +#+           */
-/* Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/* Updated: 2025/05/26 15:53:06 by iezzam            incessant change       */
-/* */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycaster.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
+/*   Updated: 2025/05/29 16:45:49 by iezzam           ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
@@ -228,206 +228,7 @@ void cast_ray(t_cub *cub, float ray_angle, int screen_x)
     draw_wall(cub, screen_x, ray_dir_x, ray_dir_y, hit_x, hit_y, side, dist);
 }
 
-void draw_split_background(t_cub *cub)
-{
-  int screen_middle = HEIGHT / 2;
-  int floor_width = cub->texture->floor_img.width;
-  int floor_height = cub->texture->floor_img.height;
 
-  float posX = cub->player.x;
-  float posY = cub->player.y;
-
-  float planeX = cos(cub->player.angle + PI / 2) * 0.66f;
-  float planeY = sin(cub->player.angle + PI / 2) * 0.66f;
-
-  float light_radius = 2.0f;
-  float max_brightness = 1.0f;
-  float min_brightness = 0.1f;
-  int y = screen_middle;
-  while (y < HEIGHT)
-  {
-    float rayDirZ = (float)(y - HEIGHT / 2);
-    float rowDistance = (float)(HEIGHT / 2) / rayDirZ;
-    int x = 0;
-    while (x < WIDTH)
-    {
-      float cameraX = 2 * x / (float)WIDTH - 1;
-      float rayDirX = cos(cub->player.angle) + planeX * cameraX;
-      float rayDirY = sin(cub->player.angle) + planeY * cameraX;
-      float floorX = posX + rowDistance * rayDirX;
-      float floorY = posY + rowDistance * rayDirY;
-      int tx = (int)(floorX * floor_width) % floor_width;
-      int ty = (int)(floorY * floor_height) % floor_height;
-      if (tx < 0)
-        tx += floor_width;
-      if (ty < 0)
-        ty += floor_height;
-      char *pixel_addr = cub->texture->floor_img.addr + (ty * cub->texture->floor_img.line_length) + (tx * (cub->texture->floor_img.bits_per_pixel / 8));
-      unsigned int color = *(unsigned int *)pixel_addr;
-      float dx = floorX - posX;
-      float dy = floorY - posY;
-      float dist = sqrtf(dx * dx + dy * dy);
-      float brightness = 1.0f - (dist / light_radius);
-      brightness = fmaxf(fminf(brightness, max_brightness), min_brightness);
-      int r = ((color >> 16) & 0xFF) * brightness;
-      int g = ((color >> 8) & 0xFF) * brightness;
-      int b = (color & 0xFF) * brightness;
-      int shaded_color = (r << 16) | (g << 8) | b;
-      my_pixel_put(x, y, &cub->data.img, shaded_color);
-      x++;
-    }
-    y++;
-  }
-}
-
-void my_pixel_put_img(t_img *img, int x, int y, int color)
-{
-  char *dst;
-
-  if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
-    return;
-  dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-  *(unsigned int *)dst = color;
-}
-void draw_weapon(t_cub *cub)
-{
-
-  cub->weapon_anim_tick++;
-  if (cub->weapon_anim_tick > cub->weapon_anim_speed)
-  {
-    cub->weapon_anim_tick = 0;
-    cub->weapon_anim_frame++;
-    if (cub->weapon_anim_frame >= MAX_ANIM_FRAMES)
-      cub->weapon_anim_frame = 0;
-  }
-
-  int frame = cub->weapon_anim_frame;
-  t_img *weapon = &cub->texture->weapon[cub->current_weapon_index * MAX_ANIM_FRAMES + frame];
-
-  int scaled_width = weapon->width / 2;
-  int scaled_height = weapon->height / 2;
-
-  int x_start = (WIDTH - scaled_width) / 2;
-  int y_start = HEIGHT - scaled_height / 1.2;
-
-  int y = 0;
-
-  while (y < scaled_height)
-  {
-    int x = 0;
-    while (x < scaled_width)
-    {
-      int orig_x = x * 2;
-      int orig_y = y * 2;
-
-      char *src_pixel = weapon->addr + (orig_y * weapon->line_length + orig_x * (weapon->bits_per_pixel / 8));
-      unsigned int color = *(unsigned int *)src_pixel;
-
-      if ((color & 0x00FFFFFF) != 0)
-      {
-        my_pixel_put_img(&cub->data.img, x_start + x, y_start + y, color);
-      }
-      x++;
-    }
-    y++;
-  }
-}
-
-void update_door_animation(t_cub *cub)
-{
-  if (!cub->door_anim_active)
-    return;
-
-  cub->door_anim_tick++;
-  if (cub->door_anim_tick > 8)
-  {
-    cub->door_anim_tick = 0;
-    cub->door_anim_frame++;
-
-    if (cub->door_anim_frame >= 4)
-    {
-      cub->door_anim_frame = 0;
-      cub->door_anim_active = 0;
-
-      cub->data.map.map[cub->door_y][cub->door_x] = 'D';
-    }
-  }
-}
-
-void update_door_close(t_cub *cub)
-{
-  if (!cub->door_opened)
-    return;
-
-  if (cub->door_anim_active)
-    return;
-
-  int px = (int)(cub->player.x / BLOCK);
-  int py = (int)(cub->player.y / BLOCK);
-
-  int fx = px + (int)round(cos(cub->player.angle));
-  int fy = py + (int)round(sin(cub->player.angle));
-  int player_is_facing_door = (fx == cub->door_x && fy == cub->door_y);
-  int player_is_on_door = (px == cub->door_x && py == cub->door_y);
-
-  if (!player_is_facing_door && !player_is_on_door)
-  {
-    cub->door_anim_tick = 0;
-    cub->door_anim_frame = 0;
-    cub->door_anim_active = 0;
-    cub->door_opened = 0;
-    cub->data.map.map[cub->door_y][cub->door_x] = '2';
-  }
-}
-void update_eye_animation(t_cub *cub)
-{
-  static int direction = -1;
-  static int is_cycling = 1;
-
-  cub->eye_anim_tick++;
-
-  if (is_cycling && cub->eye_anim_tick > cub->eye_anim_speed)
-  {
-    cub->eye_anim_tick = 0;
-    cub->eye_anim_frame += direction;
-
-    if (cub->eye_anim_frame >= MAX_EYE - 1 || cub->eye_anim_frame <= 0)
-    {
-      is_cycling = 0;
-      cub->eye_pause_timer = 0;
-      direction *= -1;
-    }
-  }
-  else if (!is_cycling)
-  {
-    cub->eye_pause_timer++;
-    if (cub->eye_pause_timer > cub->eye_pause_duration)
-    {
-      is_cycling = 1;
-    }
-  }
-}
-
-void draw_eye(t_cub *cub)
-{
-  t_img *eye = &cub->texture->eye[cub->eye_anim_frame];
-  if (!eye->addr)
-    return;
-
-  for (int y = 0; y < HEIGHT; y++)
-  {
-    for (int x = 0; x < WIDTH; x++)
-    {
-      int tex_x = x * eye->width / WIDTH;
-      int tex_y = y * eye->height / HEIGHT;
-
-      char *src_pixel = eye->addr + (tex_y * eye->line_length + tex_x * (eye->bits_per_pixel / 8));
-      unsigned int color = *(unsigned int *)src_pixel;
-      if (color == 0X000000)
-        my_pixel_put_img(&cub->data.img, x, y, color);
-    }
-  }
-}
 
 /************************************************ */
 
@@ -570,7 +371,6 @@ int game_loop(t_cub *cub)
   }
 
   render_draw_minimap(cub);
-  // draw_enemies_on_minimap(cub, minimap_x, minimap_y, minimap_size, scale);
   draw_weapon(cub);
 
   update_eye_animation(cub);
