@@ -400,6 +400,141 @@ int init_textures_eye(t_cub *cub)
     return 0;
 }
 
+#define MAX_ENEMY 65
+
+int init_textures_enemy(t_cub *cub)
+{
+    const char *paths[MAX_ENEMY] = {
+        "./textures/enemy_xa3la/1.xpm",
+        "./textures/enemy_xa3la/2.xpm",
+        "./textures/enemy_xa3la/3.xpm",
+        "./textures/enemy_xa3la/4.xpm",
+        "./textures/enemy_xa3la/5.xpm",
+        "./textures/enemy_xa3la/6.xpm",
+        "./textures/enemy_xa3la/7.xpm",
+        "./textures/enemy_xa3la/8.xpm",
+        "./textures/enemy_xa3la/9.xpm",
+        "./textures/enemy_xa3la/10.xpm",
+        "./textures/enemy_xa3la/11.xpm",
+        "./textures/enemy_xa3la/12.xpm",
+        "./textures/enemy_xa3la/13.xpm",
+        "./textures/enemy_xa3la/14.xpm",
+        "./textures/enemy_xa3la/15.xpm",
+        "./textures/enemy_xa3la/16.xpm",
+        "./textures/enemy_xa3la/17.xpm",
+        "./textures/enemy_xa3la/18.xpm",
+        "./textures/enemy_xa3la/19.xpm",
+        "./textures/enemy_xa3la/20.xpm",
+        "./textures/enemy_xa3la/21.xpm",
+        "./textures/enemy_xa3la/22.xpm",
+        "./textures/enemy_xa3la/23.xpm",
+        "./textures/enemy_xa3la/24.xpm",
+        "./textures/enemy_xa3la/25.xpm",
+        "./textures/enemy_xa3la/26.xpm",
+        "./textures/enemy_xa3la/27.xpm",
+        "./textures/enemy_xa3la/28.xpm",
+        "./textures/enemy_xa3la/29.xpm",
+        "./textures/enemy_xa3la/30.xpm",
+        "./textures/enemy_xa3la/31.xpm",
+        "./textures/enemy_xa3la/32.xpm",
+        "./textures/enemy_xa3la/33.xpm",
+        "./textures/enemy_xa3la/34.xpm",
+        "./textures/enemy_xa3la/35.xpm",
+        "./textures/enemy_xa3la/36.xpm",
+        "./textures/enemy_xa3la/37.xpm",
+        "./textures/enemy_xa3la/38.xpm",
+        "./textures/enemy_xa3la/39.xpm",
+        "./textures/enemy_xa3la/40.xpm",
+        "./textures/enemy_xa3la/41.xpm",
+        "./textures/enemy_xa3la/42.xpm",
+        "./textures/enemy_xa3la/43.xpm",
+        "./textures/enemy_xa3la/44.xpm",
+        "./textures/enemy_xa3la/45.xpm",
+        "./textures/enemy_xa3la/46.xpm",
+        "./textures/enemy_xa3la/47.xpm",
+        "./textures/enemy_xa3la/48.xpm",
+        "./textures/enemy_xa3la/49.xpm",
+        "./textures/enemy_xa3la/50.xpm",
+        "./textures/enemy_xa3la/51.xpm",
+        "./textures/enemy_xa3la/52.xpm",
+        "./textures/enemy_xa3la/53.xpm",
+        "./textures/enemy_xa3la/54.xpm",
+        "./textures/enemy_xa3la/55.xpm",
+        "./textures/enemy_xa3la/56.xpm",
+        "./textures/enemy_xa3la/57.xpm",
+        "./textures/enemy_xa3la/58.xpm",
+        "./textures/enemy_xa3la/59.xpm",
+        "./textures/enemy_xa3la/60.xpm",
+        "./textures/enemy_xa3la/61.xpm",
+        "./textures/enemy_xa3la/62.xpm",
+        "./textures/enemy_xa3la/63.xpm",
+        "./textures/enemy_xa3la/64.xpm",
+        "./textures/enemy_xa3la/65.xpm",
+    };
+
+    cub->texture->enemy = malloc(sizeof(t_img) * MAX_ENEMY);
+    if (!cub->texture->enemy)
+    {
+        ft_putendl_fd("Error\nMemory allocation failed for enemy textures", 2);
+        exit(1);
+    }
+
+    for (int f = 0; f < MAX_ENEMY; f++)
+    {
+        cub->texture->enemy[f].img = mlx_xpm_file_to_image(
+            cub->data.mlx,
+            (char *)paths[f],
+            &cub->texture->enemy[f].width,
+            &cub->texture->enemy[f].height);
+
+        if (!cub->texture->enemy[f].img)
+        {
+            ft_putendl_fd("Error\nFailed to load enemy texture", 2);
+            exit(1);
+        }
+
+        cub->texture->enemy[f].addr = mlx_get_data_addr(
+            cub->texture->enemy[f].img,
+            &cub->texture->enemy[f].bits_per_pixel,
+            &cub->texture->enemy[f].line_length,
+            &cub->texture->enemy[f].endian);
+    }
+    cub->enemy_anim_frame = 0;
+    cub->enemy_anim_tick = 0;
+    cub->enemy_anim_speed = 8;
+
+    return 0;
+}
+
+
+void init_enemies(t_cub *cub)
+{
+    int enemy_index = 0;
+    cub->enemy_count = 0;
+    for (int y = 0;cub->data.map.map[y] &&  y < HEIGHT; y++)
+    {
+        for (int x = 0;cub->data.map.map[y][x] &&  x < WIDTH; x++)
+        {
+            if (cub->data.map.map[y][x] == '3')
+            {
+                if (enemy_index < MAX_ENEMY)
+                {
+                    cub->enemies[enemy_index].x = x * BLOCK + BLOCK/2;
+                    cub->enemies[enemy_index].y = y * BLOCK + BLOCK/2;
+                    cub->enemies[enemy_index].alive = 1;
+                    cub->enemies[enemy_index].dist = 0;
+                    cub->enemies[enemy_index].sprite_x = 0;
+                    
+                    enemy_index++;
+                    cub->enemy_count++;
+                    cub->data.map.map[y][x] = '0';
+                }
+            }
+        }
+    }
+    printf("Initialized %d enemies from map positions\n", cub->enemy_count);
+}
+
 int init_window(t_cub *cub)
 {
     cub->data.mlx = mlx_init();
@@ -421,6 +556,8 @@ int init_window(t_cub *cub)
     init_texture_floor(cub);
     init_texture_door_anim(cub);
     init_texture_background_anim(cub);
+    init_textures_enemy(cub);
+    init_enemies(cub);
     if (event_hook_window(cub))
         return (1);
     return (0);

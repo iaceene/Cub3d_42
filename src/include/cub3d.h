@@ -38,7 +38,7 @@
 #define FLOOR_TOP 0x696969
 #define FLOOR_BOTTOM 0x36454F
 
-#define WIDTH 1999
+#define WIDTH 1200
 #define HEIGHT 720
 #define BLOCK 1000
 #define MINIMAP_WIDTH 200
@@ -125,6 +125,7 @@ typedef struct s_texture
 	int sky_grb[3];
 	t_img *weapon;
 	t_img *eye;
+	t_img *enemy;
 	t_img no_img;
 	t_img so_img;
 	t_img we_img;
@@ -160,9 +161,25 @@ typedef struct s_player
 #define MAX_DOOR_FRAMES 6
 #define MAX_BACKGROUND_FRAMES 57
 #define MAX_EYE 37
+#define MAX_ENEMY 65
+typedef struct s_enemy
+{
+	float x;		// Enemy X position
+	float y;		// Enemy Y position
+	int alive;		// Is enemy alive (1) or dead (0)
+	int anim_frame; // Current animation frame
+	int anim_tick;	// Animation counter
+	float distance; // Distance from player (for sorting)
+	int is_alive;
+	float dist;	  // Distance from player
+	int sprite_x; // Screen position X
+	int frame;
+} t_enemy;
 
 typedef struct s_cub
 {
+	t_enemy enemies[MAX_ENEMY];
+	int num_enemies;
 	int screen_h;
 	int screen_w;
 	t_data data;
@@ -195,6 +212,16 @@ typedef struct s_cub
 	int eye_open_timer;
 	int eye_pause_timer;	// How long we've been paused
 	int eye_pause_duration; // How long to pause between animations
+
+	int enemy_anim_frame; // Start with enemy open
+	int enemy_anim_tick;
+	int enemy_pause_duration; // 1 second at 60FPS
+	int enemy_pause_timer;
+	int current_enemy_index;
+	int enemy_anim_active;
+	// t_enemy enemies[10];  // Array of enemies (adjust size as needed)
+	int enemy_count;	  // Number of active enemies
+	int enemy_anim_speed; // Animation speed for all enemies
 } t_cub;
 
 int map_parsing(int ac, char **av, t_cub *cub);

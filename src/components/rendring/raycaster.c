@@ -14,134 +14,134 @@
 
 float calculate_brightness(float dist, float max_distance, float min_brightness, float max_brightness)
 {
-    float brightness = 1.0f - (dist / max_distance);
-    return fmaxf(fminf(brightness, max_brightness), min_brightness);
+  float brightness = 1.0f - (dist / max_distance);
+  return fmaxf(fminf(brightness, max_brightness), min_brightness);
 }
 
 unsigned int apply_shading(unsigned int color, float brightness)
 {
-    int r = ((color >> 16) & 0xFF) * brightness;
-    int g = ((color >> 8) & 0xFF) * brightness;
-    int b = (color & 0xFF) * brightness;
-    int alpha = (color >> 24) & 0xFF;
-    
-    return (alpha << 24) | (r << 16) | (g << 8) | b;
+  int r = ((color >> 16) & 0xFF) * brightness;
+  int g = ((color >> 8) & 0xFF) * brightness;
+  int b = (color & 0xFF) * brightness;
+  int alpha = (color >> 24) & 0xFF;
+
+  return (alpha << 24) | (r << 16) | (g << 8) | b;
 }
 
 void draw_wall(t_cub *cub, int screen_x, float ray_dx, float ray_dy,
                float ray_x, float ray_y, int side, float dist)
 {
-    float wall_height = (BLOCK / dist) * (WIDTH / 2);
-    int start_y = (HEIGHT - wall_height) / 2;
-    if (start_y < 0)
-        start_y = 0;
-    int end_y = start_y + wall_height;
-    if (end_y > HEIGHT)
-        end_y = HEIGHT;
+  float wall_height = (BLOCK / dist) * (WIDTH / 2);
+  int start_y = (HEIGHT - wall_height) / 2;
+  if (start_y < 0)
+    start_y = 0;
+  int end_y = start_y + wall_height;
+  if (end_y > HEIGHT)
+    end_y = HEIGHT;
 
-    t_img *tex;
-    float wall_hit;
+  t_img *tex;
+  float wall_hit;
 
-    if (side == 0)
-    {
-        if (ray_dx < 0)
-            tex = &cub->texture->we_img;
-        else
-            tex = &cub->texture->ea_img;
-        wall_hit = fmod(ray_y, BLOCK) / BLOCK;
-    }
+  if (side == 0)
+  {
+    if (ray_dx < 0)
+      tex = &cub->texture->we_img;
     else
-    {
-        if (ray_dy < 0)
-            tex = &cub->texture->no_img;
-        else
-            tex = &cub->texture->so_img;
-        wall_hit = fmod(ray_x, BLOCK) / BLOCK;
-    }
+      tex = &cub->texture->ea_img;
+    wall_hit = fmod(ray_y, BLOCK) / BLOCK;
+  }
+  else
+  {
+    if (ray_dy < 0)
+      tex = &cub->texture->no_img;
+    else
+      tex = &cub->texture->so_img;
+    wall_hit = fmod(ray_x, BLOCK) / BLOCK;
+  }
 
-    int tex_x = (int)(wall_hit * tex->width);
-    if ((side == 0 && ray_dx > 0) || (side == 1 && ray_dy < 0))
-        tex_x = tex->width - tex_x - 1;
+  int tex_x = (int)(wall_hit * tex->width);
+  if ((side == 0 && ray_dx > 0) || (side == 1 && ray_dy < 0))
+    tex_x = tex->width - tex_x - 1;
 
-    float step = (float)tex->height / wall_height;
-    float tex_pos = (start_y - HEIGHT / 2 + wall_height / 2) * step;
+  float step = (float)tex->height / wall_height;
+  float tex_pos = (start_y - HEIGHT / 2 + wall_height / 2) * step;
 
-    float max_distance = BLOCK * 6;
-    float min_brightness = 0.05f;
-    float max_brightness = 1.2f;
-    float brightness = calculate_brightness(dist, max_distance, min_brightness, max_brightness);
-    
-    if (side == 1)
-        brightness *= 0.8f;
+  float max_distance = BLOCK * 6;
+  float min_brightness = 0.05f;
+  float max_brightness = 1.2f;
+  float brightness = calculate_brightness(dist, max_distance, min_brightness, max_brightness);
 
-    int y = start_y;
-    while (y < end_y)
-    {
-        int tex_y = (int)tex_pos & (tex->height - 1);
-        tex_pos += step;
-        char *pixel = tex->addr + (tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8));
-        unsigned int color = *(unsigned int *)pixel;
-        
-        unsigned int shaded_color = apply_shading(color, brightness);
-        
-        my_pixel_put(screen_x, y, &cub->data.img, shaded_color);
-        y++;
-    }
+  if (side == 1)
+    brightness *= 0.8f;
+
+  int y = start_y;
+  while (y < end_y)
+  {
+    int tex_y = (int)tex_pos & (tex->height - 1);
+    tex_pos += step;
+    char *pixel = tex->addr + (tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8));
+    unsigned int color = *(unsigned int *)pixel;
+
+    unsigned int shaded_color = apply_shading(color, brightness);
+
+    my_pixel_put(screen_x, y, &cub->data.img, shaded_color);
+    y++;
+  }
 }
 
 void draw_door(t_cub *cub, int screen_x, float ray_dx, float ray_dy,
                float ray_x, float ray_y, int side, float dist)
 {
-    float wall_height = (BLOCK / dist) * (WIDTH / 2);
-    int start_y = (HEIGHT - wall_height) / 2;
-    if (start_y < 0)
-        start_y = 0;
-    int end_y = start_y + wall_height;
-    if (end_y > HEIGHT)
-        end_y = HEIGHT;
+  float wall_height = (BLOCK / dist) * (WIDTH / 2);
+  int start_y = (HEIGHT - wall_height) / 2;
+  if (start_y < 0)
+    start_y = 0;
+  int end_y = start_y + wall_height;
+  if (end_y > HEIGHT)
+    end_y = HEIGHT;
 
-    t_img *tex = NULL;
-    if (cub->door_anim_active)
-        tex = &cub->door_textures[cub->door_anim_frame];
-    else
-        tex = &cub->door_textures[0];
+  t_img *tex = NULL;
+  if (cub->door_anim_active)
+    tex = &cub->door_textures[cub->door_anim_frame];
+  else
+    tex = &cub->door_textures[0];
 
-    if (!tex || !tex->img)
-        return;
+  if (!tex || !tex->img)
+    return;
 
-    float wall_hit;
-    if (side == 0)
-        wall_hit = fmod(ray_y, BLOCK) / BLOCK;
-    else
-        wall_hit = fmod(ray_x, BLOCK) / BLOCK;
+  float wall_hit;
+  if (side == 0)
+    wall_hit = fmod(ray_y, BLOCK) / BLOCK;
+  else
+    wall_hit = fmod(ray_x, BLOCK) / BLOCK;
 
-    int tex_x = (int)(wall_hit * tex->width);
-    if ((side == 0 && ray_dx > 0) || (side == 1 && ray_dy < 0))
-        tex_x = tex->width - tex_x - 1;
+  int tex_x = (int)(wall_hit * tex->width);
+  if ((side == 0 && ray_dx > 0) || (side == 1 && ray_dy < 0))
+    tex_x = tex->width - tex_x - 1;
 
-    float step = (float)tex->height / wall_height;
-    float tex_pos = (start_y - HEIGHT / 2 + wall_height / 2) * step;
+  float step = (float)tex->height / wall_height;
+  float tex_pos = (start_y - HEIGHT / 2 + wall_height / 2) * step;
 
-    float max_distance = BLOCK * 6;
-    float min_brightness = 0.05f;
-    float max_brightness = 1.2f;
-    float brightness = calculate_brightness(dist, max_distance, min_brightness, max_brightness);
-    
-    if (side == 1)
-        brightness *= 0.8f;
+  float max_distance = BLOCK * 6;
+  float min_brightness = 0.05f;
+  float max_brightness = 1.2f;
+  float brightness = calculate_brightness(dist, max_distance, min_brightness, max_brightness);
 
-    int y = start_y;
-    while (y < end_y)
-    {
-        int tex_y = (int)tex_pos & (tex->height - 1);
-        tex_pos += step;
-        char *pixel = tex->addr + (tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8));
-        unsigned int color = *(unsigned int *)pixel;
-        unsigned int shaded_color = apply_shading(color, brightness);
-        
-        my_pixel_put(screen_x, y, &cub->data.img, shaded_color);
-        y++;
-    }
+  if (side == 1)
+    brightness *= 0.8f;
+
+  int y = start_y;
+  while (y < end_y)
+  {
+    int tex_y = (int)tex_pos & (tex->height - 1);
+    tex_pos += step;
+    char *pixel = tex->addr + (tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8));
+    unsigned int color = *(unsigned int *)pixel;
+    unsigned int shaded_color = apply_shading(color, brightness);
+
+    my_pixel_put(screen_x, y, &cub->data.img, shaded_color);
+    y++;
+  }
 }
 
 void cast_ray(t_cub *cub, float ray_angle, int screen_x)
@@ -279,7 +279,6 @@ void draw_split_background(t_cub *cub)
     y++;
   }
 }
-
 
 void my_pixel_put_img(t_img *img, int x, int y, int color)
 {
@@ -430,6 +429,129 @@ void draw_eye(t_cub *cub)
   }
 }
 
+/************************************************ */
+
+void update_enemy_animation(t_cub *cub)
+{
+  cub->enemy_anim_tick++;
+  if (cub->enemy_anim_tick > cub->enemy_anim_speed)
+  {
+    cub->enemy_anim_tick = 0;
+    cub->enemy_anim_frame++;
+    if (cub->enemy_anim_frame >= MAX_ENEMY)
+      cub->enemy_anim_frame = 0;
+  }
+}
+
+void calculate_enemy_sprites(t_cub *cub)
+{
+  for (int i = 0; i < cub->enemy_count; i++)
+  {
+    if (!cub->enemies[i].alive)
+      continue;
+
+    float dx = cub->enemies[i].x - cub->player.x;
+    float dy = cub->enemies[i].y - cub->player.y;
+    cub->enemies[i].dist = sqrt(dx * dx + dy * dy);
+
+    float sprite_x = dx;
+    float sprite_y = dy;
+
+    float cos_angle = cos(-cub->player.angle);
+    float sin_angle = sin(-cub->player.angle);
+
+    float transformed_x = cos_angle * sprite_x - sin_angle * sprite_y;
+    float transformed_y = sin_angle * sprite_x + cos_angle * sprite_y;
+
+    if (transformed_y > 0)
+    {
+      cub->enemies[i].sprite_x = (int)((WIDTH / 2) * (1 + transformed_x / transformed_y));
+    }
+    else
+    {
+      cub->enemies[i].sprite_x = -1;
+    }
+  }
+}
+
+void sort_enemies_by_distance(t_cub *cub)
+{
+  for (int i = 0; i < cub->enemy_count - 1; i++)
+  {
+    for (int j = 0; j < cub->enemy_count - i - 1; j++)
+    {
+      if (cub->enemies[j].dist < cub->enemies[j + 1].dist)
+      {
+        t_enemy temp = cub->enemies[j];
+        cub->enemies[j] = cub->enemies[j + 1];
+        cub->enemies[j + 1] = temp;
+      }
+    }
+  }
+}
+
+void draw_enemy(t_cub *cub)
+{
+  update_enemy_animation(cub);
+  calculate_enemy_sprites(cub);
+  sort_enemies_by_distance(cub);
+  t_img *enemy_texture = &cub->texture->enemy[cub->enemy_anim_frame];
+
+  if (!enemy_texture->addr)
+    return;
+  for (int i = 0; i < cub->enemy_count; i++)
+  {
+    if (!cub->enemies[i].alive || cub->enemies[i].sprite_x < 0)
+      continue;
+
+    float dist = cub->enemies[i].dist;
+    if (dist < 10.0f)
+      continue;
+
+    int sprite_height = (int)(HEIGHT / dist * BLOCK);
+    int sprite_width = sprite_height;
+
+    int screen_x = cub->enemies[i].sprite_x - sprite_width / 2;
+    int screen_y = (HEIGHT - sprite_height) / 2;
+
+    if (screen_x + sprite_width < 0 || screen_x > WIDTH)
+      continue;
+
+    float max_distance = BLOCK * 8;
+    float brightness = 1.0f - (dist / max_distance);
+    brightness = fmaxf(fminf(brightness, 1.0f), 0.1f);
+
+    for (int y = 0; y < sprite_height; y++)
+    {
+      int pixel_y = screen_y + y;
+      if (pixel_y < 0 || pixel_y >= HEIGHT)
+        continue;
+
+      for (int x = 0; x < sprite_width; x++)
+      {
+        int pixel_x = screen_x + x;
+        if (pixel_x < 0 || pixel_x >= WIDTH)
+          continue;
+
+        int tex_x = x * enemy_texture->width / sprite_width;
+        int tex_y = y * enemy_texture->height / sprite_height;
+
+        char *src_pixel = enemy_texture->addr +
+                          (tex_y * enemy_texture->line_length +
+                           tex_x * (enemy_texture->bits_per_pixel / 8));
+        unsigned int color = *(unsigned int *)src_pixel;
+        if ((color & 0x00FFFFFF) == 0)
+          continue;
+        int r = ((color >> 16) & 0xFF) * brightness;
+        int g = ((color >> 8) & 0xFF) * brightness;
+        int b = (color & 0xFF) * brightness;
+        unsigned int shaded_color = (r << 16) | (g << 8) | b;
+        my_pixel_put_img(&cub->data.img, pixel_x, pixel_y, shaded_color);
+      }
+    }
+  }
+}
+
 int game_loop(t_cub *cub)
 {
   handle_movement(cub);
@@ -448,13 +570,14 @@ int game_loop(t_cub *cub)
   }
 
   render_draw_minimap(cub);
+  // draw_enemies_on_minimap(cub, minimap_x, minimap_y, minimap_size, scale);
   draw_weapon(cub);
 
   update_eye_animation(cub);
   draw_eye(cub);
-
+  draw_enemy(cub);
   update_door_animation(cub);
-  update_door_close(cub);
+  // update_door_close(cub);
   mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
   return 0;
 }
