@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/29 16:45:49 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/29 17:15:23 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ void cast_ray(t_cub *cub, float ray_angle, int screen_x)
     }
 
     hit_tile = cub->data.map.map[map_y][map_x];
-    if (hit_tile == '1' || hit_tile == '2')
+    if (hit_tile == '1' || hit_tile == '2' || hit_tile == '3')
       break;
   }
 
@@ -228,19 +228,16 @@ void cast_ray(t_cub *cub, float ray_angle, int screen_x)
     draw_wall(cub, screen_x, ray_dir_x, ray_dir_y, hit_x, hit_y, side, dist);
 }
 
-
-
 /************************************************ */
 
+/* Enemy Rendering */
 void update_enemy_animation(t_cub *cub)
 {
   cub->enemy_anim_tick++;
   if (cub->enemy_anim_tick > cub->enemy_anim_speed)
   {
     cub->enemy_anim_tick = 0;
-    cub->enemy_anim_frame++;
-    if (cub->enemy_anim_frame >= MAX_ENEMY)
-      cub->enemy_anim_frame = 0;
+    cub->enemy_anim_frame = (cub->enemy_anim_frame + 1) % MAX_ENEMY;
   }
 }
 
@@ -255,18 +252,15 @@ void calculate_enemy_sprites(t_cub *cub)
     float dy = cub->enemies[i].y - cub->player.y;
     cub->enemies[i].dist = sqrt(dx * dx + dy * dy);
 
-    float sprite_x = dx;
-    float sprite_y = dy;
+    float angle = atan2(dy, dx) - cub->player.angle;
+    while (angle > PI)
+      angle -= 2 * PI;
+    while (angle < -PI)
+      angle += 2 * PI;
 
-    float cos_angle = cos(-cub->player.angle);
-    float sin_angle = sin(-cub->player.angle);
-
-    float transformed_x = cos_angle * sprite_x - sin_angle * sprite_y;
-    float transformed_y = sin_angle * sprite_x + cos_angle * sprite_y;
-
-    if (transformed_y > 0)
+    if (fabs(angle) < PI / 2)
     {
-      cub->enemies[i].sprite_x = (int)((WIDTH / 2) * (1 + transformed_x / transformed_y));
+      cub->enemies[i].sprite_x = (int)((WIDTH / 2) * (1 + angle / (PI / 3)));
     }
     else
     {
@@ -291,15 +285,56 @@ void sort_enemies_by_distance(t_cub *cub)
   }
 }
 
+float cast_single_ray(t_cub *cub, float ray_angle)
+{
+  float ray_dir_x = cos(ray_angle);
+  float ray_dir_y = sin(ray_angle);
+
+  int map_x = (int)cub->player.x / BLOCK;
+  int map_y = (int)cub->player.y / BLOCK;
+
+  float side_dist_x, side_dist_y;
+  float delta_dist_x = fabs(1 / ray_dir_x);
+  float delta_dist_y = fabs(1 / ray_dir_y);
+
+  int step_x = ray_dir_x < 0 ? -1 : 1;
+  int step_y = ray_dir_y < 0 ? -1 : 1;
+
+  side_dist_x = ray_dir_x < 0 ? (cub->player.x - map_x * BLOCK) * delta_dist_x / BLOCK : ((map_x + 1) * BLOCK - cub->player.x) * delta_dist_x / BLOCK;
+
+  side_dist_y = ray_dir_y < 0 ? (cub->player.y - map_y * BLOCK) * delta_dist_y / BLOCK : ((map_y + 1) * BLOCK - cub->player.y) * delta_dist_y / BLOCK;
+
+  while (1)
+  {
+    if (side_dist_x < side_dist_y)
+    {
+      map_x += step_x;
+      side_dist_x += delta_dist_x;
+    }
+    else
+    {
+      map_y += step_y;
+      side_dist_y += delta_dist_y;
+    }
+
+    char tile = cub->data.map.map[map_y][map_x];
+    if (tile == '1' || tile == '2' || tile == '3')
+      break;
+  }
+
+  float dist = side_dist_x < side_dist_y ? side_dist_x * BLOCK : side_dist_y * BLOCK;
+  return dist;
+}
 void draw_enemy(t_cub *cub)
 {
   update_enemy_animation(cub);
   calculate_enemy_sprites(cub);
   sort_enemies_by_distance(cub);
-  t_img *enemy_texture = &cub->texture->enemy[cub->enemy_anim_frame];
 
-  if (!enemy_texture->addr)
+  t_img *tex = &cub->texture->enemy[cub->enemy_anim_frame];
+  if (!tex->img)
     return;
+
   for (int i = 0; i < cub->enemy_count; i++)
   {
     if (!cub->enemies[i].alive || cub->enemies[i].sprite_x < 0)
@@ -309,50 +344,48 @@ void draw_enemy(t_cub *cub)
     if (dist < 10.0f)
       continue;
 
-    int sprite_height = (int)(HEIGHT / dist * BLOCK);
-    int sprite_width = sprite_height;
 
-    int screen_x = cub->enemies[i].sprite_x - sprite_width / 2;
-    int screen_y = (HEIGHT - sprite_height) / 2;
-
-    if (screen_x + sprite_width < 0 || screen_x > WIDTH)
+    float angle = atan2(cub->enemies[i].y - cub->player.y,
+                        cub->enemies[i].x - cub->player.x);
+    float ray_dist = cast_single_ray(cub, angle);
+    if (ray_dist < dist - 10.0f)
       continue;
 
-    float max_distance = BLOCK * 8;
-    float brightness = 1.0f - (dist / max_distance);
-    brightness = fmaxf(fminf(brightness, 1.0f), 0.1f);
+    int sprite_size = (int)(HEIGHT / dist * BLOCK);
+    int draw_x = cub->enemies[i].sprite_x - sprite_size / 2;
+    int draw_y = (HEIGHT - sprite_size) / 2;
 
-    for (int y = 0; y < sprite_height; y++)
+    float brightness = fmaxf(0.1f, 1.0f - (dist / (BLOCK * 8)));
+
+    for (int y = 0; y < sprite_size; y++)
     {
-      int pixel_y = screen_y + y;
-      if (pixel_y < 0 || pixel_y >= HEIGHT)
+      int screen_y = draw_y + y;
+      if (screen_y < 0 || screen_y >= HEIGHT)
         continue;
 
-      for (int x = 0; x < sprite_width; x++)
+      for (int x = 0; x < sprite_size; x++)
       {
-        int pixel_x = screen_x + x;
-        if (pixel_x < 0 || pixel_x >= WIDTH)
+        int screen_x = draw_x + x;
+        if (screen_x < 0 || screen_x >= WIDTH)
           continue;
 
-        int tex_x = x * enemy_texture->width / sprite_width;
-        int tex_y = y * enemy_texture->height / sprite_height;
+        int tex_x = x * tex->width / sprite_size;
+        int tex_y = y * tex->height / sprite_size;
 
-        char *src_pixel = enemy_texture->addr +
-                          (tex_y * enemy_texture->line_length +
-                           tex_x * (enemy_texture->bits_per_pixel / 8));
-        unsigned int color = *(unsigned int *)src_pixel;
-        if ((color & 0x00FFFFFF) == 0)
-          continue;
-        int r = ((color >> 16) & 0xFF) * brightness;
-        int g = ((color >> 8) & 0xFF) * brightness;
-        int b = (color & 0xFF) * brightness;
-        unsigned int shaded_color = (r << 16) | (g << 8) | b;
-        my_pixel_put_img(&cub->data.img, pixel_x, pixel_y, shaded_color);
+        unsigned int color = *(unsigned int *)(tex->addr +
+                                               (tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8)));
+
+        if ((color & 0x00FFFFFF) != 0)
+        {
+          int r = ((color >> 16) & 0xFF) * brightness;
+          int g = ((color >> 8) & 0xFF) * brightness;
+          int b = (color & 0xFF) * brightness;
+          my_pixel_put(screen_x, screen_y, &cub->data.img, (r << 16) | (g << 8) | b);
+        }
       }
     }
   }
 }
-
 int game_loop(t_cub *cub)
 {
   handle_movement(cub);
@@ -370,12 +403,12 @@ int game_loop(t_cub *cub)
     x++;
   }
 
+  draw_enemy(cub);
   render_draw_minimap(cub);
   draw_weapon(cub);
 
   update_eye_animation(cub);
   draw_eye(cub);
-  draw_enemy(cub);
   update_door_animation(cub);
   // update_door_close(cub);
   mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
