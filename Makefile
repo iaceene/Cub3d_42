@@ -30,6 +30,7 @@ SRCS		= \
         	$(SRC_DIR)/components/rendring/floor_sky/floor_sky.c \
         	$(SRC_DIR)/components/rendring/weapon/weapon.c \
         	$(SRC_DIR)/components/rendring/door/door.c \
+        	$(SRC_DIR)/components/rendring/enemy/enemy.c \
 			$(SRC_DIR)/main/main.c \
 
 
@@ -51,6 +52,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/components/rendring/floor_sky/floor_sky.c \
 	@mkdir -p $(OBJ_DIR)/components/rendring/weapon/weapon.c \
 	@mkdir -p $(OBJ_DIR)/components/rendring/door/door.c \
+	@mkdir -p $(OBJ_DIR)/components/rendring/enemy/enemy.c \
 	@mkdir -p $(OBJ_DIR)/main
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

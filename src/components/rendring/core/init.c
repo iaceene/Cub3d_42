@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/29 16:47:59 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/29 17:31:33 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -502,7 +502,7 @@ int init_textures_enemy(t_cub *cub)
     }
     cub->enemy_anim_frame = 0;
     cub->enemy_anim_tick = 0;
-    cub->enemy_anim_speed = 8;
+    cub->enemy_anim_speed = 0;
 
     return 0;
 }

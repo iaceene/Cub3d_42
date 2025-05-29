@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/29 16:15:55 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/29 17:29:24 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,4 +279,6 @@ void draw_weapon(t_cub *cub);
 /*door*/
 void update_door_animation(t_cub *cub);
 void update_door_close(t_cub *cub);
+/*enemy*/
+void draw_enemy(t_cub *cub);
 #endif
