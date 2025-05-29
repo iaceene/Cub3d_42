@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/29 17:15:23 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/29 17:26:08 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,6 @@ void cast_ray(t_cub *cub, float ray_angle, int screen_x)
 
 /************************************************ */
 
-/* Enemy Rendering */
 void update_enemy_animation(t_cub *cub)
 {
   cub->enemy_anim_tick++;
@@ -271,9 +270,11 @@ void calculate_enemy_sprites(t_cub *cub)
 
 void sort_enemies_by_distance(t_cub *cub)
 {
-  for (int i = 0; i < cub->enemy_count - 1; i++)
+  int i = 0;
+  while (i < cub->enemy_count - 1)
   {
-    for (int j = 0; j < cub->enemy_count - i - 1; j++)
+    int j = 0;
+    while (j < cub->enemy_count - i - 1)
     {
       if (cub->enemies[j].dist < cub->enemies[j + 1].dist)
       {
@@ -281,7 +282,9 @@ void sort_enemies_by_distance(t_cub *cub)
         cub->enemies[j] = cub->enemies[j + 1];
         cub->enemies[j + 1] = temp;
       }
+      j++;
     }
+    i++;
   }
 }
 
@@ -297,12 +300,27 @@ float cast_single_ray(t_cub *cub, float ray_angle)
   float delta_dist_x = fabs(1 / ray_dir_x);
   float delta_dist_y = fabs(1 / ray_dir_y);
 
-  int step_x = ray_dir_x < 0 ? -1 : 1;
-  int step_y = ray_dir_y < 0 ? -1 : 1;
+  int step_x;
+  if (ray_dir_x < 0)
+    step_x = -1;
+  else
+    step_x = 1;
 
-  side_dist_x = ray_dir_x < 0 ? (cub->player.x - map_x * BLOCK) * delta_dist_x / BLOCK : ((map_x + 1) * BLOCK - cub->player.x) * delta_dist_x / BLOCK;
+  int step_y;
+  if (ray_dir_y < 0)
+    step_y = -1;
+  else
+    step_y = 1;
 
-  side_dist_y = ray_dir_y < 0 ? (cub->player.y - map_y * BLOCK) * delta_dist_y / BLOCK : ((map_y + 1) * BLOCK - cub->player.y) * delta_dist_y / BLOCK;
+  if (ray_dir_x < 0)
+    side_dist_x = (cub->player.x - map_x * BLOCK) * delta_dist_x / BLOCK;
+  else
+    side_dist_x = ((map_x + 1) * BLOCK - cub->player.x) * delta_dist_x / BLOCK;
+
+  if (ray_dir_y < 0)
+    side_dist_y = (cub->player.y - map_y * BLOCK) * delta_dist_y / BLOCK;
+  else
+    side_dist_y = ((map_y + 1) * BLOCK - cub->player.y) * delta_dist_y / BLOCK;
 
   while (1)
   {
@@ -322,9 +340,15 @@ float cast_single_ray(t_cub *cub, float ray_angle)
       break;
   }
 
-  float dist = side_dist_x < side_dist_y ? side_dist_x * BLOCK : side_dist_y * BLOCK;
+  float dist;
+  if (side_dist_x < side_dist_y)
+    dist = side_dist_x * BLOCK;
+  else
+    dist = side_dist_y * BLOCK;
+
   return dist;
 }
+
 void draw_enemy(t_cub *cub)
 {
   update_enemy_animation(cub);
@@ -335,21 +359,30 @@ void draw_enemy(t_cub *cub)
   if (!tex->img)
     return;
 
-  for (int i = 0; i < cub->enemy_count; i++)
+  int i = 0;
+  while (i < cub->enemy_count)
   {
     if (!cub->enemies[i].alive || cub->enemies[i].sprite_x < 0)
+    {
+      i++;
       continue;
+    }
 
     float dist = cub->enemies[i].dist;
     if (dist < 10.0f)
+    {
+      i++;
       continue;
-
+    }
 
     float angle = atan2(cub->enemies[i].y - cub->player.y,
                         cub->enemies[i].x - cub->player.x);
     float ray_dist = cast_single_ray(cub, angle);
     if (ray_dist < dist - 10.0f)
+    {
+      i++;
       continue;
+    }
 
     int sprite_size = (int)(HEIGHT / dist * BLOCK);
     int draw_x = cub->enemies[i].sprite_x - sprite_size / 2;
@@ -357,17 +390,25 @@ void draw_enemy(t_cub *cub)
 
     float brightness = fmaxf(0.1f, 1.0f - (dist / (BLOCK * 8)));
 
-    for (int y = 0; y < sprite_size; y++)
+    int y = 0;
+    while (y < sprite_size)
     {
       int screen_y = draw_y + y;
       if (screen_y < 0 || screen_y >= HEIGHT)
+      {
+        y++;
         continue;
+      }
 
-      for (int x = 0; x < sprite_size; x++)
+      int x = 0;
+      while (x < sprite_size)
       {
         int screen_x = draw_x + x;
         if (screen_x < 0 || screen_x >= WIDTH)
+        {
+          x++;
           continue;
+        }
 
         int tex_x = x * tex->width / sprite_size;
         int tex_y = y * tex->height / sprite_size;
@@ -382,8 +423,11 @@ void draw_enemy(t_cub *cub)
           int b = (color & 0xFF) * brightness;
           my_pixel_put(screen_x, screen_y, &cub->data.img, (r << 16) | (g << 8) | b);
         }
+        x++;
       }
+      y++;
     }
+    i++;
   }
 }
 int game_loop(t_cub *cub)
