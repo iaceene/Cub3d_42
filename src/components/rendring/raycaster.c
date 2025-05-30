@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/29 17:27:53 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:34:04 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,13 +221,11 @@ void cast_ray(t_cub *cub, float ray_angle, int screen_x)
   }
 
   float dist = use_fixed_dist(cub->player.x, cub->player.y, hit_x, hit_y, cub);
-
   if (hit_tile == '2')
     draw_door(cub, screen_x, ray_dir_x, ray_dir_y, hit_x, hit_y, side, dist);
-  else
+  else if (hit_tile == '1')
     draw_wall(cub, screen_x, ray_dir_x, ray_dir_y, hit_x, hit_y, side, dist);
 }
-
 
 int game_loop(t_cub *cub)
 {
@@ -247,13 +245,11 @@ int game_loop(t_cub *cub)
   }
 
   draw_enemy(cub);
-  render_draw_minimap(cub);
   draw_weapon(cub);
-
-  update_eye_animation(cub);
   draw_eye(cub);
+  update_eye_animation(cub);
+  render_draw_minimap(cub);
   update_door_animation(cub);
-  // update_door_close(cub);
   mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
   return 0;
 }

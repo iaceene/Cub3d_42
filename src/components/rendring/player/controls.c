@@ -6,12 +6,11 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:37:28 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/23 14:08:54 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/30 11:53:02 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/cub3d.h"
-
 
 int key_press(int key, t_cub *cub)
 {
@@ -29,7 +28,7 @@ int key_press(int key, t_cub *cub)
 		cub->player.left_rotate = true;
 	if (key == XK_Right)
 		cub->player.right_rotate = true;
-	if (key == 101)
+	if (key == XK_space)
 		try_open_door(cub);
 	return (0);
 }

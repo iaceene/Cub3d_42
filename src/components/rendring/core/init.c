@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/29 17:31:33 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/30 14:24:29 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,11 +356,10 @@ int init_textures_eye(t_cub *cub)
         "./textures/eye/34.xpm",
         "./textures/eye/35.xpm",
         "./textures/eye/36.xpm",
-        "./textures/eye/37.xpm"
-    };
+        "./textures/eye/37.xpm"};
     cub->eye_anim_frame = 0;
     cub->eye_anim_tick = 0;
-    cub->eye_anim_speed = 120;
+    cub->eye_anim_speed = 0;
     cub->eye_pause_duration = 120 * 2;
     cub->eye_pause_timer = 0;
 
@@ -391,13 +390,13 @@ int init_textures_eye(t_cub *cub)
             &cub->texture->eye[f].line_length,
             &cub->texture->eye[f].endian);
     }
-    cub->eye_anim_speed = 1;
-
+    cub->eye_anim_speed = 0;
     cub->current_eye_index = 1;
     cub->eye_anim_frame = 1;
     cub->eye_anim_active = 1;
     cub->eye_anim_tick = 1;
-
+    cub->eye_direction = -1;
+    cub->is_cycling = 1;
     return 0;
 }
 
@@ -511,11 +510,11 @@ void init_enemies_position(t_cub *cub)
 {
     int enemy_index = 0;
     cub->enemy_count = 0;
-    int y =0;
-    while(cub->data.map.map[y] && y < HEIGHT)
+    int y = 0;
+    while (cub->data.map.map[y] && y < HEIGHT)
     {
-        int x =0;
-        while  (cub->data.map.map[y][x] && x < WIDTH)
+        int x = 0;
+        while (cub->data.map.map[y][x] && x < WIDTH)
         {
             if (cub->data.map.map[y][x] == '3')
             {

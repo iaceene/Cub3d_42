@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/29 17:29:24 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/30 14:13:49 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,19 @@
 #define MAP_HEIGHT 40
 #define BLOCK_SIZE 10
 #define PLAYER_SIZE 5
+#define ENEMY_RADIUS (BLOCK * 0.3f)
+#define FOV (PI / 3)  // 60 degrees
+
+
+typedef struct s_ray_hit {
+    float dist;
+    int type;       // 1=wall, 2=door, 3=enemy
+    int side;       // for walls/doors (0=NS, 1=EW)
+    int enemy_id;    // for enemies
+    float hit_x;
+    float hit_y;
+    float ray_angle;
+} t_ray_hit;
 
 typedef struct s_map
 {
@@ -222,6 +235,9 @@ typedef struct s_cub
 	// t_enemy enemies[10];  // Array of enemies (adjust size as needed)
 	int enemy_count;	  // Number of active enemies
 	int enemy_anim_speed; // Animation speed for all enemies
+	int door_anim_progress;
+	    int eye_direction;  // initialize to -1
+    int is_cycling;     // initialize to 1
 } t_cub;
 
 int map_parsing(int ac, char **av, t_cub *cub);
@@ -261,7 +277,7 @@ void my_pixel_put(int x, int y, t_img *img, int color);
 void clear_image(t_cub *cub);
 void render_draw_square(int x, int y, int size, int color, t_cub *cub);
 void render_draw_minimap(t_cub *cub);
-void cast_ray(t_cub *cub, float start_x, int i);
+// void cast_ray(t_cub *cub, float start_x, int i);
 int game_loop(t_cub *cub);
 int mouse_move(int x, int y, t_cub *cub);
 int mouse_scroll(int button, int x, int y, t_cub *cub);

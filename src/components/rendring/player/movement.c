@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:55:45 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/26 14:38:55 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:44:48 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ int mouse_scroll(int button, int x, int y, t_cub *cub)
 	}
 	else if (button == 1)
 	{
-		printf("button [%d]\n", button);
 		if (!cub->weapon_anim_active)
 		{
 			cub->weapon_anim_active = 1;
@@ -124,15 +123,10 @@ void try_open_door(t_cub *cub)
 	int fy = py + (int)round(sin(cub->player.angle));
 	cub->door_opened = 0;
 
-	if (cub->data.map.map[fy][fx] == '2' && !cub->door_anim_active)
-	{
-		cub->door_anim_active = 1;
-		cub->door_anim_frame = 0;
-		cub->door_anim_tick = 0;
-		cub->door_x = fx;
-		cub->door_y = fy;
-
-		cub->door_should_close = 0;
-		cub->door_opened = 1;
-	}
+	cub->door_x = fx;
+	cub->door_y = fy;
+	if (cub->data.map.map[fy][fx] == '2')
+		cub->data.map.map[cub->door_y][cub->door_x] = 'D';
+	else if (cub->data.map.map[fy][fx] == 'D')
+		cub->data.map.map[cub->door_y][cub->door_x] = '2';
 }
