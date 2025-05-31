@@ -6,53 +6,70 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:14:15 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/29 16:14:45 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:28:08 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/cub3d.h"
 
-
-void draw_weapon(t_cub *cub)
+static void	update_animation_frame(t_cub *cub)
 {
+	cub->weapon_anim_tick++;
+	if (cub->weapon_anim_tick > cub->weapon_anim_speed)
+	{
+		cub->weapon_anim_tick = 0;
+		cub->weapon_anim_frame++;
+		if (cub->weapon_anim_frame >= MAX_ANIM_FRAMES)
+			cub->weapon_anim_frame = 0;
+	}
+}
 
-  cub->weapon_anim_tick++;
-  if (cub->weapon_anim_tick > cub->weapon_anim_speed)
-  {
-    cub->weapon_anim_tick = 0;
-    cub->weapon_anim_frame++;
-    if (cub->weapon_anim_frame >= MAX_ANIM_FRAMES)
-      cub->weapon_anim_frame = 0;
-  }
+static void	draw_scaled_weapon(t_cub *cub, t_img *weapon, \
+				int x_start, int y_start)
+{
+	const int		scaled_width = weapon->width / 2;
+	const int		scaled_height = weapon->height / 2;
+	int				y;
+	int				x;
+	unsigned int	color;
 
-  int frame = cub->weapon_anim_frame;
-  t_img *weapon = &cub->texture->weapon[cub->current_weapon_index * MAX_ANIM_FRAMES + frame];
+	y = -1;
+	while (++y < scaled_height)
+	{
+		x = -1;
+		while (++x < scaled_width)
+		{
+			color = *(unsigned int *)(weapon->addr
+					+ (y * 2 * weapon->line_length)
+					+ (x * 2 * (weapon->bits_per_pixel / 8)));
+			if ((color & 0x00FFFFFF) != 0)
+				my_pixel_put_img(&cub->data.img,
+					x_start + x, y_start + y, color);
+		}
+	}
+}
 
-  int scaled_width = weapon->width / 2;
-  int scaled_height = weapon->height / 2;
+void	init_weapon_animation_params(t_cub *cub)
+{
+	cub->weapon_anim_speed = 1;
+	cub->current_weapon_index = 1;
+	cub->weapon_anim_frame = 1;
+	cub->weapon_anim_active = 1;
+	cub->weapon_anim_tick = 1;
+}
 
-  int x_start = (WIDTH - scaled_width) / 2;
-  int y_start = HEIGHT - scaled_height / 1.2;
+void	draw_weapon(t_cub *cub)
+{
+	t_img	*weapon;
+	int		x_start;
+	int		y_start;
+	int		frame;
 
-  int y = 0;
-
-  while (y < scaled_height)
-  {
-    int x = 0;
-    while (x < scaled_width)
-    {
-      int orig_x = x * 2;
-      int orig_y = y * 2;
-
-      char *src_pixel = weapon->addr + (orig_y * weapon->line_length + orig_x * (weapon->bits_per_pixel / 8));
-      unsigned int color = *(unsigned int *)src_pixel;
-
-      if ((color & 0x00FFFFFF) != 0)
-      {
-        my_pixel_put_img(&cub->data.img, x_start + x, y_start + y, color);
-      }
-      x++;
-    }
-    y++;
-  }
+	update_animation_frame(cub);
+	frame = cub->weapon_anim_frame;
+	weapon = &cub->texture->weapon[cub->current_weapon_index
+		* MAX_ANIM_FRAMES + frame];
+	x_start = (WIDTH - weapon->width / 2) / 2;
+	y_start = HEIGHT - (weapon->height / 2) / 1.2;
+	draw_scaled_weapon(cub, weapon, x_start, y_start);
 }

@@ -26,11 +26,11 @@ SRCS		= \
         	$(SRC_DIR)/components/rendring/graphics.c \
         	$(SRC_DIR)/components/rendring/minimap.c \
         	$(SRC_DIR)/components/rendring/raycaster.c \
-        	$(SRC_DIR)/components/rendring/eye/eye.c \
         	$(SRC_DIR)/components/rendring/floor_sky/floor_sky.c \
+        	$(SRC_DIR)/components/rendring/start_game/start_game.c \
         	$(SRC_DIR)/components/rendring/weapon/weapon.c \
-        	$(SRC_DIR)/components/rendring/door/door.c \
-        	$(SRC_DIR)/components/rendring/enemy/enemy.c \
+        	$(SRC_DIR)/components/rendring/wall/wall.c \
+        	$(SRC_DIR)/components/rendring/weapon/init_weapon.c \
 			$(SRC_DIR)/main/main.c \
 
 
@@ -48,11 +48,11 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/components/rendring/core
 	@mkdir -p $(OBJ_DIR)/components/rendring/player
 	@mkdir -p $(OBJ_DIR)/components/rendring/utils
-	@mkdir -p $(OBJ_DIR)/components/rendring/eye/eye.c \
-	@mkdir -p $(OBJ_DIR)/components/rendring/floor_sky/floor_sky.c \
-	@mkdir -p $(OBJ_DIR)/components/rendring/weapon/weapon.c \
-	@mkdir -p $(OBJ_DIR)/components/rendring/door/door.c \
-	@mkdir -p $(OBJ_DIR)/components/rendring/enemy/enemy.c \
+	@mkdir -p $(OBJ_DIR)/components/rendring/eye
+	@mkdir -p $(OBJ_DIR)/components/rendring/floor_sky
+	@mkdir -p $(OBJ_DIR)/components/rendring/weapon/weapon.c 
+	@mkdir -p $(OBJ_DIR)/components/rendring/start_game 
+	@mkdir -p $(OBJ_DIR)/components/rendring/wall
 	@mkdir -p $(OBJ_DIR)/main
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

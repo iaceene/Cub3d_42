@@ -6,13 +6,31 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:37:28 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/30 11:53:02 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:21:04 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/cub3d.h"
 
-int key_press(int key, t_cub *cub)
+int	event_hook_window(t_cub *cub)
+{
+	mlx_hook(cub->data.win, 17, 0, close_window, cub);
+	mlx_hook(cub->data.win, 2, 1L << 0, key_press, cub);
+	mlx_hook(cub->data.win, 3, 1L << 1, key_release, cub);
+	mlx_hook(cub->data.win, 6, 1L << 6, mouse_move, cub);
+	mlx_loop_hook(cub->data.mlx, game_loop, cub);
+	mlx_loop(cub->data.mlx);
+	return (0);
+}
+
+int	close_window(t_cub *cub)
+{
+	mlx_destroy_window(cub->data.mlx, cub->data.win);
+	exit(0);
+	return (0);
+}
+
+int	key_press(int key, t_cub *cub)
 {
 	if (key == XK_Escape)
 		close_window(cub);
@@ -33,7 +51,7 @@ int key_press(int key, t_cub *cub)
 	return (0);
 }
 
-int key_release(int key, t_cub *cub)
+int	key_release(int key, t_cub *cub)
 {
 	if (key == XK_Escape)
 		close_window(cub);

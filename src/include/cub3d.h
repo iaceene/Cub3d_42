@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/30 14:13:49 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/31 15:27:22 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 #define BLOCK 1000
 #define MINIMAP_WIDTH 200
 #define MINIMAP_HEIGHT 200
+#define MAX_FRAMES 18
 
 #define W 119
 #define A 97
@@ -292,9 +293,15 @@ void my_pixel_put_img(t_img *img, int x, int y, int color);
 void draw_split_background(t_cub *cub);
 /*weapon*/
 void draw_weapon(t_cub *cub);
+int init_textures_weapon(t_cub *cub);
+void init_weapon_animation_params(t_cub *cub);
 /*door*/
 void update_door_animation(t_cub *cub);
 void update_door_close(t_cub *cub);
 /*enemy*/
 void draw_enemy(t_cub *cub);
+/*start*/
+void init_texture_background_anim(t_cub *cub);
+/*wall*/
+void	init_texture_wall(t_cub *cub);
 #endif

@@ -6,61 +6,43 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:11:23 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/29 16:12:35 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/05/31 13:20:38 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/cub3d.h"
 
-
-void draw_split_background(t_cub *cub)
+static void	draw_half_background(t_img *img, int color, int start_y, int end_y)
 {
-  int screen_middle = HEIGHT / 2;
-  int floor_width = cub->texture->floor_img.width;
-  int floor_height = cub->texture->floor_img.height;
+	int	x;
+	int	y;
 
-  float posX = cub->player.x;
-  float posY = cub->player.y;
+	y = start_y;
+	while (y < end_y)
+	{
+		x = 0;
+		while (x < WIDTH)
+		{
+			my_pixel_put(x, y, img, color);
+			x++;
+		}
+		y++;
+	}
+}
 
-  float planeX = cos(cub->player.angle + PI / 2) * 0.66f;
-  float planeY = sin(cub->player.angle + PI / 2) * 0.66f;
+void	draw_split_background(t_cub *cub)
+{
+	int	floor_color;
+	int	sky_color;
+	int	screen_middle;
 
-  float light_radius = 2.0f;
-  float max_brightness = 1.0f;
-  float min_brightness = 0.1f;
-  int y = screen_middle;
-  while (y < HEIGHT)
-  {
-    float rayDirZ = (float)(y - HEIGHT / 2);
-    float rowDistance = (float)(HEIGHT / 2) / rayDirZ;
-    int x = 0;
-    while (x < WIDTH)
-    {
-      float cameraX = 2 * x / (float)WIDTH - 1;
-      float rayDirX = cos(cub->player.angle) + planeX * cameraX;
-      float rayDirY = sin(cub->player.angle) + planeY * cameraX;
-      float floorX = posX + rowDistance * rayDirX;
-      float floorY = posY + rowDistance * rayDirY;
-      int tx = (int)(floorX * floor_width) % floor_width;
-      int ty = (int)(floorY * floor_height) % floor_height;
-      if (tx < 0)
-        tx += floor_width;
-      if (ty < 0)
-        ty += floor_height;
-      char *pixel_addr = cub->texture->floor_img.addr + (ty * cub->texture->floor_img.line_length) + (tx * (cub->texture->floor_img.bits_per_pixel / 8));
-      unsigned int color = *(unsigned int *)pixel_addr;
-      float dx = floorX - posX;
-      float dy = floorY - posY;
-      float dist = sqrtf(dx * dx + dy * dy);
-      float brightness = 1.0f - (dist / light_radius);
-      brightness = fmaxf(fminf(brightness, max_brightness), min_brightness);
-      int r = ((color >> 16) & 0xFF) * brightness;
-      int g = ((color >> 8) & 0xFF) * brightness;
-      int b = (color & 0xFF) * brightness;
-      int shaded_color = (r << 16) | (g << 8) | b;
-      my_pixel_put(x, y, &cub->data.img, shaded_color);
-      x++;
-    }
-    y++;
-  }
+	screen_middle = HEIGHT / 2;
+	floor_color = (cub->texture->floor_grb[0] << 16)
+		| (cub->texture->floor_grb[1] << 8)
+		| cub->texture->floor_grb[2];
+	sky_color = (cub->texture->sky_grb[0] << 16)
+		| (cub->texture->sky_grb[1] << 8)
+		| cub->texture->sky_grb[2];
+	draw_half_background(&cub->data.img, sky_color, 0, screen_middle);
+	draw_half_background(&cub->data.img, floor_color, screen_middle, HEIGHT);
 }
