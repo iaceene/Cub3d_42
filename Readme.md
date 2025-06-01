@@ -17,7 +17,7 @@
     </a>
       <br />
       <a href="https://profile.intra.42.fr/users/yaajagro" title="Intra 42">
-        yaajagro42  🇲🇦
+        yaajagro42  alg
       </a>
     </td>
   </tr>
