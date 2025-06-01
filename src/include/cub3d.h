@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kaneki <kaneki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/01 16:45:39 by kaneki           ###   ########.fr       */
+/*   Updated: 2025/06/01 21:40:17 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,9 +190,18 @@ typedef struct s_enemy
 	int frame;
 } t_enemy;
 
+typedef struct s_minimap
+{
+    int offset_x;
+    int offset_y; 
+    int center_x;
+    int center_y;
+    int radius;
+} t_minimap;
 
 typedef struct s_cub
 {
+	    t_minimap minimap;
 	t_enemy enemies[MAX_ENEMY];
 	int num_enemies;
 	int screen_h;
@@ -324,4 +333,10 @@ void	init_texture_wall(t_cub *cub);
 void	draw_door(t_cub *cub, int screen_x, t_ray_data *ray, float dist);
 void	draw_wall(t_cub *cub, int screen_x, t_ray_data *ray, float dist);
 void	init_ray_params(t_ray_params *params, t_cub *cub, float ray_angle);
+void draw_minimap_walls(t_cub *cub, int center_x, int center_y, int radius);
+void draw_minimap_doors(t_cub *cub, int center_x, int center_y, int radius);
+void	draw_minimap_player(t_cub *cub, int center_x, int center_y);
+void	init_minimap_values(t_cub *cub);
+void	draw_border_pixel(t_cub *cub, int x, int y, int radius);
+int	calculate_distance_sq(int x, int y, int center_x, int center_y);
 #endif

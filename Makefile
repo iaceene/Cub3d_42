@@ -25,7 +25,9 @@ SRCS		= \
         	$(SRC_DIR)/components/rendring/utils/map_utils.c \
         	$(SRC_DIR)/components/rendring/graphics.c \
 			$(SRC_DIR)/components/rendring/utils_rycaster.c \
-        	$(SRC_DIR)/components/rendring/minimap.c \
+        	$(SRC_DIR)/components/rendring/minimap/utils_one_minimap.c \
+        	$(SRC_DIR)/components/rendring/minimap/utils_two_minimap.c \
+        	$(SRC_DIR)/components/rendring/minimap/minimap.c \
         	$(SRC_DIR)/components/rendring/raycaster.c \
         	$(SRC_DIR)/components/rendring/floor_sky/floor_sky.c \
         	$(SRC_DIR)/components/rendring/weapon/weapon.c \
@@ -52,6 +54,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/components/rendring/floor_sky
 	@mkdir -p $(OBJ_DIR)/components/rendring/weapon/weapon.c 
 	@mkdir -p $(OBJ_DIR)/components/rendring/wall
+	@mkdir -p $(OBJ_DIR)/components/rendring/minimap
 	@mkdir -p $(OBJ_DIR)/main
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
