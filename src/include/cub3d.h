@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kaneki <kaneki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/01 14:07:59 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/01 16:45:39 by kaneki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@
 #define FLOOR_TOP 0x696969
 #define FLOOR_BOTTOM 0x36454F
 
-#define WIDTH 1200
-#define HEIGHT 720
+#define WIDTH 900
+#define HEIGHT 520
 #define BLOCK 1000
 #define MINIMAP_WIDTH 200
 #define MINIMAP_HEIGHT 200

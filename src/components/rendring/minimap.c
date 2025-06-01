@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kaneki <kaneki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:46:23 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/01 14:35:35 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/01 20:37:20 by kaneki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,21 @@ void draw_minimap_background(t_cub *cub, int center_x, int center_y, int radius)
         y++;
     }
 }
-
+// Add this helper function at the top or in a utils file
+static int get_map_height(char **map)
+{
+    int h = 0;
+    while (map && map[h])
+        h++;
+    return h;
+}
 void draw_minimap_doors(t_cub *cub, int center_x, int center_y, int radius)
 {
     const int player_map_x = cub->player.x / BLOCK;
     const int player_map_y = cub->player.y / BLOCK;
     const int visible_blocks = radius / BLOCK_SIZE;
+    int map_height = get_map_height(cub->data.map.map);
+
 
     int dy = -visible_blocks;
     while (dy <= visible_blocks)
@@ -69,7 +78,7 @@ void draw_minimap_doors(t_cub *cub, int center_x, int center_y, int radius)
         {
             const int map_x = player_map_x + dx;
             const int map_y = player_map_y + dy;
-            if (map_y >= 0 && map_y < MAP_HEIGHT && cub->data.map.map[map_y])
+            if (map_y >= 0 && map_y < map_height && cub->data.map.map[map_y])
             {
                 size_t row_len = ft_strlen(cub->data.map.map[map_y]);
                 if (map_x >= 0 && map_x < (int)row_len && cub->data.map.map[map_y][map_x] == '2')
@@ -97,6 +106,7 @@ void draw_minimap_walls(t_cub *cub, int center_x, int center_y, int radius)
     const int player_map_x = cub->player.x / BLOCK;
     const int player_map_y = cub->player.y / BLOCK;
     const int visible_blocks = radius / BLOCK_SIZE;
+    int map_height = get_map_height(cub->data.map.map);
 
     int dy = -visible_blocks;
     while (dy <= visible_blocks)
@@ -106,7 +116,7 @@ void draw_minimap_walls(t_cub *cub, int center_x, int center_y, int radius)
         {
             const int map_x = player_map_x + dx;
             const int map_y = player_map_y + dy;
-            if (map_y >= 0 && map_y < MAP_HEIGHT && cub->data.map.map[map_y])
+            if (map_y >= 0 && map_y < map_height && cub->data.map.map[map_y])
             {
                 size_t row_len = ft_strlen(cub->data.map.map[map_y]);
                 if (map_x >= 0 && map_x < (int)row_len && cub->data.map.map[map_y][map_x] == '1')
@@ -155,48 +165,24 @@ void draw_minimap_border(t_cub *cub, int center_x, int center_y, int radius, int
 
 void draw_minimap_direction(t_cub *cub, int center_x, int center_y, int radius)
 {
-    const float line_length = 40;
-    const int rays = 30;
-    const float fov = 60 * (3.14 / 180);
-    const float start_angle = cub->player.angle - fov / 2;
-    const float angle_step = fov / rays;
+    const float line_length = 40.0f;
+    float dx = cosf(cub->player.angle);
+    float dy = sinf(cub->player.angle);
+    float x = center_x;
+    float y = center_y;
 
-    for (int r = 0; r < rays; r++)
+    for (int i = 0; i < (int)line_length; i++)
     {
-        float ray_angle = start_angle + r * angle_step;
-        float dx = cos(ray_angle);
-        float dy = sin(ray_angle);
-        float x = center_x;
-        float y = center_y;
-        int i = 0;
-
-        while (i < line_length)
-        {
-            int px = (int)x;
-            int py = (int)y;
-
-            if ((px - center_x) * (px - center_x) + (py - center_y) * (py - center_y) <= radius * radius)
-                my_pixel_put(px, py, &cub->data.img, 0xFFFF00);
-
-            float world_x = cub->player.x + (x - center_x) * (BLOCK / BLOCK_SIZE);
-            float world_y = cub->player.y + (y - center_y) * (BLOCK / BLOCK_SIZE);
-            int map_x = (int)(world_x / BLOCK);
-            int map_y = (int)(world_y / BLOCK);
-
-            if (map_y >= 0 && map_y < MAP_HEIGHT && cub->data.map.map[map_y])
-            {
-                size_t row_len = ft_strlen(cub->data.map.map[map_y]);
-                if (map_x >= 0 && map_x < (int)row_len &&
-                    (cub->data.map.map[map_y][map_x] == '1' || cub->data.map.map[map_y][map_x] == '2'))
-                    break;
-            }
-            else
-                break;
-
-            x += dx;
-            y += dy;
-            i++;
-        }
+        int px = (int)x;
+        int py = (int)y;
+        if ((px - center_x) * (px - center_x) + (py - center_y) * (py - center_y) > radius * radius)
+            break;
+        if (touch_one(px, py, cub))
+            my_pixel_put(px, py, &cub->data.img, 0xFF0000);
+        else
+            break;
+        x += dx;
+        y += dy;
     }
 }
 
