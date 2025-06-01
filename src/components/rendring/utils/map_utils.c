@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:35:35 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/31 15:41:20 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/01 14:05:27 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,16 @@ float	use_fixed_dist(float x1, float y1, float x2, float y2, t_cub *game)
 	angle = atan2(delta_y, delta_x) - game->player.angle;
 	fix_dist = use_distance(delta_x, delta_y) * cos(angle);
 	return (fix_dist);
+}
+
+void	init_ray_params(t_ray_params *params, t_cub *cub, float ray_angle)
+{
+	params->ray_dir_x = cos(ray_angle);
+	params->ray_dir_y = sin(ray_angle);
+	params->map_x = (int)cub->player.x / BLOCK;
+	params->map_y = (int)cub->player.y / BLOCK;
+	params->delta_dist_x = fabs(1 / params->ray_dir_x);
+	params->delta_dist_y = fabs(1 / params->ray_dir_y);
+	params->pos_x = cub->player.x;
+	params->pos_y = cub->player.y;
 }

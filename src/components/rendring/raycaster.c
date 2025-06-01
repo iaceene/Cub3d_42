@@ -6,206 +6,136 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/31 13:08:55 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/01 12:04:07 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
-void draw_wall(t_cub *cub, int screen_x, float ray_dx, float ray_dy,
-               float ray_x, float ray_y, int side, float dist)
+
+static void	perform_dda(t_ray_params *params, t_cub *cub)
 {
-  float wall_height = (BLOCK / dist) * (WIDTH / 2);
-  int start_y = (HEIGHT - wall_height) / 2;
-  if (start_y < 0)
-    start_y = 0;
-  int end_y = start_y + wall_height;
-  if (end_y > HEIGHT)
-    end_y = HEIGHT;
+	char	hit_tile;
 
-  t_img *tex;
-  float wall_hit;
-
-  if (side == 0)
-  {
-    if (ray_dx < 0)
-      tex = &cub->texture->we_img;
-    else
-      tex = &cub->texture->ea_img;
-    wall_hit = fmod(ray_y, BLOCK) / BLOCK;
-  }
-  else
-  {
-    if (ray_dy < 0)
-      tex = &cub->texture->no_img;
-    else
-      tex = &cub->texture->so_img;
-    wall_hit = fmod(ray_x, BLOCK) / BLOCK;
-  }
-
-  int tex_x = (int)(wall_hit * tex->width);
-  if ((side == 0 && ray_dx > 0) || (side == 1 && ray_dy < 0))
-    tex_x = tex->width - tex_x - 1;
-
-  float step = (float)tex->height / wall_height;
-  float tex_pos = (start_y - HEIGHT / 2 + wall_height / 2) * step;
-
-  int y = start_y;
-  while (y < end_y)
-  {
-    int tex_y = (int)tex_pos & (tex->height - 1);
-    tex_pos += step;
-    char *pixel = tex->addr + (tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8));
-    unsigned int color = *(unsigned int *)pixel;
-
-    my_pixel_put(screen_x, y, &cub->data.img, color);
-    y++;
-  }
+	hit_tile = ' ';
+	while (1)
+	{
+		if (params->side_dist_x < params->side_dist_y)
+		{
+			params->map_x += params->step_x;
+			params->side_dist_x += params->delta_dist_x;
+			params->side = 0;
+		}
+		else
+		{
+			params->map_y += params->step_y;
+			params->side_dist_y += params->delta_dist_y;
+			params->side = 1;
+		}
+		hit_tile = cub->data.map.map[params->map_y][params->map_x];
+		if (hit_tile == '1' || hit_tile == '2' || hit_tile == '3')
+		{
+			params->hit_tile = hit_tile;
+			break ;
+		}
+	}
 }
 
-void draw_door(t_cub *cub, int screen_x, float ray_dx, float ray_dy,
-               float ray_x, float ray_y, int side, float dist)
+static void	calculate_hit_point(t_ray_params *params, t_cub *cub,
+	float *hit_x, float *hit_y)
 {
-  float wall_height = (BLOCK / dist) * (WIDTH / 2);
-  int start_y = (HEIGHT - wall_height) / 2;
-  if (start_y < 0)
-    start_y = 0;
-  int end_y = start_y + wall_height;
-  if (end_y > HEIGHT)
-    end_y = HEIGHT;
-
-  t_img *tex = &cub->texture->door_img;
-  if (!tex || !tex->img)
-    return;
-
-  float wall_hit;
-  if (side == 0)
-    wall_hit = fmod(ray_y, BLOCK) / BLOCK;
-  else
-    wall_hit = fmod(ray_x, BLOCK) / BLOCK;
-
-  int tex_x = (int)(wall_hit * tex->width);
-  if ((side == 0 && ray_dx > 0) || (side == 1 && ray_dy < 0))
-    tex_x = tex->width - tex_x - 1;
-
-  float step = (float)tex->height / wall_height;
-  float tex_pos = (start_y - HEIGHT / 2 + wall_height / 2) * step;
-
-  int y = start_y;
-  while (y < end_y)
-  {
-    int tex_y = (int)tex_pos & (tex->height - 1);
-    tex_pos += step;
-    char *pixel = tex->addr + (tex_y * tex->line_length + tex_x * (tex->bits_per_pixel / 8));
-    unsigned int color = *(unsigned int *)pixel;
-
-    my_pixel_put(screen_x, y, &cub->data.img, color);
-    y++;
-  }
+	if (params->side == 0)
+	{
+		*hit_x = cub->player.x + (params->map_x * BLOCK - cub->player.x
+				+ (1 - params->step_x) * BLOCK / 2) / params->ray_dir_x
+			* params->ray_dir_x;
+		*hit_y = cub->player.y + (params->map_x * BLOCK - cub->player.x
+				+ (1 - params->step_x) * BLOCK / 2) / params->ray_dir_x
+			* params->ray_dir_y;
+	}
+	else
+	{
+		*hit_x = cub->player.x + (params->map_y * BLOCK - cub->player.y
+				+ (1 - params->step_y) * BLOCK / 2) / params->ray_dir_y
+			* params->ray_dir_x;
+		*hit_y = cub->player.y + (params->map_y * BLOCK - cub->player.y
+				+ (1 - params->step_y) * BLOCK / 2) / params->ray_dir_y
+			* params->ray_dir_y;
+	}
 }
 
-void cast_ray(t_cub *cub, float ray_angle, int screen_x)
+static void	calculate_step_distances(t_ray_params *params)
 {
-  float ray_dir_x = cos(ray_angle);
-  float ray_dir_y = sin(ray_angle);
-
-  int map_x = (int)cub->player.x / BLOCK;
-  int map_y = (int)cub->player.y / BLOCK;
-
-  float side_dist_x;
-  float side_dist_y;
-
-  float delta_dist_x = fabs(1 / ray_dir_x);
-  float delta_dist_y = fabs(1 / ray_dir_y);
-
-  int step_x;
-  int step_y;
-  int side;
-
-  float pos_x = cub->player.x;
-  float pos_y = cub->player.y;
-
-  if (ray_dir_x < 0)
-  {
-    step_x = -1;
-    side_dist_x = (pos_x - map_x * BLOCK) * delta_dist_x / BLOCK;
-  }
-  else
-  {
-    step_x = 1;
-    side_dist_x = ((map_x + 1) * BLOCK - pos_x) * delta_dist_x / BLOCK;
-  }
-
-  if (ray_dir_y < 0)
-  {
-    step_y = -1;
-    side_dist_y = (pos_y - map_y * BLOCK) * delta_dist_y / BLOCK;
-  }
-  else
-  {
-    step_y = 1;
-    side_dist_y = ((map_y + 1) * BLOCK - pos_y) * delta_dist_y / BLOCK;
-  }
-
-  char hit_tile = ' ';
-  while (1)
-  {
-    if (side_dist_x < side_dist_y)
-    {
-      map_x += step_x;
-      side_dist_x += delta_dist_x;
-      side = 0;
-    }
-    else
-    {
-      map_y += step_y;
-      side_dist_y += delta_dist_y;
-      side = 1;
-    }
-
-    hit_tile = cub->data.map.map[map_y][map_x];
-    if (hit_tile == '1' || hit_tile == '2' || hit_tile == '3')
-      break;
-  }
-
-  float hit_x, hit_y;
-  if (side == 0)
-  {
-    hit_x = cub->player.x + (map_x * BLOCK - cub->player.x + (1 - step_x) * BLOCK / 2) / ray_dir_x * ray_dir_x;
-    hit_y = cub->player.y + (map_x * BLOCK - cub->player.x + (1 - step_x) * BLOCK / 2) / ray_dir_x * ray_dir_y;
-  }
-  else
-  {
-    hit_x = cub->player.x + (map_y * BLOCK - cub->player.y + (1 - step_y) * BLOCK / 2) / ray_dir_y * ray_dir_x;
-    hit_y = cub->player.y + (map_y * BLOCK - cub->player.y + (1 - step_y) * BLOCK / 2) / ray_dir_y * ray_dir_y;
-  }
-
-  float dist = use_fixed_dist(cub->player.x, cub->player.y, hit_x, hit_y, cub);
-  if (hit_tile == '2')
-    draw_door(cub, screen_x, ray_dir_x, ray_dir_y, hit_x, hit_y, side, dist);
-  else if (hit_tile == '1')
-    draw_wall(cub, screen_x, ray_dir_x, ray_dir_y, hit_x, hit_y, side, dist);
+	if (params->ray_dir_x < 0)
+	{
+		params->step_x = -1;
+		params->side_dist_x = (params->pos_x - params->map_x * BLOCK)
+			* params->delta_dist_x / BLOCK;
+	}
+	else
+	{
+		params->step_x = 1;
+		params->side_dist_x = ((params->map_x + 1) * BLOCK - params->pos_x)
+			* params->delta_dist_x / BLOCK;
+	}
+	if (params->ray_dir_y < 0)
+	{
+		params->step_y = -1;
+		params->side_dist_y = (params->pos_y - params->map_y * BLOCK)
+			* params->delta_dist_y / BLOCK;
+	}
+	else
+	{
+		params->step_y = 1;
+		params->side_dist_y = ((params->map_y + 1) * BLOCK - params->pos_y)
+			* params->delta_dist_y / BLOCK;
+	}
 }
 
-
-int game_loop(t_cub *cub)
+void	cast_ray(t_cub *cub, float ray_angle, int screen_x)
 {
-  handle_movement(cub);
-  clear_image(cub);
-  draw_split_background(cub);
+	t_ray_params	params;
+	t_ray_data		ray;
+	float			hit_x;
+	float			hit_y;
+	float			dist;
 
-  float ray_step = (PI / 3) / WIDTH;
-  float ray_angle = cub->player.angle - (PI / 6);
+	init_ray_params(&params, cub, ray_angle);
+	calculate_step_distances(&params);
+	perform_dda(&params, cub);
+	calculate_hit_point(&params, cub, &hit_x, &hit_y);
+	ray.ray_dx = params.ray_dir_x;
+	ray.ray_dy = params.ray_dir_y;
+	ray.ray_x = hit_x;
+	ray.ray_y = hit_y;
+	ray.side = params.side;
+	dist = use_fixed_dist(cub->player.x, cub->player.y, hit_x, hit_y, cub);
+	if (params.hit_tile == '2')
+		draw_door(cub, screen_x, &ray, dist);
+	else if (params.hit_tile == '1')
+		draw_wall(cub, screen_x, &ray, dist);
+}
 
-  int x = 0;
-  while (x < WIDTH)
-  {
-    cast_ray(cub, ray_angle, x);
-    ray_angle += ray_step;
-    x++;
-  }
+int	game_loop(t_cub *cub)
+{
+	float	ray_step;
+	float	ray_angle;
+	int		x;
 
-  draw_weapon(cub);
-  render_draw_minimap(cub);
-  mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
-  return 0;
+	handle_movement(cub);
+	clear_image(cub);
+	draw_split_background(cub);
+	ray_step = (PI / 3) / WIDTH;
+	ray_angle = cub->player.angle - (PI / 6);
+	x = 0;
+	while (x < WIDTH)
+	{
+		cast_ray(cub, ray_angle, x);
+		ray_angle += ray_step;
+		x++;
+	}
+	draw_weapon(cub);
+	render_draw_minimap(cub);
+	mlx_put_image_to_window(cub->data.mlx, cub->data.win,
+		cub->data.img.img, 0, 0);
+	return (0);
 }

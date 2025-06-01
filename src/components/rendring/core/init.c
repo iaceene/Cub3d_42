@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/31 15:17:07 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/01 11:09:51 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ int	init_window(t_cub *cub)
 	init_textures_weapon(cub);
 	init_texture_wall(cub);
 	init_texture_door(cub);
-	init_texture_background_anim(cub);
 	if (event_hook_window(cub))
 		return (1);
 	return (0);

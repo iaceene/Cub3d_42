@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/31 15:27:22 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/01 14:07:59 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,7 @@ typedef struct s_enemy
 	int frame;
 } t_enemy;
 
+
 typedef struct s_cub
 {
 	t_enemy enemies[MAX_ENEMY];
@@ -240,7 +241,44 @@ typedef struct s_cub
 	    int eye_direction;  // initialize to -1
     int is_cycling;     // initialize to 1
 } t_cub;
+typedef struct s_draw_info
+{
+	t_img		*tex;
+	float		wall_height;
+	float		wall_hit;
+	float		step;
+	float		tex_pos;
+	int			start_y;
+	int			end_y;
+	int			tex_x;
+}	t_draw_info;
 
+typedef struct s_ray_data
+{
+	float	ray_dx;
+	float	ray_dy;
+	float	ray_x;
+	float	ray_y;
+	int		side;
+}	t_ray_data;
+
+typedef struct s_ray_params
+{
+	float	ray_dir_x;
+	float	ray_dir_y;
+	int		map_x;
+	int		map_y;
+	float	side_dist_x;
+	float	side_dist_y;
+	float	delta_dist_x;
+	float	delta_dist_y;
+	int		step_x;
+	int		step_y;
+	int		side;
+	float	pos_x;
+	float	pos_y;
+	char	hit_tile;
+}	t_ray_params;
 int map_parsing(int ac, char **av, t_cub *cub);
 int init_map(t_cub *cub, char *filename);
 char *read_map(int fd);
@@ -260,48 +298,30 @@ int check_file(char *filename);
 int check_texture(t_cub *cub);
 int check_comas(char *clr1, char *clr2);
 void reset_texture(t_texture *textur);
-
 int init_window(t_cub *cub);
 int event_hook_window(t_cub *cub);
 int init_image(t_cub *cub);
-void initialize_player(t_player *player, t_cub *cub);
 int key_release(int key, t_cub *cub);
 int key_press(int key, t_cub *cub);
 int close_window(t_cub *cub);
 void handle_movement(t_cub *cub);
 bool touch_one(float px, float py, t_cub *cub);
 float use_distance(float x, float y);
-float use_fixed_dist(float x1, float y1, float x2, float y2, t_cub *game);
-float world_to_minimap_x(float x);
-float world_to_minimap_y(float y);
+float	use_fixed_dist(float x1, float y1, float x2, float y2, t_cub *game);
 void my_pixel_put(int x, int y, t_img *img, int color);
 void clear_image(t_cub *cub);
 void render_draw_square(int x, int y, int size, int color, t_cub *cub);
 void render_draw_minimap(t_cub *cub);
-// void cast_ray(t_cub *cub, float start_x, int i);
 int game_loop(t_cub *cub);
 int mouse_move(int x, int y, t_cub *cub);
-int mouse_scroll(int button, int x, int y, t_cub *cub);
-
 void try_open_door(t_cub *cub);
-/*eye*/
-void update_eye_animation(t_cub *cub);
-void draw_eye(t_cub *cub);
-/*graphics*/
 void my_pixel_put_img(t_img *img, int x, int y, int color);
-/*floor_sky*/
 void draw_split_background(t_cub *cub);
-/*weapon*/
 void draw_weapon(t_cub *cub);
 int init_textures_weapon(t_cub *cub);
 void init_weapon_animation_params(t_cub *cub);
-/*door*/
-void update_door_animation(t_cub *cub);
-void update_door_close(t_cub *cub);
-/*enemy*/
-void draw_enemy(t_cub *cub);
-/*start*/
-void init_texture_background_anim(t_cub *cub);
-/*wall*/
 void	init_texture_wall(t_cub *cub);
+void	draw_door(t_cub *cub, int screen_x, t_ray_data *ray, float dist);
+void	draw_wall(t_cub *cub, int screen_x, t_ray_data *ray, float dist);
+void	init_ray_params(t_ray_params *params, t_cub *cub, float ray_angle);
 #endif
