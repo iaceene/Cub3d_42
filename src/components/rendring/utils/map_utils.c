@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:35:35 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/01 14:05:27 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 12:09:50 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,26 @@
 
 bool	touch_one(float px, float py, t_cub *cub)
 {
-	int	x;
-	int	y;
+	int		i;
+	int		j;
+	float	check_x;
+	float	check_y;
 
-	x = px / BLOCK;
-	y = py / BLOCK;
-	if (cub->data.map.map[y][x] == '1' || cub->data.map.map[y][x] == '2')
-		return (true);
+	i = -1;
+	while (i <= 1)
+	{
+		j = -1;
+		while (j <= 1)
+		{
+			check_x = (px + i * PLAYER_RADIUS) / BLOCK;
+			check_y = (py + j * PLAYER_RADIUS) / BLOCK;
+			if (cub->data.map.map[(int)check_y][(int)check_x] == '1' \
+			|| cub->data.map.map[(int)check_y][(int)check_x] == '2')
+				return (true);
+			j++;
+		}
+		i++;
+	}
 	return (false);
 }
 
@@ -29,15 +42,15 @@ float	use_distance(float x, float y)
 	return (sqrt(x * x + y * y));
 }
 
-float	use_fixed_dist(float x1, float y1, float x2, float y2, t_cub *game)
+float	use_fixed_dist(float x2, float y2, t_cub *game)
 {
 	float	delta_x;
 	float	delta_y;
 	float	angle;
 	float	fix_dist;
 
-	delta_x = x2 - x1;
-	delta_y = y2 - y1;
+	delta_x = x2 - game->player.x;
+	delta_y = y2 - game->player.y;
 	angle = atan2(delta_y, delta_x) - game->player.angle;
 	fix_dist = use_distance(delta_x, delta_y) * cos(angle);
 	return (fix_dist);
@@ -53,4 +66,14 @@ void	init_ray_params(t_ray_params *params, t_cub *cub, float ray_angle)
 	params->delta_dist_y = fabs(1 / params->ray_dir_y);
 	params->pos_x = cub->player.x;
 	params->pos_y = cub->player.y;
+}
+
+int	get_map_height(char **map)
+{
+	int	h;
+
+	h = 0;
+	while (map && map[h])
+		h++;
+	return (h);
 }

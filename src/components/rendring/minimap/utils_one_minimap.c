@@ -6,21 +6,11 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 21:15:40 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/01 21:42:51 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 11:59:48 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/cub3d.h"
-
-static int	get_map_height(char **map)
-{
-	int	h;
-
-	h = 0;
-	while (map && map[h])
-		h++;
-	return (h);
-}
 
 static int	is_valid_map_position(t_cub *cub, int map_x, int map_y, int map_h)
 {
@@ -39,7 +29,6 @@ static void	draw_block_if_in_radius(t_cub *cub, int dx, int dy, char block_type)
 	int	screen_x;
 	int	screen_y;
 	int	dist_sq;
-	int	color;
 
 	screen_x = cub->minimap.center_x + dx * BLOCK_SIZE;
 	screen_y = cub->minimap.center_y + dy * BLOCK_SIZE;
@@ -50,11 +39,11 @@ static void	draw_block_if_in_radius(t_cub *cub, int dx, int dy, char block_type)
 	if (dist_sq <= cub->minimap.radius * cub->minimap.radius)
 	{
 		if (block_type == '1')
-			color = WALL_COLOR;
+			cub->color = WALL_COLOR;
 		else
-			color = DOOR_COLOR;
+			cub->color = DOOR_COLOR;
 		render_draw_square(screen_x - BLOCK_SIZE / 2,
-			screen_y - BLOCK_SIZE / 2, BLOCK_SIZE, color, cub);
+			screen_y - BLOCK_SIZE / 2, BLOCK_SIZE, cub);
 	}
 }
 

@@ -6,13 +6,13 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 21:29:40 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/01 21:39:29 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 12:05:59 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/cub3d.h"
 
-void	render_draw_square(int x, int y, int size, int color, t_cub *cub)
+void	render_draw_square(int x, int y, int size, t_cub *cub)
 {
 	int	i;
 	int	j;
@@ -25,9 +25,11 @@ void	render_draw_square(int x, int y, int size, int color, t_cub *cub)
 		while (j <= size)
 		{
 			if (i == 0 || j == 0 || i == size || j == size)
-				my_pixel_put(x + i, y + j, &cub->data.img, color - 0x101010);
+				my_pixel_put(x + i, y + j, &cub->data.img, \
+					cub->color - 0x101010);
 			else
-				my_pixel_put(x + i, y + j, &cub->data.img, color);
+				my_pixel_put(x + i, y + j, &cub->data.img, \
+					cub->color);
 			j++;
 		}
 		i++;

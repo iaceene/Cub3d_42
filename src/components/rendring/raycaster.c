@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/01 12:04:07 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 12:09:56 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	cast_ray(t_cub *cub, float ray_angle, int screen_x)
 	ray.ray_x = hit_x;
 	ray.ray_y = hit_y;
 	ray.side = params.side;
-	dist = use_fixed_dist(cub->player.x, cub->player.y, hit_x, hit_y, cub);
+	dist = use_fixed_dist(hit_x, hit_y, cub);
 	if (params.hit_tile == '2')
 		draw_door(cub, screen_x, &ray, dist);
 	else if (params.hit_tile == '1')

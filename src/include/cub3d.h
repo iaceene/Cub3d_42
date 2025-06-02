@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/01 21:40:17 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 12:14:31 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "../lib/libft/libft.h"
 #include "../lib/gnl/get_next_line.h"
 #include "../lib/malloc/ft_malloc.h"
+#define PLAYER_RADIUS (BLOCK / 4)
 
 #define COLOR_RESET "\x1b[0m"
 #define COLOR_YELLOW "\x1b[33m"
@@ -45,12 +46,6 @@
 #define MINIMAP_HEIGHT 200
 #define MAX_FRAMES 18
 
-#define W 119
-#define A 97
-#define S 115
-#define D 100
-#define LEFT 65361
-#define RIGHT 65363
 
 // For X11/Linux:
 #define KEY_W 119
@@ -65,24 +60,10 @@
 
 #define PI 3.14159265359
 
-/* ================== MINIMAP COLORS ================== */
 #define WALL_COLOR 0x000000
 #define PLAYER_COLOR 0x00FF00
-#define RAY_COLOR 0xF7FF00
-#define EMPTY_SPACE 0x1A1A2E
-
-/* ================== 3D VIEW COLORS ================== */
-#define SKY_COLOR 0x87CEEB
-#define FLOOR_COLOR 0x36454F
-#define WALL_TOP_COLOR 0x6B8E23
-#define WALL_BOTTOM_COLOR 0x98FB98
-
-#define MAP_WIDTH 40
-#define MAP_HEIGHT 40
 #define BLOCK_SIZE 10
-#define PLAYER_SIZE 5
-#define ENEMY_RADIUS (BLOCK * 0.3f)
-#define FOV (PI / 3)  // 60 degrees
+#define PLAYER_SIZE 3
 
 
 typedef struct s_ray_hit {
@@ -249,6 +230,7 @@ typedef struct s_cub
 	int door_anim_progress;
 	    int eye_direction;  // initialize to -1
     int is_cycling;     // initialize to 1
+	int color;
 } t_cub;
 typedef struct s_draw_info
 {
@@ -316,10 +298,10 @@ int close_window(t_cub *cub);
 void handle_movement(t_cub *cub);
 bool touch_one(float px, float py, t_cub *cub);
 float use_distance(float x, float y);
-float	use_fixed_dist(float x1, float y1, float x2, float y2, t_cub *game);
+float	use_fixed_dist(float x2, float y2, t_cub *game);
 void my_pixel_put(int x, int y, t_img *img, int color);
 void clear_image(t_cub *cub);
-void render_draw_square(int x, int y, int size, int color, t_cub *cub);
+void	render_draw_square(int x, int y, int size, t_cub *cub);
 void render_draw_minimap(t_cub *cub);
 int game_loop(t_cub *cub);
 int mouse_move(int x, int y, t_cub *cub);
@@ -339,4 +321,5 @@ void	draw_minimap_player(t_cub *cub, int center_x, int center_y);
 void	init_minimap_values(t_cub *cub);
 void	draw_border_pixel(t_cub *cub, int x, int y, int radius);
 int	calculate_distance_sq(int x, int y, int center_x, int center_y);
+int	get_map_height(char **map);
 #endif
