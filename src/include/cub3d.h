@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/02 12:14:31 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 13:06:59 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include "../lib/libft/libft.h"
 #include "../lib/gnl/get_next_line.h"
 #include "../lib/malloc/ft_malloc.h"
-#define PLAYER_RADIUS (BLOCK / 4)
+#define PLAYER_RADIUS (BLOCK / 9)
 
 #define COLOR_RESET "\x1b[0m"
 #define COLOR_YELLOW "\x1b[33m"
@@ -64,17 +64,6 @@
 #define PLAYER_COLOR 0x00FF00
 #define BLOCK_SIZE 10
 #define PLAYER_SIZE 3
-
-
-typedef struct s_ray_hit {
-    float dist;
-    int type;       // 1=wall, 2=door, 3=enemy
-    int side;       // for walls/doors (0=NS, 1=EW)
-    int enemy_id;    // for enemies
-    float hit_x;
-    float hit_y;
-    float ray_angle;
-} t_ray_hit;
 
 typedef struct s_map
 {
@@ -119,14 +108,11 @@ typedef struct s_texture
 	int floor_grb[3];
 	int sky_grb[3];
 	t_img *weapon;
-	t_img *eye;
-	t_img *enemy;
 	t_img no_img;
 	t_img so_img;
 	t_img we_img;
 	t_img ea_img;
 	t_img door_img;
-	t_img floor_img;
 } t_texture;
 
 typedef struct s_data
@@ -151,12 +137,6 @@ typedef struct s_player
 	bool right_rotate;
 } t_player;
 
-#define MAX_WEAPONS 3
-#define MAX_ANIM_FRAMES 3
-#define MAX_DOOR_FRAMES 6
-#define MAX_BACKGROUND_FRAMES 57
-#define MAX_EYE 37
-#define MAX_ENEMY 65
 typedef struct s_enemy
 {
 	float x;		// Enemy X position
@@ -183,14 +163,12 @@ typedef struct s_minimap
 typedef struct s_cub
 {
 	    t_minimap minimap;
-	t_enemy enemies[MAX_ENEMY];
-	int num_enemies;
 	int screen_h;
 	int screen_w;
 	t_data data;
 	t_player player;
 	t_texture *texture;
-	t_img weapon[MAX_WEAPONS][MAX_ANIM_FRAMES];
+	t_img weapon[1][3];
 	int eye_anim_speed;
 	int current_eye_index;
 	int eye_anim_frame;
@@ -209,26 +187,7 @@ typedef struct s_cub
 	int door_x;
 	int door_y;
 	int door_opened;
-	t_img door_textures[MAX_DOOR_FRAMES];
-	t_img background_textures[MAX_BACKGROUND_FRAMES];
-	int background_anim_frame;
-	int background_anim_tick;
-	int eye_closed_timer;
-	int eye_open_timer;
-	int eye_pause_timer;	// How long we've been paused
-	int eye_pause_duration; // How long to pause between animations
-
-	int enemy_anim_frame; // Start with enemy open
-	int enemy_anim_tick;
-	int enemy_pause_duration; // 1 second at 60FPS
-	int enemy_pause_timer;
-	int current_enemy_index;
-	int enemy_anim_active;
-	// t_enemy enemies[10];  // Array of enemies (adjust size as needed)
-	int enemy_count;	  // Number of active enemies
-	int enemy_anim_speed; // Animation speed for all enemies
 	int door_anim_progress;
-	    int eye_direction;  // initialize to -1
     int is_cycling;     // initialize to 1
 	int color;
 } t_cub;

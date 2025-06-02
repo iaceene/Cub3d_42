@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/01 11:09:51 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 13:07:13 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,6 @@ int	init_window(t_cub *cub)
 	cub->data.win = mlx_new_window(cub->data.mlx, WIDTH, HEIGHT, "Cub3d");
 	if (!cub->data.win)
 		return (ft_putendl_fd("Error\nFail to open window", 2), 1);
-	cub->background_anim_frame = 0;
-	cub->background_anim_tick = 0;
 	init_player(&cub->player, cub);
 	if (init_image(cub))
 		return (1);

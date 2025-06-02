@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:14:15 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/31 15:28:08 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 13:05:06 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	update_animation_frame(t_cub *cub)
 	{
 		cub->weapon_anim_tick = 0;
 		cub->weapon_anim_frame++;
-		if (cub->weapon_anim_frame >= MAX_ANIM_FRAMES)
+		if (cub->weapon_anim_frame >= 3)
 			cub->weapon_anim_frame = 0;
 	}
 }
@@ -68,7 +68,7 @@ void	draw_weapon(t_cub *cub)
 	update_animation_frame(cub);
 	frame = cub->weapon_anim_frame;
 	weapon = &cub->texture->weapon[cub->current_weapon_index
-		* MAX_ANIM_FRAMES + frame];
+		* 3 + frame];
 	x_start = (WIDTH - weapon->width / 2) / 2;
 	y_start = HEIGHT - (weapon->height / 2) / 1.2;
 	draw_scaled_weapon(cub, weapon, x_start, y_start);
