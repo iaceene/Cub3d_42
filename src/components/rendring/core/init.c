@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/02 13:07:13 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 13:49:37 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	init_image(t_cub *cub)
 void	init_texture_door(t_cub *cub)
 {
 	cub->texture->door_img.img = mlx_xpm_file_to_image(cub->data.mlx,
-			"./textures/door/door.xpm",
+			"./textures/door/__door2.xpm",
 			&cub->texture->door_img.width,
 			&cub->texture->door_img.height);
 	if (!cub->texture->door_img.img)

@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:35:35 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/02 12:09:50 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 13:18:00 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ bool	touch_one(float px, float py, t_cub *cub)
 		j = -1;
 		while (j <= 1)
 		{
-			check_x = (px + i * PLAYER_RADIUS) / BLOCK;
-			check_y = (py + j * PLAYER_RADIUS) / BLOCK;
+			check_x = (px + i * BLOCK / 9) / BLOCK;
+			check_y = (py + j * BLOCK / 9) / BLOCK;
 			if (cub->data.map.map[(int)check_y][(int)check_x] == '1' \
 			|| cub->data.map.map[(int)check_y][(int)check_x] == '2')
 				return (true);

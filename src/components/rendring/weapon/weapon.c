@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 16:14:15 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/02 13:05:06 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 13:10:56 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	init_weapon_animation_params(t_cub *cub)
 	cub->weapon_anim_speed = 1;
 	cub->current_weapon_index = 1;
 	cub->weapon_anim_frame = 1;
-	cub->weapon_anim_active = 1;
 	cub->weapon_anim_tick = 1;
 }
 

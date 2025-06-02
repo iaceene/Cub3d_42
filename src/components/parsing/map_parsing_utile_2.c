@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing_utile_2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:01:07 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/30 18:28:54 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:20:42 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ int	parse_lines(t_cub *cub)
 	t_lines		*line;
 	int			i;
 
-	map = cub->data.map.map;
-	line = NULL;
-	i = 0;
+	(1) && (map = cub->data.map.map, line = NULL, i = 0);
 	while (map[i])
 	{
 		if (!i)

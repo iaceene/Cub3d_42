@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:38:14 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/02 23:18:59 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:20:05 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ int	map_parsing(int ac, char **av, t_cub *cub)
 		return (ft_putendl_fd("Error\nFailed to parse lines", 2), 1);
 	if (extractor(cub))
 		return (1);
-	// if (check_texture(cub) || check_colors(cub)
 	if (check_colors(cub)
 		|| check_map(cub))
 		return (1);

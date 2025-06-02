@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:55:45 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/31 13:44:08 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/02 13:12:36 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ void	try_open_door(t_cub *cub)
 	py = (int)(cub->player.y / BLOCK);
 	fx = px + (int)round(cos(cub->player.angle));
 	fy = py + (int)round(sin(cub->player.angle));
-	cub->door_opened = 0;
 	cub->door_x = fx;
 	cub->door_y = fy;
 	if (cub->data.map.map[fy][fx] == '2')

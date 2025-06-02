@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing_utile_4.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:15:15 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/01 17:08:59 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:22:19 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	check_walls(char **map)
 		if (map[y] && map[y + 1] && ft_strlen(map[y]) < ft_strlen(map[y + 1]))
 		{
 			if (!only_walls_map(*(map + y + 1) + ft_strlen(map[y])))
-				return (ft_putstr_fd("Error\nInvalid map : ", 2), 
+				return (ft_putstr_fd("Error\nInvalid map : ", 2),
 					ft_putendl_fd(ft_strjoin(ft_strjoin(map[y], " <<< line : "),
 					ft_itoa(y)), 2), 1);
 		}
@@ -74,9 +74,7 @@ int	check_map(t_cub *cub)
 	int		i;
 	int		j;
 
-	i = 0;
-	count = 0;
-	map = cub->data.map.map;
+	(1) && (i = 0, count = 0, map = cub->data.map.map);
 	if (!map)
 		return (1);
 	while (map[i])
