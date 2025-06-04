@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raycasting Loop Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .left-panel {
+            flex: 1;
+        }
+        .right-panel {
+            width: 300px;
+        }
+        canvas {
+            border: 2px solid #333;
+            background: #000;
+            display: block;
+            margin: 10px 0;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .info {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .code {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #007acc;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .current-line {
+            background: #4a4a00;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+        }
+        button:hover {
+            background: #005a9e;
+        }
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        .step-info {
+            background: #2a4a2a;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        .current-ray {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        .screen-preview {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #555;
+            background: #111;
+        }
+        .ray-counter {
+            font-size: 18px;
+            color: #00ff88;
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="info">
+                <h2>Raycasting Loop Analysis</h2>
+                <div class="code">
+x = 0;<br>
+while (x &lt; WIDTH)<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span id="line1">cast_ray(cub, ray_angle, x);</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span id="line2">ray_angle += ray_step;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span id="line3">x++;</span><br>
+}
+                </div>
+            </div>
+
+            <canvas id="topCanvas" width="800" height="400"></canvas>
+            
+            <div class="controls">
+                <button onclick="stepForward()" id="stepBtn">Step Forward</button>
+                <button onclick="stepBackward()" id="backBtn">Step Back</button>
+                <button onclick="autoStep()" id="autoBtn">Auto Step</button>
+                <button onclick="reset()">Reset</button>
+                <button onclick="fastComplete()">Complete Loop</button>
+            </div>
+
+            <canvas id="screenCanvas" width="800" height="200" class="screen-preview"></canvas>
+            <p style="text-align: center; font-size: 12px;">↑ Simulated Screen Output (each column from one ray)</p>
+        </div>
+
+        <div class="right-panel">
+            <div class="ray-counter" id="rayCounter">Ray: 0 / 120</div>
+            
+            <div class="step-info">
+                <h3>Current Step:</h3>
+                <div id="currentStep">Ready to start</div>
+            </div>
+
+            <div class="step-info">
+                <h3>Variables:</h3>
+                <div id="variables">
+                    x = 0<br>
+                    ray_angle = -30°<br>
+                    ray_step = 0.5°
+                </div>
+            </div>
+
+            <div class="step-info">
+                <h3>What happens each iteration:</h3>
+                <ol style="font-size: 11px; margin: 5px 0; padding-left: 15px;">
+                    <li><strong>cast_ray()</strong>: Shoots ray at current angle, finds wall hit, draws vertical line at screen position x</li>
+                    <li><strong>ray_angle += ray_step</strong>: Move to next angle (rotate right)</li>
+                    <li><strong>x++</strong>: Move to next screen column</li>
+                </ol>
+            </div>
+
+            <div class="step-info">
+                <h3>Why this works:</h3>
+                <ul style="font-size: 11px; margin: 5px 0; padding-left: 15px;">
+                    <li>Each ray corresponds to one screen column</li>
+                    <li>Angles sweep smoothly across FOV</li>
+                    <li>Left-to-right casting builds complete image</li>
+                    <li>Distance determines wall height</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const topCanvas = document.getElementById('topCanvas');
+        const screenCanvas = document.getElementById('screenCanvas');
+        const topCtx = topCanvas.getContext('2d');
+        const screenCtx = screenCanvas.getContext('2d');
+        
+        let currentX = 0;
+        let currentRayAngle = -Math.PI / 6; // -30 degrees
+        const rayStep = (Math.PI / 3) / 120; // 60° / 120 pixels
+        const WIDTH = 120; // Reduced for demo
+        let autoStepping = false;
+        let autoInterval;
+        let rayHits = [];
+        
+        const player = {
+            x: topCanvas.width / 2,
+            y: topCanvas.height / 2
+        };
+        
+        // Sample walls
+        const walls = [
+            {x1: 100, y1: 50, x2: 300, y2: 50},
+            {x1: 300, y1: 50, x2: 300, y2: 150},
+            {x1: 500, y1: 100, x2: 650, y2: 100},
+            {x1: 650, y1: 100, x2: 650, y2: 250},
+            {x1: 150, y1: 300, x2: 400, y2: 320},
+            {x1: 600, y1: 280, x2: 750, y2: 250}
+        ];
+        
+        function castRay(angle) {
+            const rayDx = Math.cos(angle);
+            const rayDy = Math.sin(angle);
+            
+            for (let distance = 0; distance < 400; distance += 2) {
+                const x = player.x + rayDx * distance;
+                const y = player.y + rayDy * distance;
+                
+                // Check wall collision
+                for (let wall of walls) {
+                    const dist = distanceToLineSegment(x, y, wall.x1, wall.y1, wall.x2, wall.y2);
+                    if (dist < 5) {
+                        return {x, y, distance, hit: true};
+                    }
+                }
+                
+                // Check boundaries
+                if (x < 0 || x > topCanvas.width || y < 0 || y > topCanvas.height) {
+                    return {x, y, distance, hit: true};
+                }
+            }
+            
+            return {
+                x: player.x + rayDx * 400,
+                y: player.y + rayDy * 400,
+                distance: 400,
+                hit: false
+            };
+        }
+        
+        function distanceToLineSegment(px, py, x1, y1, x2, y2) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            
+            if (length === 0) return Math.sqrt((px - x1) ** 2 + (py - y1) ** 2);
+            
+            const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / (length * length)));
+            const projection = {
+                x: x1 + t * dx,
+                y: y1 + t * dy
+            };
+            
+            return Math.sqrt((px - projection.x) ** 2 + (py - projection.y) ** 2);
+        }
+        
+        function drawTopView() {
+            topCtx.clearRect(0, 0, topCanvas.width, topCanvas.height);
+            
+            // Draw walls
+            topCtx.strokeStyle = '#ff8800';
+            topCtx.lineWidth = 4;
+            walls.forEach(wall => {
+                topCtx.beginPath();
+                topCtx.moveTo(wall.x1, wall.y1);
+                topCtx.lineTo(wall.x2, wall.y2);
+                topCtx.stroke();
+            });
+            
+            // Draw all previous rays (faded)
+            topCtx.strokeStyle = '#004400';
+            topCtx.lineWidth = 1;
+            rayHits.forEach(hit => {
+                topCtx.beginPath();
+                topCtx.moveTo(player.x, player.y);
+                topCtx.lineTo(hit.x, hit.y);
+                topCtx.stroke();
+            });
+            
+            // Draw current ray (bright)
+            if (currentX < WIDTH) {
+                const hit = castRay(currentRayAngle);
+                topCtx.strokeStyle = '#00ff00';
+                topCtx.lineWidth = 3;
+                topCtx.beginPath();
+                topCtx.moveTo(player.x, player.y);
+                topCtx.lineTo(hit.x, hit.y);
+                topCtx.stroke();
+                
+                // Draw hit point
+                topCtx.fillStyle = '#ff0000';
+                topCtx.beginPath();
+                topCtx.arc(hit.x, hit.y, 4, 0, Math.PI * 2);
+                topCtx.fill();
+            }
+            
+            // Draw player
+            topCtx.fillStyle = '#0088ff';
+            topCtx.beginPath();
+            topCtx.arc(player.x, player.y, 8, 0, Math.PI * 2);
+            topCtx.fill();
+            
+            // Draw info
+            topCtx.fillStyle = '#ffffff';
+            topCtx.font = '12px Courier New';
+            topCtx.fillText(`x = ${currentX}`, 10, 25);
+            topCtx.fillText(`ray_angle = ${(currentRayAngle * 180 / Math.PI).toFixed(1)}°`, 10, 45);
+            topCtx.fillText(`Casting ray ${currentX + 1} of ${WIDTH}`, 10, 65);
+        }
+        
+        function drawScreen() {
+            screenCtx.clearRect(0, 0, screenCanvas.width, screenCanvas.height);
+            
+            const columnWidth = screenCanvas.width / WIDTH;
+            
+            rayHits.forEach((hit, index) => {
+                // Calculate wall height based on distance
+                const wallHeight = Math.max(10, 8000 / hit.distance);
+                const wallTop = (screenCanvas.height - wallHeight) / 2;
+                
+                // Color based on distance
+                const brightness = Math.max(50, 255 - hit.distance * 0.5);
+                screenCtx.fillStyle = `rgb(${brightness}, ${brightness * 0.8}, ${brightness * 0.6})`;
+                
+                screenCtx.fillRect(
+                    index * columnWidth,
+                    wallTop,
+                    columnWidth,
+                    wallHeight
+                );
+            });
+            
+            // Highlight current column
+            if (currentX < WIDTH && currentX > 0) {
+                screenCtx.strokeStyle = '#00ff00';
+                screenCtx.lineWidth = 2;
+                screenCtx.beginPath();
+                screenCtx.rect((currentX - 1) * columnWidth, 0, columnWidth, screenCanvas.height);
+                screenCtx.stroke();
+            }
+        }
+        
+        function updateUI() {
+            document.getElementById('rayCounter').textContent = `Ray: ${currentX} / ${WIDTH}`;
+            
+            let stepText = '';
+            if (currentX === 0) {
+                stepText = 'About to start: x = 0, ready to cast first ray';
+            } else if (currentX >= WIDTH) {
+                stepText = 'Loop complete! All rays cast.';
+            } else {
+                stepText = `Just cast ray ${currentX}, moving to next angle and column`;
+            }
+            document.getElementById('currentStep').textContent = stepText;
+            
+            document.getElementById('variables').innerHTML = `
+                x = ${currentX}<br>
+                ray_angle = ${(currentRayAngle * 180 / Math.PI).toFixed(1)}°<br>
+                ray_step = ${(rayStep * 180 / Math.PI).toFixed(1)}°
+            `;
+            
+            // Update button states
+            document.getElementById('stepBtn').disabled = currentX >= WIDTH;
+            document.getElementById('backBtn').disabled = currentX <= 0;
+        }
+        
+        function stepForward() {
+            if (currentX >= WIDTH) return;
+            
+            // Execute the three lines of the loop
+            // 1. cast_ray(cub, ray_angle, x)
+            const hit = castRay(currentRayAngle);
+            rayHits[currentX] = hit;
+            
+            // 2. ray_angle += ray_step
+            currentRayAngle += rayStep;
+            
+            // 3. x++
+            currentX++;
+            
+            drawTopView();
+            drawScreen();
+            updateUI();
+        }
+        
+        function stepBackward() {
+            if (currentX <= 0) return;
+            
+            currentX--;
+            currentRayAngle -= rayStep;
+            rayHits.pop();
+            
+            drawTopView();
+            drawScreen();
+            updateUI();
+        }
+        
+        function autoStep() {
+            if (autoStepping) {
+                clearInterval(autoInterval);
+                autoStepping = false;
+                document.getElementById('autoBtn').textContent = 'Auto Step';
+            } else {
+                autoStepping = true;
+                document.getElementById('autoBtn').textContent = 'Stop Auto';
+                autoInterval = setInterval(() => {
+                    if (currentX >= WIDTH) {
+                        clearInterval(autoInterval);
+                        autoStepping = false;
+                        document.getElementById('autoBtn').textContent = 'Auto Step';
+                        return;
+                    }
+                    stepForward();
+                }, 100);
+            }
+        }
+        
+        function fastComplete() {
+            while (currentX < WIDTH) {
+                stepForward();
+            }
+        }
+        
+        function reset() {
+            if (autoStepping) {
+                clearInterval(autoInterval);
+                autoStepping = false;
+                document.getElementById('autoBtn').textContent = 'Auto Step';
+            }
+            
+            currentX = 0;
+            currentRayAngle = -Math.PI / 6;
+            rayHits = [];
+            
+            drawTopView();
+            drawScreen();
+            updateUI();
+        }
+        
+        // Initial draw
+        reset();
+    </script>
+</body>
+</html>

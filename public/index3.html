@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ray Parameters Deep Analysis</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #fff;
+            line-height: 1.4;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .panel {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        canvas {
+            border: 2px solid #333;
+            background: #000;
+            display: block;
+            margin: 15px auto;
+            cursor: crosshair;
+        }
+        .code-section {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #007acc;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+        .highlight {
+            background: #4a4a00;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        .math-section {
+            background: #2a1a4a;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #aa07cc;
+            margin: 15px 0;
+        }
+        .controls {
+            text-align: center;
+            margin: 15px 0;
+        }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 3px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 11px;
+        }
+        button:hover { background: #005a9e; }
+        .info-box {
+            background: #1a3a1a;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        .warning-box {
+            background: #3a1a1a;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        .coordinate-system {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .coord-box {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 11px;
+        }
+        h3 { color: #00ff88; margin-top: 25px; }
+        h4 { color: #ffaa00; margin-top: 15px; }
+        .values-display {
+            font-family: monospace;
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color: #00ff88;">Ray Parameters Deep Analysis</h1>
+    
+    <div class="container">
+        <div class="panel">
+            <h3>📐 Why Sin/Cos? The Math Behind Direction Vectors</h3>
+            
+            <div class="math-section">
+                <h4>Unit Circle & Direction Vectors</h4>
+                <p>An angle θ on the unit circle gives us:</p>
+                <ul>
+                    <li><strong>cos(θ)</strong> = X component (horizontal displacement)</li>
+                    <li><strong>sin(θ)</strong> = Y component (vertical displacement)</li>
+                    <li>Together they form a <strong>unit vector</strong> (length = 1)</li>
+                </ul>
+                <p>This is <em>exactly</em> what we need for ray direction!</p>
+            </div>
+
+            <canvas id="unitCircle" width="400" height="400"></canvas>
+            
+            <div class="controls">
+                <button onclick="setAngle(0)">0° (East)</button>
+                <button onclick="setAngle(90)">90° (North)</button>
+                <button onclick="setAngle(180)">180° (West)</button>
+                <button onclick="setAngle(270)">270° (South)</button>
+                <button onclick="setAngle(45)">45° (NE)</button>
+                <button onclick="setAngle(315)">315° (SE)</button>
+            </div>
+
+            <div class="coordinate-system">
+                <div class="coord-box">
+                    <strong>Screen Coordinates</strong><br>
+                    Origin: Top-Left<br>
+                    X: Left → Right<br>
+                    Y: Top → Bottom
+                </div>
+                <div class="coord-box">
+                    <strong>Math Coordinates</strong><br>
+                    Origin: Center<br>
+                    X: Left → Right<br>
+                    Y: Bottom → Top
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Coordinate System Difference:</strong><br>
+                In computer graphics, Y increases downward. In math, Y increases upward. 
+                This affects how angles are interpreted but sin/cos still work correctly!
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>🎯 Interactive Ray Parameter Calculator</h3>
+            
+            <canvas id="rayDemo" width="500" height="400"></canvas>
+            <p style="text-align: center; font-size: 11px;">
+                Click anywhere to set ray direction. Grid shows map blocks.
+            </p>
+
+            <div class="values-display" id="valuesDisplay">
+                Click to see ray parameters...
+            </div>
+
+            <div class="code-section">
+<strong>void init_ray_params(...)</strong><br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">params->ray_dir_x = cos(ray_angle);</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">params->ray_dir_y = sin(ray_angle);</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;params->map_x = (int)player.x / BLOCK;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;params->map_y = (int)player.y / BLOCK;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">params->delta_dist_x = fabs(1 / ray_dir_x);</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">params->delta_dist_y = fabs(1 / ray_dir_y);</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;params->pos_x = player.x;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;params->pos_y = player.y;<br>
+}
+            </div>
+
+            <div class="info-box">
+                <h4>🔍 Parameter Breakdown:</h4>
+                <ul style="margin: 8px 0; padding-left: 18px; font-size: 11px;">
+                    <li><strong>ray_dir_x/y</strong>: Direction vector components (unit vector)</li>
+                    <li><strong>map_x/y</strong>: Current map grid cell coordinates</li>
+                    <li><strong>delta_dist_x/y</strong>: Distance ray travels to cross one grid line</li>
+                    <li><strong>pos_x/y</strong>: Exact player position in world coordinates</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" style="grid-column: 1 / -1; margin-top: 20px;">
+        <h3>🧮 The Deep Math: Why Delta Distance = 1/ray_dir?</h3>
+        
+        <div class="coordinate-system">
+            <div class="math-section">
+                <h4>Delta Distance X</h4>
+                <p><strong>delta_dist_x = |1 / ray_dir_x|</strong></p>
+                <p>This is the distance the ray travels to move exactly 1 unit in the X direction.</p>
+                <ul style="font-size: 11px;">
+                    <li>If ray_dir_x = 1 (horizontal ray): delta = 1</li>
+                    <li>If ray_dir_x = 0.5 (shallow angle): delta = 2</li>
+                    <li>If ray_dir_x = 0.1 (steep angle): delta = 10</li>
+                </ul>
+            </div>
+            <div class="math-section">
+                <h4>Delta Distance Y</h4>
+                <p><strong>delta_dist_y = |1 / ray_dir_y|</strong></p>
+                <p>This is the distance the ray travels to move exactly 1 unit in the Y direction.</p>
+                <ul style="font-size: 11px;">
+                    <li>If ray_dir_y = 1 (vertical ray): delta = 1</li>
+                    <li>If ray_dir_y = 0.5 (shallow angle): delta = 2</li>
+                    <li>If ray_dir_y = 0.1 (steep angle): delta = 10</li>
+                </ul>
+            </div>
+        </div>
+
+        <canvas id="deltaDemo" width="800" height="300"></canvas>
+        <p style="text-align: center; font-size: 11px;">
+            Visualization of delta distances: How far ray travels to cross grid lines
+        </p>
+
+        <div class="info-box">
+            <strong>💡 Why This Matters for DDA:</strong><br>
+            The DDA algorithm steps through grid cells efficiently. Delta distances tell us exactly 
+            how far to step when crossing each grid line, making collision detection fast and accurate.
+        </div>
+
+        <div class="warning-box">
+            <strong>🚨 Division by Zero Protection:</strong><br>
+            If ray_dir_x or ray_dir_y is 0 (perfectly horizontal/vertical ray), 1/0 = infinity. 
+            The fabs() handles this, and the DDA algorithm is designed to handle infinite delta distances.
+        </div>
+    </div>
+
+    <script>
+        // Canvas references
+        const unitCanvas = document.getElementById('unitCircle');
+        const rayCanvas = document.getElementById('rayDemo');
+        const deltaCanvas = document.getElementById('deltaDemo');
+        const unitCtx = unitCanvas.getContext('2d');
+        const rayCtx = rayCanvas.getContext('2d');
+        const deltaCtx = deltaCanvas.getContext('2d');
+
+        // State
+        let currentAngle = 0; // degrees
+        let playerPos = { x: 250, y: 200 };
+        let rayDirection = { x: 1, y: 0 };
+        const BLOCK_SIZE = 40;
+
+        function degToRad(deg) { return deg * Math.PI / 180; }
+        function radToDeg(rad) { return rad * 180 / Math.PI; }
+
+        function drawUnitCircle() {
+            const ctx = unitCtx;
+            const centerX = unitCanvas.width / 2;
+            const centerY = unitCanvas.height / 2;
+            const radius = 150;
+
+            ctx.clearRect(0, 0, unitCanvas.width, unitCanvas.height);
+
+            // Draw coordinate axes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(unitCanvas.width, centerY);
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, unitCanvas.height);
+            ctx.stroke();
+
+            // Draw unit circle
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Draw angle
+            const angleRad = degToRad(currentAngle);
+            const x = Math.cos(angleRad);
+            const y = -Math.sin(angleRad); // Negative because screen Y is flipped
+
+            // Draw angle arc
+            ctx.strokeStyle = '#ffaa00';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 50, 0, -angleRad, angleRad < 0);
+            ctx.stroke();
+
+            // Draw radius line
+            ctx.strokeStyle = '#00ff88';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + x * radius, centerY + y * radius);
+            ctx.stroke();
+
+            // Draw components
+            ctx.strokeStyle = '#ff4444';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            // X component
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + x * radius, centerY);
+            ctx.stroke();
+            // Y component
+            ctx.beginPath();
+            ctx.moveTo(centerX + x * radius, centerY);
+            ctx.lineTo(centerX + x * radius, centerY + y * radius);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw point
+            ctx.fillStyle = '#00ff88';
+            ctx.beginPath();
+            ctx.arc(centerX + x * radius, centerY + y * radius, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw labels
+            ctx.fillStyle = '#fff';
+            ctx.font = '14px Courier New';
+            ctx.fillText(`cos(${currentAngle}°) = ${x.toFixed(3)}`, 10, 30);
+            ctx.fillText(`sin(${currentAngle}°) = ${(-y).toFixed(3)}`, 10, 50);
+            ctx.fillText(`Angle: ${currentAngle}°`, 10, 70);
+        }
+
+        function drawRayDemo() {
+            const ctx = rayCtx;
+            ctx.clearRect(0, 0, rayCanvas.width, rayCanvas.height);
+
+            // Draw grid
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            for (let x = 0; x <= rayCanvas.width; x += BLOCK_SIZE) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, rayCanvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y <= rayCanvas.height; y += BLOCK_SIZE) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(rayCanvas.width, y);
+                ctx.stroke();
+            }
+
+            // Draw some walls
+            ctx.fillStyle = '#ff8800';
+            ctx.fillRect(3 * BLOCK_SIZE, 2 * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            ctx.fillRect(8 * BLOCK_SIZE, 1 * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE * 2);
+            ctx.fillRect(1 * BLOCK_SIZE, 7 * BLOCK_SIZE, BLOCK_SIZE * 3, BLOCK_SIZE);
+
+            // Draw player
+            ctx.fillStyle = '#0088ff';
+            ctx.beginPath();
+            ctx.arc(playerPos.x, playerPos.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw ray
+            ctx.strokeStyle = '#00ff88';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(playerPos.x, playerPos.y);
+            ctx.lineTo(
+                playerPos.x + rayDirection.x * 200,
+                playerPos.y + rayDirection.y * 200
+            );
+            ctx.stroke();
+
+            // Draw current grid cell highlight
+            const mapX = Math.floor(playerPos.x / BLOCK_SIZE);
+            const mapY = Math.floor(playerPos.y / BLOCK_SIZE);
+            ctx.strokeStyle = '#ffff00';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(mapX * BLOCK_SIZE, mapY * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        }
+
+        function drawDeltaDemo() {
+            const ctx = deltaCtx;
+            ctx.clearRect(0, 0, deltaCanvas.width, deltaCanvas.height);
+
+            const centerX = 100;
+            const centerY = deltaCanvas.height / 2;
+            const gridSize = 60;
+
+            // Draw grid
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 10; i++) {
+                const x = centerX + i * gridSize;
+                ctx.beginPath();
+                ctx.moveTo(x, 50);
+                ctx.lineTo(x, deltaCanvas.height - 50);
+                ctx.stroke();
+            }
+            for (let i = 0; i <= 4; i++) {
+                const y = 50 + i * gridSize;
+                ctx.beginPath();
+                ctx.moveTo(centerX, y);
+                ctx.lineTo(centerX + 10 * gridSize, y);
+                ctx.stroke();
+            }
+
+            // Calculate ray parameters
+            const angleRad = degToRad(currentAngle);
+            const ray_dir_x = Math.cos(angleRad);
+            const ray_dir_y = Math.sin(angleRad);
+            
+            let delta_dist_x = Math.abs(1 / ray_dir_x);
+            let delta_dist_y = Math.abs(1 / ray_dir_y);
+            
+            // Cap for display
+            delta_dist_x = Math.min(delta_dist_x, 20);
+            delta_dist_y = Math.min(delta_dist_y, 20);
+
+            // Draw ray
+            ctx.strokeStyle = '#00ff88';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(
+                centerX + ray_dir_x * 300,
+                centerY + ray_dir_y * 300
+            );
+            ctx.stroke();
+
+            // Draw delta distance X
+            if (Math.abs(ray_dir_x) > 0.01) {
+                ctx.strokeStyle = '#ff4444';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                
+                let stepX = centerX + gridSize;
+                let stepY = centerY + (gridSize / ray_dir_x) * ray_dir_y;
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(stepX, stepY);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#ff4444';
+                ctx.font = '12px Courier New';
+                ctx.fillText(`delta_x = ${delta_dist_x.toFixed(2)}`, stepX + 10, stepY - 10);
+            }
+
+            // Draw delta distance Y
+            if (Math.abs(ray_dir_y) > 0.01) {
+                ctx.strokeStyle = '#4444ff';
+                ctx.lineWidth = 2;
+                
+                let stepX = centerX + (gridSize / ray_dir_y) * ray_dir_x;
+                let stepY = centerY + gridSize;
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(stepX, stepY);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#4444ff';
+                ctx.font = '12px Courier New';
+                ctx.fillText(`delta_y = ${delta_dist_y.toFixed(2)}`, stepX + 10, stepY + 15);
+            }
+            
+            ctx.setLineDash([]);
+
+            // Labels
+            ctx.fillStyle = '#fff';
+            ctx.font = '14px Courier New';
+            ctx.fillText('Red: Distance to cross 1 X-grid', 450, 50);
+            ctx.fillText('Blue: Distance to cross 1 Y-grid', 450, 70);
+        }
+
+        function updateValues() {
+            const angleRad = degToRad(currentAngle);
+            const ray_dir_x = Math.cos(angleRad);
+            const ray_dir_y = Math.sin(angleRad);
+            const map_x = Math.floor(playerPos.x / BLOCK_SIZE);
+            const map_y = Math.floor(playerPos.y / BLOCK_SIZE);
+            const delta_dist_x = Math.abs(1 / ray_dir_x);
+            const delta_dist_y = Math.abs(1 / ray_dir_y);
+
+            document.getElementById('valuesDisplay').innerHTML = `
+<strong>Ray Parameters:</strong><br>
+ray_angle = ${currentAngle}° (${angleRad.toFixed(3)} rad)<br>
+ray_dir_x = cos(${currentAngle}°) = ${ray_dir_x.toFixed(3)}<br>
+ray_dir_y = sin(${currentAngle}°) = ${ray_dir_y.toFixed(3)}<br>
+map_x = ${map_x} (grid cell)<br>
+map_y = ${map_y} (grid cell)<br>
+delta_dist_x = |1/${ray_dir_x.toFixed(3)}| = ${delta_dist_x.toFixed(3)}<br>
+delta_dist_y = |1/${ray_dir_y.toFixed(3)}| = ${delta_dist_y.toFixed(3)}<br>
+pos_x = ${playerPos.x.toFixed(1)}<br>
+pos_y = ${playerPos.y.toFixed(1)}
+            `;
+        }
+
+        function setAngle(angle) {
+            currentAngle = angle;
+            const angleRad = degToRad(angle);
+            rayDirection.x = Math.cos(angleRad);
+            rayDirection.y = Math.sin(angleRad);
+            redrawAll();
+        }
+
+        function redrawAll() {
+            drawUnitCircle();
+            drawRayDemo();
+            drawDeltaDemo();
+            updateValues();
+        }
+
+        // Event listeners
+        rayCanvas.addEventListener('click', (e) => {
+            const rect = rayCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const dx = x - playerPos.x;
+            const dy = y - playerPos.y;
+            const angle = Math.atan2(dy, dx);
+            
+            currentAngle = Math.round(radToDeg(angle));
+            rayDirection.x = Math.cos(angle);
+            rayDirection.y = Math.sin(angle);
+            
+            redrawAll();
+        });
+
+        // Initial draw
+        setAngle(30);
+    </script>
+</body>
+</html>
