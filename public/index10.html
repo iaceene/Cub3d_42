@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fisheye Correction Demo</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+            margin-bottom: 30px;
+        }
+        .demo-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        canvas {
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            background: #000;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .control-group {
+            display: inline-block;
+            margin: 0 15px;
+            vertical-align: top;
+        }
+        label {
+            display: block;
+            color: #00ff88;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 150px;
+            margin: 5px 0;
+        }
+        .value-display {
+            color: #fff;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .explanation {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #00ff88;
+        }
+        .code-block {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        .highlight {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        .formula {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.2em;
+        }
+        .comparison {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .comparison-item {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+        .toggle-btn {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .toggle-btn:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+        .toggle-btn.active {
+            background: #ff6b6b;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Fisheye Correction in Raycasting</h1>
+        
+        <div class="demo-section">
+            <h2>Interactive Demo</h2>
+            <canvas id="mainCanvas" width="800" height="400"></canvas>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label>Player Angle (degrees)</label>
+                    <input type="range" id="playerAngle" min="0" max="360" value="0" step="1">
+                    <div class="value-display" id="angleDisplay">0°</div>
+                </div>
+                <div class="control-group">
+                    <label>Wall Distance</label>
+                    <input type="range" id="wallDistance" min="50" max="300" value="150" step="5">
+                    <div class="value-display" id="distanceDisplay">150</div>
+                </div>
+                <div class="control-group">
+                    <button class="toggle-btn" id="correctionToggle">Enable Fisheye Correction</button>
+                </div>
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3>Without Correction</h3>
+                    <canvas id="rawCanvas" width="300" height="200"></canvas>
+                    <p>Raw distance causes fisheye distortion</p>
+                </div>
+                <div class="comparison-item">
+                    <h3>With Correction</h3>
+                    <canvas id="correctedCanvas" width="300" height="200"></canvas>
+                    <p>Corrected distance eliminates distortion</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section explanation">
+            <h2>🧠 Deep Explanation</h2>
+            
+            <h3>The Problem: Fisheye Distortion</h3>
+            <p>In raycasting engines, when you calculate the straight-line distance from the player to a wall, you get what's called the <strong class="highlight">euclidean distance</strong>. However, this creates a "fisheye" effect where walls appear curved, especially at the edges of the screen.</p>
+            
+            <div class="code-block">
+                <strong>Function 1: use_distance()</strong><br>
+                float use_distance(float x, float y) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;return (sqrt(x * x + y * y));<br>
+                }
+            </div>
+            
+            <p>This function calculates the <strong>euclidean distance</strong> using the Pythagorean theorem:</p>
+            <div class="formula">
+                distance = √(x² + y²)
+            </div>
+            
+            <h3>The Solution: Perpendicular Distance</h3>
+            <p>The fix is to calculate the <strong class="highlight">perpendicular distance</strong> from the player's viewing direction to the wall. This is what your eye would naturally see.</p>
+            
+            <div class="code-block">
+                <strong>Function 2: use_fixed_dist()</strong><br>
+                float use_fixed_dist(float x2, float y2, t_cub *game) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;float delta_x = x2 - game->player.x;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;float delta_y = y2 - game->player.y;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;float angle = atan2(delta_y, delta_x) - game->player.angle;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;float fix_dist = use_distance(delta_x, delta_y) * cos(angle);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;return (fix_dist);<br>
+                }
+            </div>
+            
+            <h3>Step-by-Step Breakdown:</h3>
+            
+            <p><strong>1. Calculate offset from player:</strong></p>
+            <div class="formula">
+                delta_x = wall_x - player_x<br>
+                delta_y = wall_y - player_y
+            </div>
+            
+            <p><strong>2. Find the angle difference:</strong></p>
+            <div class="formula">
+                wall_angle = atan2(delta_y, delta_x)<br>
+                angle_diff = wall_angle - player_angle
+            </div>
+            <p>This gives us the angle between the player's facing direction and the direction to the wall.</p>
+            
+            <p><strong>3. Apply cosine correction:</strong></p>
+            <div class="formula">
+                corrected_distance = euclidean_distance × cos(angle_difference)
+            </div>
+            <p>The cosine function projects the diagonal distance onto the player's viewing plane, giving us the perpendicular distance.</p>
+            
+            <h3>🎯 Why This Works</h3>
+            <p>Imagine you're looking straight ahead, and there's a wall to your right. The straight-line distance to that wall is longer than the perpendicular distance from your viewing direction to the wall. By multiplying by cos(angle), we're essentially projecting that diagonal distance onto your forward-facing view plane.</p>
+            
+            <p><strong class="highlight">Key Insight:</strong> This correction ensures that parallel walls appear parallel in the rendered view, eliminating the fisheye distortion that would make straight walls look curved.</p>
+        </div>
+    </div>
+
+    <script>
+        const mainCanvas = document.getElementById('mainCanvas');
+        const rawCanvas = document.getElementById('rawCanvas');
+        const correctedCanvas = document.getElementById('correctedCanvas');
+        const mainCtx = mainCanvas.getContext('2d');
+        const rawCtx = rawCanvas.getContext('2d');
+        const correctedCtx = correctedCanvas.getContext('2d');
+        
+        const playerAngleSlider = document.getElementById('playerAngle');
+        const wallDistanceSlider = document.getElementById('wallDistance');
+        const correctionToggle = document.getElementById('correctionToggle');
+        const angleDisplay = document.getElementById('angleDisplay');
+        const distanceDisplay = document.getElementById('distanceDisplay');
+        
+        let correctionEnabled = false;
+        
+        // Player and world setup
+        const player = {
+            x: 200,
+            y: 200,
+            angle: 0,
+            fov: Math.PI / 3 // 60 degrees
+        };
+        
+        function degToRad(deg) {
+            return deg * Math.PI / 180;
+        }
+        
+        function radToDeg(rad) {
+            return rad * 180 / Math.PI;
+        }
+        
+        function useDistance(x, y) {
+            return Math.sqrt(x * x + y * y);
+        }
+        
+        function useFixedDist(x2, y2, game) {
+            const deltaX = x2 - game.x;
+            const deltaY = y2 - game.y;
+            const angle = Math.atan2(deltaY, deltaX) - game.angle;
+            const fixDist = useDistance(deltaX, deltaY) * Math.cos(angle);
+            return fixDist;
+        }
+        
+        function drawMainDemo() {
+            mainCtx.fillStyle = '#000';
+            mainCtx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+            
+            // Draw grid
+            mainCtx.strokeStyle = '#333';
+            mainCtx.lineWidth = 1;
+            for (let i = 0; i < mainCanvas.width; i += 20) {
+                mainCtx.beginPath();
+                mainCtx.moveTo(i, 0);
+                mainCtx.lineTo(i, mainCanvas.height);
+                mainCtx.stroke();
+            }
+            for (let i = 0; i < mainCanvas.height; i += 20) {
+                mainCtx.beginPath();
+                mainCtx.moveTo(0, i);
+                mainCtx.lineTo(mainCanvas.width, i);
+                mainCtx.stroke();
+            }
+            
+            // Draw player
+            mainCtx.fillStyle = '#00ff88';
+            mainCtx.beginPath();
+            mainCtx.arc(player.x, player.y, 8, 0, Math.PI * 2);
+            mainCtx.fill();
+            
+            // Draw player direction
+            const dirX = player.x + Math.cos(player.angle) * 30;
+            const dirY = player.y + Math.sin(player.angle) * 30;
+            mainCtx.strokeStyle = '#00ff88';
+            mainCtx.lineWidth = 3;
+            mainCtx.beginPath();
+            mainCtx.moveTo(player.x, player.y);
+            mainCtx.lineTo(dirX, dirY);
+            mainCtx.stroke();
+            
+            // Draw FOV lines
+            mainCtx.strokeStyle = '#00ff8860';
+            mainCtx.lineWidth = 2;
+            const leftAngle = player.angle - player.fov / 2;
+            const rightAngle = player.angle + player.fov / 2;
+            
+            const leftX = player.x + Math.cos(leftAngle) * 300;
+            const leftY = player.y + Math.sin(leftAngle) * 300;
+            const rightX = player.x + Math.cos(rightAngle) * 300;
+            const rightY = player.y + Math.sin(rightAngle) * 300;
+            
+            mainCtx.beginPath();
+            mainCtx.moveTo(player.x, player.y);
+            mainCtx.lineTo(leftX, leftY);
+            mainCtx.stroke();
+            
+            mainCtx.beginPath();
+            mainCtx.moveTo(player.x, player.y);
+            mainCtx.lineTo(rightX, rightY);
+            mainCtx.stroke();
+            
+            // Draw wall points and rays
+            const wallDistance = parseInt(wallDistanceSlider.value);
+            const rayCount = 15;
+            
+            for (let i = 0; i < rayCount; i++) {
+                const rayAngle = leftAngle + (rightAngle - leftAngle) * (i / (rayCount - 1));
+                const wallX = player.x + Math.cos(rayAngle) * wallDistance;
+                const wallY = player.y + Math.sin(rayAngle) * wallDistance;
+                
+                // Calculate distances
+                const deltaX = wallX - player.x;
+                const deltaY = wallY - player.y;
+                const rawDist = useDistance(deltaX, deltaY);
+                const correctedDist = useFixedDist(wallX, wallY, player);
+                
+                const distance = correctionEnabled ? Math.abs(correctedDist) : rawDist;
+                
+                // Draw ray
+                const intensity = Math.max(0.2, 1 - distance / 300);
+                mainCtx.strokeStyle = `rgba(255, 107, 107, ${intensity})`;
+                mainCtx.lineWidth = 2;
+                mainCtx.beginPath();
+                mainCtx.moveTo(player.x, player.y);
+                mainCtx.lineTo(wallX, wallY);
+                mainCtx.stroke();
+                
+                // Draw wall point
+                mainCtx.fillStyle = '#ff6b6b';
+                mainCtx.beginPath();
+                mainCtx.arc(wallX, wallY, 4, 0, Math.PI * 2);
+                mainCtx.fill();
+                
+                // Draw distance text
+                if (i % 3 === 0) {
+                    mainCtx.fillStyle = '#fff';
+                    mainCtx.font = '12px Courier New';
+                    mainCtx.fillText(Math.round(distance), wallX + 10, wallY - 10);
+                }
+            }
+            
+            // Draw angle indicator
+            const mouseAngle = Math.atan2(dirY - player.y, dirX - player.x);
+            mainCtx.strokeStyle = '#ffff00';
+            mainCtx.lineWidth = 2;
+            mainCtx.beginPath();
+            mainCtx.arc(player.x, player.y, 50, 0, mouseAngle, mouseAngle > 0);
+            mainCtx.stroke();
+            
+            // Labels
+            mainCtx.fillStyle = '#fff';
+            mainCtx.font = '16px Courier New';
+            mainCtx.fillText('Player', player.x - 30, player.y - 20);
+            mainCtx.fillText(`Angle: ${Math.round(radToDeg(player.angle))}°`, 20, 30);
+            mainCtx.fillText(`Correction: ${correctionEnabled ? 'ON' : 'OFF'}`, 20, 50);
+        }
+        
+        function drawComparison() {
+            const wallDistance = parseInt(wallDistanceSlider.value);
+            const rayCount = 50;
+            
+            // Clear canvases
+            rawCtx.fillStyle = '#000';
+            rawCtx.fillRect(0, 0, rawCanvas.width, rawCanvas.height);
+            correctedCtx.fillStyle = '#000';
+            correctedCtx.fillRect(0, 0, correctedCanvas.width, correctedCanvas.height);
+            
+            // Draw wall strips
+            for (let i = 0; i < rayCount; i++) {
+                const rayAngle = player.angle - player.fov/2 + (player.fov * i / rayCount);
+                const wallX = player.x + Math.cos(rayAngle) * wallDistance;
+                const wallY = player.y + Math.sin(rayAngle) * wallDistance;
+                
+                const deltaX = wallX - player.x;
+                const deltaY = wallY - player.y;
+                const rawDist = useDistance(deltaX, deltaY);
+                const correctedDist = Math.abs(useFixedDist(wallX, wallY, player));
+                
+                // Raw distance visualization
+                const rawHeight = Math.max(10, 2000 / rawDist);
+                const rawX = i * (rawCanvas.width / rayCount);
+                rawCtx.fillStyle = `hsl(${240 - rawDist/2}, 70%, 50%)`;
+                rawCtx.fillRect(rawX, (rawCanvas.height - rawHeight) / 2, rawCanvas.width / rayCount, rawHeight);
+                
+                // Corrected distance visualization
+                const correctedHeight = Math.max(10, 2000 / correctedDist);
+                const correctedX = i * (correctedCanvas.width / rayCount);
+                correctedCtx.fillStyle = `hsl(${240 - correctedDist/2}, 70%, 50%)`;
+                correctedCtx.fillRect(correctedX, (correctedCanvas.height - correctedHeight) / 2, correctedCanvas.width / rayCount, correctedHeight);
+            }
+        }
+        
+        function updateDemo() {
+            player.angle = degToRad(parseInt(playerAngleSlider.value));
+            angleDisplay.textContent = playerAngleSlider.value + '°';
+            distanceDisplay.textContent = wallDistanceSlider.value;
+            
+            drawMainDemo();
+            drawComparison();
+        }
+        
+        // Event listeners
+        playerAngleSlider.addEventListener('input', updateDemo);
+        wallDistanceSlider.addEventListener('input', updateDemo);
+        
+        correctionToggle.addEventListener('click', () => {
+            correctionEnabled = !correctionEnabled;
+            correctionToggle.textContent = correctionEnabled ? 'Disable Fisheye Correction' : 'Enable Fisheye Correction';
+            correctionToggle.classList.toggle('active', correctionEnabled);
+            updateDemo();
+        });
+        
+        // Initial draw
+        updateDemo();
+    </script>
+</body>
+</html>

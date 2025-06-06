@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDA Algorithm Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .canvas-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+        canvas {
+            border: 2px solid #333;
+            background: white;
+            border-radius: 10px;
+        }
+        .algorithm-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #4fc3f7;
+        }
+        .step-log {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+        .controls {
+            text-align: center;
+            margin: 15px 0;
+        }
+        button {
+            background: linear-gradient(45deg, #4fc3f7, #29b6f6);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .code-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            border: 2px solid #4fc3f7;
+        }
+        .highlight {
+            background: rgba(255, 255, 0, 0.4);
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #000;
+            font-weight: bold;
+        }
+        .current-step {
+            background: rgba(255, 193, 7, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #FFC107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 DDA Algorithm: The Grid Walking Magic</h1>
+        
+        <div class="demo-grid">
+            <div class="canvas-container">
+                <h3 style="color: #333; margin-top: 0;">Step-by-Step Visualization</h3>
+                <canvas id="ddaCanvas" width="400" height="400"></canvas>
+                <div class="controls">
+                    <button id="stepBtn" onclick="performStep()">Next Step</button>
+                    <button id="resetBtn" onclick="resetDemo()">Reset</button>
+                    <button id="autoBtn" onclick="toggleAuto()">Auto Run</button>
+                </div>
+                <div id="currentStatus" style="color: #333; font-family: monospace; margin-top: 10px;"></div>
+            </div>
+            
+            <div class="algorithm-box">
+                <h3>🔍 What's Happening Now</h3>
+                <div id="currentStep" class="current-step">
+                    Click "Next Step" to start the DDA algorithm!
+                </div>
+                
+                <h4>📊 Algorithm Log</h4>
+                <div id="stepLog" class="step-log">
+                    Waiting to start...
+                </div>
+            </div>
+        </div>
+        
+        <div class="code-section">
+            <h3>💻 The Code Explained:</h3>
+            <pre style="color: #4fc3f7;">
+<span style="color: #ff9800;">// Main DDA loop - keep stepping until we hit a wall</span>
+while (1) {
+    <span style="color: #4caf50;">// Compare distances: which boundary is closer?</span>
+    if (params->side_dist_x < params->side_dist_y) {
+        <span style="color: #ffeb3b;">// Vertical boundary is closer - step horizontally</span>
+        params->map_x += params->step_x;        <span style="color: #888;">// Move to next/prev column</span>
+        params->side_dist_x += params->delta_dist_x; <span style="color: #888;">// Update distance</span>
+        params->side = 0;                       <span style="color: #888;">// Mark as vertical wall hit</span>
+    } else {
+        <span style="color: #ffeb3b;">// Horizontal boundary is closer - step vertically</span>
+        params->map_y += params->step_y;        <span style="color: #888;">// Move to next/prev row</span>
+        params->side_dist_y += params->delta_dist_y; <span style="color: #888;">// Update distance</span>
+        params->side = 1;                       <span style="color: #888;">// Mark as horizontal wall hit</span>
+    }
+    
+    <span style="color: #4caf50;">// Check what's in this new grid cell</span>
+    hit_tile = cub->data.map.map[params->map_y][params->map_x];
+    
+    <span style="color: #4caf50;">// Found a wall? Stop here!</span>
+    if (hit_tile == '1' || hit_tile == '2' || hit_tile == '3') {
+        params->hit_tile = hit_tile;
+        break;  <span style="color: #888;">// Exit the loop - we found our wall!</span>
+    }
+}
+            </pre>
+        </div>
+        
+        <div class="algorithm-box">
+            <h3>🧠 Key Insights</h3>
+            <p><strong>The Core Logic:</strong> Always step to whichever grid boundary is closest. This ensures we never miss a wall!</p>
+            
+            <p><strong>Why it's called "Digital Differential Analyzer":</strong><br>
+            • <em>Digital:</em> Works on discrete grid cells<br>
+            • <em>Differential:</em> Uses differences between grid positions<br>
+            • <em>Analyzer:</em> Analyzes the line path efficiently</p>
+            
+            <p><strong>Performance Magic:</strong><br>
+            Instead of checking every pixel (400×400 = 160,000 checks), we only check grid boundaries (maybe 10-20 steps). That's why old games ran so fast!</p>
+            
+            <div class="highlight" style="color: white; background: rgba(76, 175, 80, 0.3);">
+                <strong>Real Result:</strong> This algorithm finds the exact wall the ray hits, which wall face it hits (vertical/horizontal), and how far away it is - everything needed for 3D rendering!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('ddaCanvas');
+        const ctx = canvas.getContext('2d');
+        const stepBtn = document.getElementById('stepBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const autoBtn = document.getElementById('autoBtn');
+        const currentStatus = document.getElementById('currentStatus');
+        const currentStep = document.getElementById('currentStep');
+        const stepLog = document.getElementById('stepLog');
+        
+        // Simulation state
+        let rayStartX = 75;
+        let rayStartY = 125;
+        let rayAngle = 0.8;
+        const BLOCK = 50;
+        let stepCount = 0;
+        let isRunning = false;
+        let autoMode = false;
+        let autoInterval;
+        
+        // Create a simple map
+        const gameMap = [
+            ['1','1','1','1','1','1','1','1'],
+            ['1','0','0','0','0','0','0','1'],
+            ['1','0','1','0','0','1','0','1'],
+            ['1','0','0','0','0','0','0','1'],
+            ['1','0','0','2','3','0','0','1'],
+            ['1','0','1','0','0','1','0','1'],
+            ['1','0','0','0','0','0','0','1'],
+            ['1','1','1','1','1','1','1','1']
+        ];
+        
+        // DDA simulation variables
+        let rayDirX, rayDirY, mapX, mapY, deltaDistX, deltaDistY;
+        let stepX, stepY, sideDistX, sideDistY, side, hitTile;
+        let steps = [];
+        let currentStepIndex = -1;
+        
+        function initializeDDA() {
+            // Calculate ray direction
+            rayDirX = Math.cos(rayAngle);
+            rayDirY = Math.sin(rayAngle);
+            
+            // Current grid position
+            mapX = Math.floor(rayStartX / BLOCK);
+            mapY = Math.floor(rayStartY / BLOCK);
+            
+            // Calculate delta distances
+            deltaDistX = Math.abs(1 / rayDirX);
+            deltaDistY = Math.abs(1 / rayDirY);
+            
+            // Calculate step and initial side distances
+            if (rayDirX < 0) {
+                stepX = -1;
+                sideDistX = (rayStartX / BLOCK - mapX) * deltaDistX;
+            } else {
+                stepX = 1;
+                sideDistX = (mapX + 1 - rayStartX / BLOCK) * deltaDistX;
+            }
+            
+            if (rayDirY < 0) {
+                stepY = -1;
+                sideDistY = (rayStartY / BLOCK - mapY) * deltaDistY;
+            } else {
+                stepY = 1;
+                sideDistY = (mapY + 1 - rayStartY / BLOCK) * deltaDistY;
+            }
+            
+            steps = [];
+            currentStepIndex = -1;
+            stepCount = 0;
+            hitTile = '0';
+        }
+        
+        function performStep() {
+            if (hitTile !== '0') return; // Already hit a wall
+            
+            stepCount++;
+            let stepInfo = {
+                stepNum: stepCount,
+                beforeMapX: mapX,
+                beforeMapY: mapY,
+                beforeSideDistX: sideDistX.toFixed(3),
+                beforeSideDistY: sideDistY.toFixed(3)
+            };
+            
+            // The actual DDA step!
+            if (sideDistX < sideDistY) {
+                mapX += stepX;
+                sideDistX += deltaDistX;
+                side = 0; // Vertical wall
+                stepInfo.direction = stepX > 0 ? 'RIGHT' : 'LEFT';
+                stepInfo.wallType = 'VERTICAL';
+            } else {
+                mapY += stepY;
+                sideDistY += deltaDistY;
+                side = 1; // Horizontal wall
+                stepInfo.direction = stepY > 0 ? 'DOWN' : 'UP';
+                stepInfo.wallType = 'HORIZONTAL';
+            }
+            
+            // Check what we hit
+            hitTile = gameMap[mapY] ? gameMap[mapY][mapX] : '1';
+            
+            stepInfo.newMapX = mapX;
+            stepInfo.newMapY = mapY;
+            stepInfo.hitTile = hitTile;
+            stepInfo.isWall = hitTile !== '0';
+            stepInfo.newSideDistX = sideDistX.toFixed(3);
+            stepInfo.newSideDistY = sideDistY.toFixed(3);
+            
+            steps.push(stepInfo);
+            currentStepIndex++;
+            
+            updateDisplay();
+            
+            if (hitTile !== '0') {
+                stepBtn.disabled = true;
+                if (autoMode) {
+                    clearInterval(autoInterval);
+                    autoMode = false;
+                    autoBtn.textContent = 'Auto Run';
+                }
+            }
+        }
+        
+        function updateDisplay() {
+            drawScene();
+            updateStatus();
+            updateStepLog();
+        }
+        
+        function drawScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid and map
+            for (let y = 0; y < 8; y++) {
+                for (let x = 0; x < 8; x++) {
+                    const cellX = x * BLOCK;
+                    const cellY = y * BLOCK;
+                    
+                    // Draw cell background
+                    if (gameMap[y][x] === '1') {
+                        ctx.fillStyle = '#333';
+                    } else if (gameMap[y][x] === '2') {
+                        ctx.fillStyle = '#ff6b6b';
+                    } else if (gameMap[y][x] === '3') {
+                        ctx.fillStyle = '#4ecdc4';
+                    } else {
+                        ctx.fillStyle = '#f8f9fa';
+                    }
+                    ctx.fillRect(cellX, cellY, BLOCK, BLOCK);
+                    
+                    // Draw grid lines
+                    ctx.strokeStyle = '#ddd';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(cellX, cellY, BLOCK, BLOCK);
+                    
+                    // Mark visited cells
+                    if (steps.some(step => step.newMapX === x && step.newMapY === y)) {
+                        ctx.fillStyle = 'rgba(255, 193, 7, 0.3)';
+                        ctx.fillRect(cellX + 2, cellY + 2, BLOCK - 4, BLOCK - 4);
+                    }
+                }
+            }
+            
+            // Draw ray start point
+            ctx.fillStyle = '#ff4444';
+            ctx.beginPath();
+            ctx.arc(rayStartX, rayStartY, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw ray
+            ctx.strokeStyle = '#ff4444';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(rayStartX, rayStartY);
+            
+            if (hitTile !== '0') {
+                // Ray hit a wall - draw to the wall
+                const wallX = mapX * BLOCK + (side === 0 ? (stepX < 0 ? BLOCK : 0) : BLOCK/2);
+                const wallY = mapY * BLOCK + (side === 1 ? (stepY < 0 ? BLOCK : 0) : BLOCK/2);
+                ctx.lineTo(wallX, wallY);
+                
+                // Mark the hit point
+                ctx.fillStyle = '#ffeb3b';
+                ctx.beginPath();
+                ctx.arc(wallX, wallY, 8, 0, 2 * Math.PI);
+                ctx.fill();
+            } else {
+                // Ray still traveling
+                const rayLength = 200;
+                ctx.lineTo(rayStartX + rayDirX * rayLength, rayStartY + rayDirY * rayLength);
+            }
+            ctx.stroke();
+            
+            // Highlight current position
+            if (currentStepIndex >= 0) {
+                ctx.strokeStyle = '#4fc3f7';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(mapX * BLOCK, mapY * BLOCK, BLOCK, BLOCK);
+            }
+        }
+        
+        function updateStatus() {
+            if (currentStepIndex >= 0) {
+                const step = steps[currentStepIndex];
+                currentStatus.innerHTML = `
+                    <strong>Step ${step.stepNum}:</strong><br>
+                    Position: (${step.newMapX}, ${step.newMapY})<br>
+                    Moved: ${step.direction}<br>
+                    Hit: ${step.hitTile} ${step.isWall ? '(WALL!)' : '(empty)'}
+                `;
+            } else {
+                currentStatus.innerHTML = `
+                    <strong>Ready to start</strong><br>
+                    Ray at: (${rayStartX}, ${rayStartY})<br>
+                    Grid: (${Math.floor(rayStartX/BLOCK)}, ${Math.floor(rayStartY/BLOCK)})
+                `;
+            }
+        }
+        
+        function updateStepLog() {
+            let logText = '';
+            
+            steps.forEach((step, index) => {
+                const isCurrentStep = index === currentStepIndex;
+                const prefix = isCurrentStep ? '>>> ' : '    ';
+                
+                logText += `${prefix}STEP ${step.stepNum}:\n`;
+                logText += `${prefix}  Compare: side_dist_x(${step.beforeSideDistX}) vs side_dist_y(${step.beforeSideDistY})\n`;
+                logText += `${prefix}  Decision: Move ${step.direction} (${step.wallType} wall closer)\n`;
+                logText += `${prefix}  New pos: (${step.beforeMapX},${step.beforeMapY}) -> (${step.newMapX},${step.newMapY})\n`;
+                logText += `${prefix}  Found: '${step.hitTile}' ${step.isWall ? '-> WALL HIT!' : '-> continue'}\n\n`;
+            });
+            
+            if (logText === '') {
+                logText = 'Ready to start DDA algorithm...\n\nClick "Next Step" to begin!';
+            }
+            
+            stepLog.textContent = logText;
+            stepLog.scrollTop = stepLog.scrollHeight;
+        }
+        
+        function updateCurrentStep() {
+            if (currentStepIndex < 0) {
+                currentStep.innerHTML = 'Click "Next Step" to start the DDA algorithm!';
+            } else if (hitTile !== '0') {
+                const step = steps[currentStepIndex];
+                currentStep.innerHTML = `
+                    <strong>🎉 WALL FOUND!</strong><br>
+                    Hit tile '${step.hitTile}' at position (${step.newMapX}, ${step.newMapY})<br>
+                    Wall type: ${step.wallType}<br>
+                    Total steps: ${stepCount}
+                `;
+            } else {
+                const step = steps[currentStepIndex];
+                currentStep.innerHTML = `
+                    <strong>Step ${step.stepNum} completed:</strong><br>
+                    Compared distances and moved ${step.direction}<br>
+                    Now at grid (${step.newMapX}, ${step.newMapY})<br>
+                    Found: '${step.hitTile}' - ${step.isWall ? 'WALL!' : 'empty space, continue...'}
+                `;
+            }
+        }
+        
+        function resetDemo() {
+            initializeDDA();
+            stepBtn.disabled = false;
+            if (autoMode) {
+                clearInterval(autoInterval);
+                autoMode = false;
+                autoBtn.textContent = 'Auto Run';
+            }
+            updateDisplay();
+            updateCurrentStep();
+        }
+        
+        function toggleAuto() {
+            if (autoMode) {
+                clearInterval(autoInterval);
+                autoMode = false;
+                autoBtn.textContent = 'Auto Run';
+            } else {
+                autoMode = true;
+                autoBtn.textContent = 'Stop Auto';
+                autoInterval = setInterval(() => {
+                    if (hitTile === '0') {
+                        performStep();
+                        updateCurrentStep();
+                    } else {
+                        clearInterval(autoInterval);
+                        autoMode = false;
+                        autoBtn.textContent = 'Auto Run';
+                    }
+                }, 800);
+            }
+        }
+        
+        // Initialize
+        initializeDDA();
+        updateDisplay();
+        updateCurrentStep();
+        
+        // Add click to move ray start
+        canvas.addEventListener('click', (e) => {
+            if (autoMode) return;
+            const rect = canvas.getBoundingClientRect();
+            rayStartX = e.clientX - rect.left;
+            rayStartY = e.clientY - rect.top;
+            resetDemo();
+        });
+    </script>
+</body>
+</html>

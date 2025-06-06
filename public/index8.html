@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raycasting Hit Point Calculation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e1e2e, #2d2d44);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #64ffda;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+        }
+        
+        .explanation {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .canvas-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #64ffda;
+        }
+        
+        canvas {
+            border: 1px solid #555;
+            border-radius: 10px;
+            background: #000;
+        }
+        
+        .code-explanation {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .step {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 3px solid #64ffda;
+        }
+        
+        .step h3 {
+            color: #ff6b6b;
+            margin-top: 0;
+        }
+        
+        .formula {
+            background: rgba(100, 255, 218, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            border: 1px solid #64ffda;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #64ffda, #4ecdc4);
+            color: #1e1e2e;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(100, 255, 218, 0.4);
+        }
+        
+        .info-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #555;
+        }
+        
+        .highlight {
+            color: #64ffda;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Raycasting Hit Point Calculation</h1>
+        
+        <div class="explanation">
+            <div class="canvas-container">
+                <h3 style="text-align: center; color: #64ffda;">Interactive Visualization</h3>
+                <canvas id="raycastCanvas" width="400" height="400"></canvas>
+                <div class="controls">
+                    <button onclick="movePlayer(-10, 0)">← Left</button>
+                    <button onclick="movePlayer(10, 0)">Right →</button>
+                    <button onclick="movePlayer(0, -10)">↑ Up</button>
+                    <button onclick="movePlayer(0, 10)">Down ↓</button>
+                </div>
+            </div>
+            
+            <div class="code-explanation">
+                <h3>🔍 Function Breakdown</h3>
+                
+                <div class="step">
+                    <h3>Step 1: Determine Hit Side</h3>
+                    <p>The function first checks <span class="highlight">params->side</span>:</p>
+                    <ul>
+                        <li><strong>side == 0</strong>: Ray hit a vertical wall (North/South face)</li>
+                        <li><strong>side == 1</strong>: Ray hit a horizontal wall (East/West face)</li>
+                    </ul>
+                </div>
+                
+                <div class="step">
+                    <h3>Step 2: Calculate Distance to Wall</h3>
+                    <div class="formula">
+                        distance = (wall_position - player_position + offset) / ray_direction
+                    </div>
+                    <p>Where <span class="highlight">offset</span> adjusts for which side of the grid cell we hit.</p>
+                </div>
+                
+                <div class="step">
+                    <h3>Step 3: Find Exact Hit Point</h3>
+                    <div class="formula">
+                        hit_x = player_x + distance * ray_dir_x<br>
+                        hit_y = player_y + distance * ray_dir_y
+                    </div>
+                    <p>This gives us the precise coordinates where the ray intersects the wall.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h3>🎮 Key Concepts</h3>
+            <p><strong>Raycasting:</strong> A technique used in 3D games to determine what the player can see by casting rays from their position.</p>
+            <p><strong>Grid-based World:</strong> The world is divided into blocks (BLOCK size), where walls exist at grid boundaries.</p>
+            <p><strong>Step Direction:</strong> Determines whether we're moving in the positive or negative direction along each axis.</p>
+            <p><strong>Hit Point:</strong> The exact pixel coordinate where a ray intersects with a wall surface.</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('raycastCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game state
+        let player = { x: 150, y: 150 };
+        let rayAngle = 0;
+        const BLOCK = 50;
+        
+        // Simple grid map (1 = wall, 0 = empty)
+        const map = [
+            [1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,0,1],
+            [1,0,1,0,0,1,0,1],
+            [1,0,0,0,0,0,0,1],
+            [1,0,1,1,1,0,0,1],
+            [1,0,0,0,0,0,0,1],
+            [1,0,0,0,0,1,0,1],
+            [1,1,1,1,1,1,1,1]
+        ];
+        
+        function drawGrid() {
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            
+            // Draw grid lines
+            for (let i = 0; i <= 8; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * BLOCK, 0);
+                ctx.lineTo(i * BLOCK, 400);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(0, i * BLOCK);
+                ctx.lineTo(400, i * BLOCK);
+                ctx.stroke();
+            }
+        }
+        
+        function drawMap() {
+            for (let y = 0; y < 8; y++) {
+                for (let x = 0; x < 8; x++) {
+                    if (map[y][x] === 1) {
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+                    }
+                }
+            }
+        }
+        
+        function castRay(angle) {
+            const rayDirX = Math.cos(angle);
+            const rayDirY = Math.sin(angle);
+            
+            let mapX = Math.floor(player.x / BLOCK);
+            let mapY = Math.floor(player.y / BLOCK);
+            
+            const deltaDistX = Math.abs(1 / rayDirX);
+            const deltaDistY = Math.abs(1 / rayDirY);
+            
+            let stepX, stepY, sideDistX, sideDistY;
+            
+            if (rayDirX < 0) {
+                stepX = -1;
+                sideDistX = (player.x / BLOCK - mapX) * deltaDistX;
+            } else {
+                stepX = 1;
+                sideDistX = (mapX + 1.0 - player.x / BLOCK) * deltaDistX;
+            }
+            
+            if (rayDirY < 0) {
+                stepY = -1;
+                sideDistY = (player.y / BLOCK - mapY) * deltaDistY;
+            } else {
+                stepY = 1;
+                sideDistY = (mapY + 1.0 - player.y / BLOCK) * deltaDistY;
+            }
+            
+            let hit = false;
+            let side;
+            
+            while (!hit) {
+                if (sideDistX < sideDistY) {
+                    sideDistX += deltaDistX;
+                    mapX += stepX;
+                    side = 0;
+                } else {
+                    sideDistY += deltaDistY;
+                    mapY += stepY;
+                    side = 1;
+                }
+                
+                if (mapX >= 0 && mapX < 8 && mapY >= 0 && mapY < 8 && map[mapY][mapX] === 1) {
+                    hit = true;
+                }
+            }
+            
+            // Calculate hit point using the same logic as the C function
+            let hitX, hitY;
+            if (side === 0) {
+                hitX = player.x + (mapX * BLOCK - player.x + (1 - stepX) * BLOCK / 2) / rayDirX * rayDirX;
+                hitY = player.y + (mapX * BLOCK - player.x + (1 - stepX) * BLOCK / 2) / rayDirX * rayDirY;
+            } else {
+                hitX = player.x + (mapY * BLOCK - player.y + (1 - stepY) * BLOCK / 2) / rayDirY * rayDirX;
+                hitY = player.y + (mapY * BLOCK - player.y + (1 - stepY) * BLOCK / 2) / rayDirY * rayDirY;
+            }
+            
+            return { hitX, hitY, side };
+        }
+        
+        function draw() {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, 400, 400);
+            
+            drawGrid();
+            drawMap();
+            
+            // Draw player
+            ctx.fillStyle = '#64ffda';
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Cast multiple rays for visualization
+            for (let i = -30; i <= 30; i += 5) {
+                const angle = (rayAngle + i * Math.PI / 180);
+                const result = castRay(angle);
+                
+                // Draw ray
+                ctx.strokeStyle = i === 0 ? '#64ffda' : 'rgba(100, 255, 218, 0.3)';
+                ctx.lineWidth = i === 0 ? 3 : 1;
+                ctx.beginPath();
+                ctx.moveTo(player.x, player.y);
+                ctx.lineTo(result.hitX, result.hitY);
+                ctx.stroke();
+                
+                // Highlight main ray hit point
+                if (i === 0) {
+                    ctx.fillStyle = '#ff6b6b';
+                    ctx.beginPath();
+                    ctx.arc(result.hitX, result.hitY, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Show coordinates
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '12px Arial';
+                    ctx.fillText(`Hit: (${Math.round(result.hitX)}, ${Math.round(result.hitY)})`, 10, 20);
+                    ctx.fillText(`Side: ${result.side === 0 ? 'Vertical' : 'Horizontal'}`, 10, 35);
+                }
+            }
+            
+            rayAngle += 0.02; // Rotate rays slowly
+        }
+        
+        function movePlayer(dx, dy) {
+            const newX = player.x + dx;
+            const newY = player.y + dy;
+            
+            // Check bounds and walls
+            const mapX = Math.floor(newX / BLOCK);
+            const mapY = Math.floor(newY / BLOCK);
+            
+            if (mapX >= 0 && mapX < 8 && mapY >= 0 && mapY < 8 && map[mapY][mapX] === 0) {
+                player.x = newX;
+                player.y = newY;
+            }
+        }
+        
+        // Animation loop
+        function animate() {
+            draw();
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>
