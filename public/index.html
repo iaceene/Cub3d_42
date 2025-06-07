@@ -1,25 +1,498 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Navigation</title>
+  <title>Navigation Hub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated background particles */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.3;
+      }
+
+      50% {
+        transform: translateY(-100px) rotate(180deg);
+        opacity: 0.8;
+      }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      margin-bottom: 3rem;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 1s ease-out;
+      background: linear-gradient(45deg, #fff, #e0e7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .nav-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      animation: slideIn 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .nav-card:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .nav-card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .nav-card:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .nav-card:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .nav-card:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+
+    .nav-card:nth-child(6) {
+      animation-delay: 0.6s;
+    }
+
+    .nav-card:nth-child(7) {
+      animation-delay: 0.7s;
+    }
+
+    .nav-card:nth-child(8) {
+      animation-delay: 0.8s;
+    }
+
+    .nav-card:nth-child(9) {
+      animation-delay: 0.9s;
+    }
+
+    .nav-card:nth-child(10) {
+      animation-delay: 1.0s;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .nav-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s;
+    }
+
+    .nav-card:hover::before {
+      left: 100%;
+    }
+
+    .nav-card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .nav-link {
+      display: block;
+      text-decoration: none;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    .nav-card:hover .nav-link {
+      color: #f0f9ff;
+      transform: scale(1.1);
+    }
+
+    .page-number {
+      display: inline-block;
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+      font-size: 2rem;
+      margin-right: 0.5rem;
+    }
+
+    .nav-card:nth-child(odd) .page-number {
+      background: linear-gradient(45deg, #4ecdc4, #44a08d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .glow-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 0.6s ease;
+      pointer-events: none;
+    }
+
+    .nav-card:hover .glow-effect {
+      transform: translate(-50%, -50%) scale(3);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .nav-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .nav-card {
+        padding: 1.5rem;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+    }
+
+    /* Additional decorative elements */
+    .decoration {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    .decoration:nth-child(1) {
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .decoration:nth-child(2) {
+      bottom: 10%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 0.1;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Pages Navigation</h1>
-  <nav>
-    <ul>
-      <li><a href="index1.html">Page 1</a></li>
-      <li><a href="index2.html">Page 2</a></li>
-      <li><a href="index3.html">Page 3</a></li>
-      <li><a href="index4.html">Page 4</a></li>
-      <li><a href="index5.html">Page 5</a></li>
-      <li><a href="index6.html">Page 6</a></li>
-      <li><a href="index7.html">Page 7</a></li>
-      <li><a href="index8.html">Page 8</a></li>
-      <li><a href="index9.html">Page 9</a></li>
-      <li><a href="index10.html">Page 10</a></li>
-    </ul>
-  </nav>
+  <div class="bg-animation"></div>
+  <div class="decoration"></div>
+  <div class="decoration"></div>
+
+  <div class="container">
+    <h1>Navigation Hub</h1>
+
+    <div class="nav-grid">
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index1.html" class="nav-link">
+          <span class="page-number">01</span>
+          Page 1
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index2.html" class="nav-link">
+          <span class="page-number">02</span>
+          Page 2
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index3.html" class="nav-link">
+          <span class="page-number">03</span>
+          Page 3
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index4.html" class="nav-link">
+          <span class="page-number">04</span>
+          Page 4
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index5.html" class="nav-link">
+          <span class="page-number">05</span>
+          Page 5
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index6.html" class="nav-link">
+          <span class="page-number">06</span>
+          Page 6
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index7.html" class="nav-link">
+          <span class="page-number">07</span>
+          Page 7
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index8.html" class="nav-link">
+          <span class="page-number">08</span>
+          Page 8
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index9.html" class="nav-link">
+          <span class="page-number">09</span>
+          Page 9
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index10.html" class="nav-link">
+          <span class="page-number">10</span>
+          Page 10
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index11.html" class="nav-link">
+          <span class="page-number">11</span>
+          Page 11
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index12.html" class="nav-link">
+          <span class="page-number">12</span>
+          Page 12
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index13.html" class="nav-link">
+          <span class="page-number">13</span>
+          Page 13
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index14.html" class="nav-link">
+          <span class="page-number">14</span>
+          Page 14
+        </a>
+      </div>
+
+      <div class="nav-card">
+        <div class="glow-effect"></div>
+        <a href="index15.html" class="nav-link">
+          <span class="page-number">15</span>
+          Page 15
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Create floating particles
+    function createParticles() {
+      const bgAnimation = document.querySelector('.bg-animation');
+      const particleCount = 50;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        bgAnimation.appendChild(particle);
+      }
+    }
+
+    // Add click ripple effect
+    document.querySelectorAll('.nav-card').forEach(card => {
+      card.addEventListener('click', function (e) {
+        const ripple = document.createElement('div');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.style.position = 'absolute';
+        ripple.style.borderRadius = '50%';
+        ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+        ripple.style.transform = 'scale(0)';
+        ripple.style.animation = 'ripple 0.6s linear';
+        ripple.style.pointerEvents = 'none';
+
+        this.appendChild(ripple);
+
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+
+    // Add ripple keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple {
+        to {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize particles
+    createParticles();
+
+    // Add parallax effect on mouse move
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+
+      document.querySelectorAll('.decoration').forEach((decoration, index) => {
+        const speed = (index + 1) * 0.02;
+        const x = (mouseX - 0.5) * speed * 100;
+        const y = (mouseY - 0.5) * speed * 100;
+        decoration.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    });
+  </script>
 </body>
+
 </html>

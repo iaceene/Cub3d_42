@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line-by-Line Code Analysis</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #58a6ff;
+            border-bottom: 2px solid #21262d;
+            padding-bottom: 10px;
+        }
+        .function-block {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .function-header {
+            background: #21262d;
+            padding: 15px;
+            border-bottom: 1px solid #30363d;
+        }
+        .function-title {
+            color: #f85149;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .code-line {
+            display: flex;
+            align-items: flex-start;
+            padding: 8px 15px;
+            border-bottom: 1px solid #21262d;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .code-line:hover {
+            background: #1c2128;
+        }
+        .code-line.active {
+            background: #0d4b2b;
+            border-left: 4px solid #7c3aed;
+        }
+        .line-number {
+            color: #7d8590;
+            width: 30px;
+            flex-shrink: 0;
+            text-align: right;
+            margin-right: 15px;
+        }
+        .code-content {
+            flex: 1;
+            color: #c9d1d9;
+        }
+        .keyword { color: #ff7b72; }
+        .function-name { color: #d2a8ff; }
+        .variable { color: #79c0ff; }
+        .operator { color: #ff7b72; }
+        .number { color: #a5d6ff; }
+        .visualization {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .canvas-container {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #30363d;
+            background: #0d1117;
+            border-radius: 4px;
+        }
+        .explanation {
+            background: #1c2128;
+            border-left: 4px solid #7c3aed;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .math-formula {
+            background: #21262d;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Times New Roman', serif;
+            text-align: center;
+            margin: 10px 0;
+            color: #ffa657;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #161b22;
+            border-radius: 8px;
+        }
+        .step-indicator {
+            color: #58a6ff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .values-display {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        .value-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        .value-name { color: #79c0ff; }
+        .value-number { color: #a5d6ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Deep Line-by-Line Analysis: Fisheye Correction</h1>
+        
+        <div class="controls">
+            <p><strong>Click on any line of code</strong> to see its detailed explanation and visualization!</p>
+            <p>Move your mouse in the visualization area to see real-time calculations.</p>
+        </div>
+
+        <!-- Function 1: use_distance -->
+        <div class="function-block">
+            <div class="function-header">
+                <div class="function-title">Function 1: use_distance(float x, float y)</div>
+                <p>Simple Euclidean distance calculator using Pythagorean theorem</p>
+            </div>
+            <div class="code-line" data-step="0">
+                <div class="line-number">1</div>
+                <div class="code-content">
+                    <span class="keyword">float</span> <span class="function-name">use_distance</span>(<span class="keyword">float</span> <span class="variable">x</span>, <span class="keyword">float</span> <span class="variable">y</span>) {
+                </div>
+            </div>
+            <div class="code-line" data-step="1">
+                <div class="line-number">2</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> (<span class="function-name">sqrt</span>(<span class="variable">x</span> <span class="operator">*</span> <span class="variable">x</span> <span class="operator">+</span> <span class="variable">y</span> <span class="operator">*</span> <span class="variable">y</span>));
+                </div>
+            </div>
+            <div class="code-line" data-step="2">
+                <div class="line-number">3</div>
+                <div class="code-content">}</div>
+            </div>
+        </div>
+
+        <!-- Function 2: use_fixed_dist -->
+        <div class="function-block">
+            <div class="function-header">
+                <div class="function-title">Function 2: use_fixed_dist(float x2, float y2, t_cub *game)</div>
+                <p>Fisheye correction function - projects 3D distance onto 2D viewing plane</p>
+            </div>
+            <div class="code-line" data-step="3">
+                <div class="line-number">4</div>
+                <div class="code-content">
+                    <span class="keyword">float</span> <span class="function-name">use_fixed_dist</span>(<span class="keyword">float</span> <span class="variable">x2</span>, <span class="keyword">float</span> <span class="variable">y2</span>, <span class="variable">t_cub</span> *<span class="variable">game</span>) {
+                </div>
+            </div>
+            <div class="code-line" data-step="4">
+                <div class="line-number">5</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">float</span> <span class="variable">delta_x</span>;
+                </div>
+            </div>
+            <div class="code-line" data-step="5">
+                <div class="line-number">6</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">float</span> <span class="variable">delta_y</span>;
+                </div>
+            </div>
+            <div class="code-line" data-step="6">
+                <div class="line-number">7</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">float</span> <span class="variable">angle</span>;
+                </div>
+            </div>
+            <div class="code-line" data-step="7">
+                <div class="line-number">8</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">float</span> <span class="variable">fix_dist</span>;
+                </div>
+            </div>
+            <div class="code-line" data-step="8">
+                <div class="line-number">9</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">delta_x</span> <span class="operator">=</span> <span class="variable">x2</span> <span class="operator">-</span> <span class="variable">game</span><span class="operator">-></span><span class="variable">player</span>.<span class="variable">x</span>;
+                </div>
+            </div>
+            <div class="code-line" data-step="9">
+                <div class="line-number">10</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">delta_y</span> <span class="operator">=</span> <span class="variable">y2</span> <span class="operator">-</span> <span class="variable">game</span><span class="operator">-></span><span class="variable">player</span>.<span class="variable">y</span>;
+                </div>
+            </div>
+            <div class="code-line" data-step="10">
+                <div class="line-number">11</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">angle</span> <span class="operator">=</span> <span class="function-name">atan2</span>(<span class="variable">delta_y</span>, <span class="variable">delta_x</span>) <span class="operator">-</span> <span class="variable">game</span><span class="operator">-></span><span class="variable">player</span>.<span class="variable">angle</span>;
+                </div>
+            </div>
+            <div class="code-line" data-step="11">
+                <div class="line-number">12</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">fix_dist</span> <span class="operator">=</span> <span class="function-name">use_distance</span>(<span class="variable">delta_x</span>, <span class="variable">delta_y</span>) <span class="operator">*</span> <span class="function-name">cos</span>(<span class="variable">angle</span>);
+                </div>
+            </div>
+            <div class="code-line" data-step="12">
+                <div class="line-number">13</div>
+                <div class="code-content">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> (<span class="variable">fix_dist</span>);
+                </div>
+            </div>
+            <div class="code-line" data-step="13">
+                <div class="line-number">14</div>
+                <div class="code-content">}</div>
+            </div>
+        </div>
+
+        <div class="visualization">
+            <div class="canvas-container">
+                <h3>2D Top View</h3>
+                <canvas id="topCanvas" width="350" height="350"></canvas>
+            </div>
+            <div class="canvas-container">
+                <h3>Calculation Steps</h3>
+                <canvas id="mathCanvas" width="350" height="350"></canvas>
+            </div>
+        </div>
+
+        <div class="explanation" id="explanation">
+            <div class="step-indicator">Click on a line of code to see detailed explanation</div>
+            <p>This interactive demo shows each step of the fisheye correction algorithm. The math behind preventing visual distortion in raycasting engines.</p>
+        </div>
+
+        <div class="values-display" id="values">
+            <div class="value-item">
+                <span class="value-name">Mouse Position:</span>
+                <span class="value-number" id="mousePos">(150, 100)</span>
+            </div>
+            <div class="value-item">
+                <span class="value-name">Player Position:</span>
+                <span class="value-number">(175, 175)</span>
+            </div>
+            <div class="value-item">
+                <span class="value-name">Player Angle:</span>
+                <span class="value-number" id="playerAngle">-90°</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const topCanvas = document.getElementById('topCanvas');
+        const mathCanvas = document.getElementById('mathCanvas');
+        const topCtx = topCanvas.getContext('2d');
+        const mathCtx = mathCanvas.getContext('2d');
+        
+        let mouseX = 150;
+        let mouseY = 100;
+        let currentStep = -1;
+        
+        const player = {
+            x: 175,
+            y: 175,
+            angle: -Math.PI / 2 // -90 degrees, looking up
+        };
+
+        const stepExplanations = [
+            {
+                title: "Function Declaration",
+                content: "Declares the use_distance function that takes two float parameters (x, y coordinates) and returns a float (the distance).",
+                math: "function: ℝ² → ℝ"
+            },
+            {
+                title: "Pythagorean Theorem Implementation",
+                content: "Calculates the Euclidean distance using √(x² + y²). This gives us the straight-line distance from origin to point (x,y).",
+                math: "distance = √(x² + y²)"
+            },
+            {
+                title: "Function End",
+                content: "Closes the use_distance function. This function is now ready to be called by other parts of the code.",
+                math: ""
+            },
+            {
+                title: "Main Function Declaration",
+                content: "Declares use_fixed_dist function. Takes target coordinates (x2, y2) and a game structure containing player data. Returns the corrected distance.",
+                math: "function: ℝ² × GameState → ℝ"
+            },
+            {
+                title: "Declare delta_x Variable",
+                content: "Declares a float variable to store the horizontal distance between target and player. This will be calculated on line 9.",
+                math: "delta_x ∈ ℝ"
+            },
+            {
+                title: "Declare delta_y Variable", 
+                content: "Declares a float variable to store the vertical distance between target and player. This will be calculated on line 10.",
+                math: "delta_y ∈ ℝ"
+            },
+            {
+                title: "Declare angle Variable",
+                content: "Declares a float variable to store the relative angle between the ray direction and player's viewing direction.",
+                math: "angle ∈ [-π, π]"
+            },
+            {
+                title: "Declare fix_dist Variable",
+                content: "Declares a float variable to store the final corrected distance that prevents fisheye distortion.",
+                math: "fix_dist ∈ ℝ"
+            },
+            {
+                title: "Calculate Horizontal Distance",
+                content: "Calculates the horizontal component of the vector from player to target. Positive means target is to the right of player.",
+                math: "delta_x = x₂ - x_player"
+            },
+            {
+                title: "Calculate Vertical Distance", 
+                content: "Calculates the vertical component of the vector from player to target. Positive means target is below player (in screen coordinates).",
+                math: "delta_y = y₂ - y_player"
+            },
+            {
+                title: "Calculate Relative Angle",
+                content: "atan2 gives the angle from player to target. Subtracting player.angle gives the relative angle from the player's viewing direction.",
+                math: "θ = atan2(delta_y, delta_x) - player_angle"
+            },
+            {
+                title: "Apply Fisheye Correction",
+                content: "Multiplies the raw distance by cos(relative_angle) to project the 3D distance onto the 2D viewing plane. This prevents the fisheye effect.",
+                math: "corrected_distance = raw_distance × cos(θ)"
+            },
+            {
+                title: "Return Corrected Distance",
+                content: "Returns the corrected distance value. This is the distance that should be used for rendering to maintain realistic perspective.",
+                math: "return fix_dist"
+            },
+            {
+                title: "Function End",
+                content: "Closes the use_fixed_dist function. The fisheye correction algorithm is now complete.",
+                math: ""
+            }
+        ];
+
+        function use_distance(x, y) {
+            return Math.sqrt(x * x + y * y);
+        }
+
+        function use_fixed_dist(x2, y2, game) {
+            const delta_x = x2 - game.player.x;
+            const delta_y = y2 - game.player.y;
+            const angle = Math.atan2(delta_y, delta_x) - game.player.angle;
+            const fix_dist = use_distance(delta_x, delta_y) * Math.cos(angle);
+            return fix_dist;
+        }
+
+        function drawTopView() {
+            topCtx.clearRect(0, 0, 350, 350);
+            
+            // Grid
+            topCtx.strokeStyle = '#21262d';
+            topCtx.lineWidth = 1;
+            for (let i = 0; i <= 350; i += 25) {
+                topCtx.beginPath();
+                topCtx.moveTo(i, 0);
+                topCtx.lineTo(i, 350);
+                topCtx.moveTo(0, i);
+                topCtx.lineTo(350, i);
+                topCtx.stroke();
+            }
+
+            // Player viewing cone
+            topCtx.strokeStyle = '#30363d';
+            topCtx.lineWidth = 2;
+            topCtx.beginPath();
+            topCtx.moveTo(player.x, player.y);
+            const fov = Math.PI / 3;
+            const leftAngle = player.angle - fov / 2;
+            const rightAngle = player.angle + fov / 2;
+            topCtx.lineTo(player.x + Math.cos(leftAngle) * 80, player.y + Math.sin(leftAngle) * 80);
+            topCtx.moveTo(player.x, player.y);
+            topCtx.lineTo(player.x + Math.cos(rightAngle) * 80, player.y + Math.sin(rightAngle) * 80);
+            topCtx.stroke();
+
+            // Draw step-specific visualizations
+            if (currentStep >= 8) {
+                // Delta vectors
+                topCtx.strokeStyle = '#58a6ff';
+                topCtx.lineWidth = 2;
+                topCtx.setLineDash([5, 5]);
+                
+                // Horizontal delta
+                topCtx.beginPath();
+                topCtx.moveTo(player.x, player.y);
+                topCtx.lineTo(mouseX, player.y);
+                topCtx.stroke();
+                
+                // Vertical delta  
+                topCtx.beginPath();
+                topCtx.moveTo(player.x, player.y);
+                topCtx.lineTo(player.x, mouseY);
+                topCtx.stroke();
+                
+                topCtx.setLineDash([]);
+
+                // Delta labels
+                topCtx.fillStyle = '#58a6ff';
+                topCtx.font = '12px Courier New';
+                const dx = mouseX - player.x;
+                const dy = mouseY - player.y;
+                topCtx.fillText(`Δx=${dx.toFixed(0)}`, (player.x + mouseX) / 2, player.y - 10);
+                topCtx.fillText(`Δy=${dy.toFixed(0)}`, player.x - 40, (player.y + mouseY) / 2);
+            }
+
+            if (currentStep >= 10) {
+                // Angle arc
+                const dx = mouseX - player.x;
+                const dy = mouseY - player.y;
+                const wallAngle = Math.atan2(dy, dx);
+                const relativeAngle = wallAngle - player.angle;
+                
+                topCtx.strokeStyle = '#d2a8ff';
+                topCtx.lineWidth = 3;
+                topCtx.beginPath();
+                topCtx.arc(player.x, player.y, 40, player.angle, wallAngle, relativeAngle < 0);
+                topCtx.stroke();
+                
+                topCtx.fillStyle = '#d2a8ff';
+                topCtx.fillText(`θ=${(relativeAngle * 180 / Math.PI).toFixed(1)}°`, player.x + 45, player.y - 10);
+            }
+
+            // Player
+            topCtx.fillStyle = '#7c3aed';
+            topCtx.beginPath();
+            topCtx.arc(player.x, player.y, 8, 0, Math.PI * 2);
+            topCtx.fill();
+
+            // Player direction
+            topCtx.strokeStyle = '#7c3aed';
+            topCtx.lineWidth = 3;
+            topCtx.beginPath();
+            topCtx.moveTo(player.x, player.y);
+            topCtx.lineTo(player.x + Math.cos(player.angle) * 25, player.y + Math.sin(player.angle) * 25);
+            topCtx.stroke();
+
+            // Target point
+            topCtx.fillStyle = '#f85149';
+            topCtx.beginPath();
+            topCtx.arc(mouseX, mouseY, 6, 0, Math.PI * 2);
+            topCtx.fill();
+
+            // Ray
+            topCtx.strokeStyle = '#ffa657';
+            topCtx.lineWidth = 2;
+            topCtx.beginPath();
+            topCtx.moveTo(player.x, player.y);
+            topCtx.lineTo(mouseX, mouseY);
+            topCtx.stroke();
+        }
+
+        function drawMathVisualization() {
+            mathCtx.clearRect(0, 0, 350, 350);
+            
+            const dx = mouseX - player.x;
+            const dy = mouseY - player.y;
+            const rawDist = use_distance(dx, dy);
+            const correctedDist = use_fixed_dist(mouseX, mouseY, { player: player });
+            const wallAngle = Math.atan2(dy, dx);
+            const relativeAngle = wallAngle - player.angle;
+
+            // Title
+            mathCtx.fillStyle = '#c9d1d9';
+            mathCtx.font = 'bold 14px Courier New';
+            mathCtx.fillText('Real-time Calculations:', 10, 25);
+
+            let y = 50;
+            const lineHeight = 25;
+
+            if (currentStep >= 1) {
+                mathCtx.fillStyle = '#58a6ff';
+                mathCtx.font = '12px Courier New';
+                mathCtx.fillText(`Raw Distance Calculation:`, 10, y);
+                y += lineHeight;
+                mathCtx.fillText(`sqrt(${dx.toFixed(1)}² + ${dy.toFixed(1)}²) = ${rawDist.toFixed(2)}`, 10, y);
+                y += lineHeight;
+            }
+
+            if (currentStep >= 8) {
+                mathCtx.fillStyle = '#79c0ff';
+                mathCtx.fillText(`Delta X: ${dx.toFixed(2)}`, 10, y);
+                y += lineHeight;
+            }
+
+            if (currentStep >= 9) {
+                mathCtx.fillStyle = '#79c0ff';
+                mathCtx.fillText(`Delta Y: ${dy.toFixed(2)}`, 10, y);
+                y += lineHeight;
+            }
+
+            if (currentStep >= 10) {
+                mathCtx.fillStyle = '#d2a8ff';
+                mathCtx.fillText(`Wall Angle: ${(wallAngle * 180 / Math.PI).toFixed(1)}°`, 10, y);
+                y += lineHeight;
+                mathCtx.fillText(`Player Angle: ${(player.angle * 180 / Math.PI).toFixed(1)}°`, 10, y);
+                y += lineHeight;
+                mathCtx.fillText(`Relative Angle: ${(relativeAngle * 180 / Math.PI).toFixed(1)}°`, 10, y);
+                y += lineHeight;
+            }
+
+            if (currentStep >= 11) {
+                mathCtx.fillStyle = '#7c3aed';
+                mathCtx.fillText(`cos(${(relativeAngle * 180 / Math.PI).toFixed(1)}°) = ${Math.cos(relativeAngle).toFixed(3)}`, 10, y);
+                y += lineHeight;
+                mathCtx.fillText(`Corrected Distance:`, 10, y);
+                y += lineHeight;
+                mathCtx.fillText(`${rawDist.toFixed(2)} × ${Math.cos(relativeAngle).toFixed(3)} = ${correctedDist.toFixed(2)}`, 10, y);
+                y += lineHeight;
+            }
+
+            // Visual comparison bars
+            if (currentStep >= 11) {
+                const barY = 250;
+                const barWidth = 30;
+                const maxHeight = 80;
+                
+                // Scale the heights based on distances
+                const rawHeight = Math.min(maxHeight, (maxHeight * 50) / Math.max(1, rawDist));
+                const correctedHeight = Math.min(maxHeight, (maxHeight * 50) / Math.max(1, Math.abs(correctedDist)));
+
+                // Raw distance bar
+                mathCtx.fillStyle = '#f85149';
+                mathCtx.fillRect(50, barY - rawHeight, barWidth, rawHeight);
+                mathCtx.fillText('Raw', 50, barY + 20);
+
+                // Corrected distance bar
+                mathCtx.fillStyle = '#7c3aed';
+                mathCtx.fillRect(100, barY - correctedHeight, barWidth, correctedHeight);
+                mathCtx.fillText('Fixed', 100, barY + 20);
+            }
+        }
+
+        function updateValues() {
+            document.getElementById('mousePos').textContent = `(${mouseX.toFixed(0)}, ${mouseY.toFixed(0)})`;
+            document.getElementById('playerAngle').textContent = `${(player.angle * 180 / Math.PI).toFixed(0)}°`;
+        }
+
+        function updateExplanation(step) {
+            const explanation = document.getElementById('explanation');
+            if (step >= 0 && step < stepExplanations.length) {
+                const info = stepExplanations[step];
+                explanation.innerHTML = `
+                    <div class="step-indicator">Step ${step + 1}: ${info.title}</div>
+                    <p>${info.content}</p>
+                    ${info.math ? `<div class="math-formula">${info.math}</div>` : ''}
+                `;
+            }
+        }
+
+        function draw() {
+            drawTopView();
+            drawMathVisualization();
+            updateValues();
+        }
+
+        // Event listeners
+        document.querySelectorAll('.code-line').forEach((line, index) => {
+            line.addEventListener('click', () => {
+                // Remove active class from all lines
+                document.querySelectorAll('.code-line').forEach(l => l.classList.remove('active'));
+                // Add active class to clicked line
+                line.classList.add('active');
+                
+                currentStep = parseInt(line.getAttribute('data-step'));
+                updateExplanation(currentStep);
+                draw();
+            });
+        });
+
+        topCanvas.addEventListener('mousemove', (e) => {
+            const rect = topCanvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+            draw();
+        });
+
+        // Initial draw
+        draw();
+        updateExplanation(-1);
+    </script>
+</body>
+</html>
