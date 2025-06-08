@@ -1,9 +1,9 @@
 # Directories
-MLX_DIR		= ./src/lib/.mlx
+MLX_DIR		= ./bonus/src/lib/.mlx
 MLX_LIB		= $(MLX_DIR)/libmlx.a
-LIBFT_DIR	= ./src/lib/libft
+LIBFT_DIR	= ./bonus/src/lib/libft
 LIBFT_LIB	= $(LIBFT_DIR)/libft.a
-SRC_DIR		= ./src
+SRC_DIR		= ./bonus/src
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -g3 -fsanitize=address
 MLX_FLAGS	= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm -lbsd
@@ -49,7 +49,7 @@ $(MLX_LIB):
 $(LIBFT_LIB):
 	@$(MAKE) -s -C $(LIBFT_DIR)
 
-$(NAME): $(OBJS) ./src/include/cub3d.h
+$(NAME): $(OBJS) ./bonus/src/include/cub3d.h
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_FLAGS)
 	@echo "$(NAME) compiled successfully"
 
