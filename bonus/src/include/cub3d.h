@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/02 13:18:06 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/08 05:16:30 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@
 # define SKY_BOTTOM 0x87CEEB
 # define FLOOR_TOP 0x696969
 # define FLOOR_BOTTOM 0x36454F
-# define WIDTH 900
-# define HEIGHT 520
+# define WIDTH 1800
+# define HEIGHT 720
 # define BLOCK 1000
 # define MINIMAP_WIDTH 200
 # define MINIMAP_HEIGHT 200
