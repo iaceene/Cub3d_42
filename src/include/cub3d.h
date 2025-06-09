@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/07 18:39:54 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/09 04:19:53 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,5 +153,6 @@ void	render_map(t_cub *cub);
 void	draw_player(t_img *img, t_player point, int color);
 void	my_pixel_put(int x, int y, t_img *img, int color);
 int		is_wall_point(t_cub *cub, int x, int y);
+double deg_to_rad(double deg);
 
 #endif
