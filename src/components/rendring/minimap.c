@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:46:23 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/26 19:11:09 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/09 10:24:26 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,16 @@ void draw_minimap_background(t_cub *cub, int center_x, int center_y, int radius)
     }
 }
 
+int	get_map_height(char **map)
+{
+	int	h;
+
+	h = 0;
+	while (map && map[h])
+		h++;
+	return (h);
+}
+
 void draw_minimap_doors(t_cub *cub, int center_x, int center_y, int radius)
 {
     const int player_map_x = cub->player.x / BLOCK;
@@ -69,7 +79,8 @@ void draw_minimap_doors(t_cub *cub, int center_x, int center_y, int radius)
         {
             const int map_x = player_map_x + dx;
             const int map_y = player_map_y + dy;
-            if (map_y >= 0 && map_y < MAP_HEIGHT && cub->data.map.map[map_y])
+            int map_height = get_map_height(cub->data.map.map)+1;
+            if (map_y >= 0 && map_y < map_height && cub->data.map.map[map_y])
             {
                 size_t row_len = ft_strlen(cub->data.map.map[map_y]);
                 if (map_x >= 0 && map_x < (int)row_len && cub->data.map.map[map_y][map_x] == '2')
@@ -106,7 +117,8 @@ void draw_minimap_walls(t_cub *cub, int center_x, int center_y, int radius)
         {
             const int map_x = player_map_x + dx;
             const int map_y = player_map_y + dy;
-            if (map_y >= 0 && map_y < MAP_HEIGHT && cub->data.map.map[map_y])
+            int map_height = get_map_height(cub->data.map.map);
+            if (map_y >= 0 && map_y < map_height && cub->data.map.map[map_y])
             {
                 size_t row_len = ft_strlen(cub->data.map.map[map_y]);
                 if (map_x >= 0 && map_x < (int)row_len && cub->data.map.map[map_y][map_x] == '1')
