@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/09 04:21:17 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/10 00:37:49 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,7 @@ double deg_to_rad(double deg)
 
 void draw_player(t_img *img, t_player point, int color)
 {
-	double angel_rad;
-	angel_rad = deg_to_rad((double)point.angl);
-
-	int x = 0;
-	while (x < 40)
-	{
-		my_pixel_put((point.x * 64 + point.x_bit) - x * cos(angel_rad), (point.y * 64 + point.y_bit) - x * sin(angel_rad), img, color);
-		my_pixel_put((point.x * 64 + point.x_bit) - x * cos(deg_to_rad(point.angl - FOV_ANGLE / 2)), (point.y * 64 + point.y_bit) - x * sin(deg_to_rad(point.angl - FOV_ANGLE / 2)), img, color);
-		my_pixel_put((point.x * 64 + point.x_bit) - x * cos(deg_to_rad(point.angl - FOV_ANGLE / 2 * -1)), (point.y * 64 + point.y_bit) - x * sin(deg_to_rad(point.angl - FOV_ANGLE / 2 * -1)), img, color);
-		x++;
-	}
+	my_pixel_put(point.x * TILE_SIZE + point.x_bit, point.y * TILE_SIZE + point.y_bit, img, 0xFFFF00);
 	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
 }
 
@@ -188,7 +178,6 @@ void render_map(t_cub *cub)
 	set_player(cub);
 	set_dirction(cub);
 	cub->wall = ft_malloc(sizeof(t_wall) * cub->data.map.map_points);
-	set_walls_points(cub);
 	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }

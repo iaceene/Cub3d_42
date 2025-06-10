@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/09 04:19:53 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/10 00:39:30 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include <stdbool.h>
 #include <sys/time.h>
 #include <time.h>
@@ -33,9 +34,9 @@
 #define COLOR_CYAN    "\x1b[36m"
 #define COLOR_RED     "\x1b[31m"
 
-#define MOVE_SPEED 10
+#define MOVE_SPEED 1
 #define CAM_SPEED 10
-#define TILE_SIZE 64
+#define TILE_SIZE 8
 #define FOV_ANGLE 60.0f  // Field of view angle (typically 60 degrees)
 #define RAY_COUNT 120  
 #define PI 3.14159265
@@ -153,6 +154,8 @@ void	render_map(t_cub *cub);
 void	draw_player(t_img *img, t_player point, int color);
 void	my_pixel_put(int x, int y, t_img *img, int color);
 int		is_wall_point(t_cub *cub, int x, int y);
-double deg_to_rad(double deg);
+double	deg_to_rad(double deg);
+int		init_ray_catstin(t_cub *cub);
+void *ray_thread(void *arg);
 
 #endif

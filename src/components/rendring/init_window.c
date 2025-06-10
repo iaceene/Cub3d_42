@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/09 04:31:51 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/10 03:28:11 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,10 @@ void move_player(t_cub *cub, float speed, int flag)
 	draw_player(&cub->data.img, cub->player, 0);
 	display_map(cub);
 
-	if (!flag)
-	{
-		cub->player.x_bit += speed * -cos(deg_to_rad(cub->player.angl));
-		cub->player.y_bit += speed * sin(deg_to_rad(cub->player.angl));
-	}
-	else
-	{
-		cub->player.x_bit += speed * -cos(deg_to_rad(cub->player.angl));
-		cub->player.y_bit += speed * -sin(deg_to_rad(cub->player.angl));
-	}
+	if (flag)
+		cub->player.x_bit += speed;
+	cub->player.y_bit += speed;
+
 	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 }
 
@@ -81,17 +75,19 @@ int key_bind(int key, void *pram)
 	if (key == XK_Escape)
 		close_window(cub);
 	if (key == XK_w)
-		move_player(cub, MOVE_SPEED, 0);
+		cub->player.y_bit -= MOVE_SPEED;
 	if (key == XK_s)
-		move_player(cub, -MOVE_SPEED, 0);
+		cub->player.y_bit += MOVE_SPEED;
 	if (key == XK_d)
-		move_player(cub, MOVE_SPEED, 1);
+		cub->player.x_bit += MOVE_SPEED;
 	if (key == XK_a)
-		move_player(cub, -MOVE_SPEED, 1);
+		cub->player.x_bit -= MOVE_SPEED;
 	if (key == XK_Left)
 		move_cam(cub, 1);
 	if (key == XK_Right)
 		move_cam(cub, 0);
+	display_map(cub);
+	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 	return (0);
 }
 
@@ -116,9 +112,8 @@ int init_window(t_cub *cub)
 	cub->screen_h = hight;
 	cub->screen_w = width;
 	cub->player.cub = cub;
-	cub->data.map.map_points = cub->data.map.width * TILE_SIZE * cub->data.map.height * TILE_SIZE;
-	// cub->data.win = mlx_new_window(cub->data.mlx, hight, width, "Cub3d");
-	cub->data.win = mlx_new_window(cub->data.mlx, cub->data.map.width * TILE_SIZE, cub->data.map.height * TILE_SIZE, "Cub3d");
+	// cub->data.map.map_points = cub->data.map.width * TILE_SIZE * cub->data.map.height * TILE_SIZE;
+	cub->data.win = mlx_new_window(cub->data.mlx, hight, width, "Cub3d");
 	if (!cub->data.win)
 		return (ft_putendl_fd("Error\nFail to open window", 2), 1);
 	printf(COLOR_GREEN "[WINDOW CREATED]  \n" COLOR_RESET);
