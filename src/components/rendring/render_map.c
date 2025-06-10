@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 18:14:22 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/10 00:37:49 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/10 03:32:05 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,51 +113,6 @@ void set_player(t_cub *cub)
 	cub->player.y_bit = TILE_SIZE / 2;
 }
 
-void set_point_wall(t_cub *cub, int x, int y, int *i)
-{
-	int yw;
-	int xw;
-
-	yw = 0;
-	while (yw < TILE_SIZE)
-	{
-		xw = 0;
-		while (xw < TILE_SIZE)
-		{
-			cub->wall[*i].x = x * TILE_SIZE + xw;
-			cub->wall[*i].y = y * TILE_SIZE + yw;
-			xw++;
-			(*i)++;
-		}
-		yw++;
-	}
-}
-
-void set_walls_points(t_cub *cub)
-{
-	char **map;
-	int i;
-	int x;
-	int y;
-
-	y = 0;
-	i = 0;
-	map = cub->data.map.map;
-	while (map[y])
-	{
-		x = 0;
-		while (map[y][x])
-		{
-			if (map[y][x] == '1')
-				set_point_wall(cub, x, y, &i);
-			x++;
-		}
-		y++;
-	}
-	printf(COLOR_RED "[LAST WALL POINT X=%d, Y=%d]\n" COLOR_RESET,
-		   cub->wall[i - 1].x, cub->wall[i - 1].y);
-}
-
 void set_dirction(t_cub *cub)
 {
 	if (cub->player.dir == 'N')
@@ -177,7 +132,6 @@ void render_map(t_cub *cub)
 	display_map(cub);
 	set_player(cub);
 	set_dirction(cub);
-	cub->wall = ft_malloc(sizeof(t_wall) * cub->data.map.map_points);
 	draw_player(&cub->data.img, cub->player, 0xFFFFFF);
 	mlx_put_image_to_window(cub->data.mlx, cub->data.win, cub->data.img.img, 0, 0);
 }

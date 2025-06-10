@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 17:30:30 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/10 03:28:11 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/10 03:32:34 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ int init_window(t_cub *cub)
 	cub->screen_h = hight;
 	cub->screen_w = width;
 	cub->player.cub = cub;
-	// cub->data.map.map_points = cub->data.map.width * TILE_SIZE * cub->data.map.height * TILE_SIZE;
 	cub->data.win = mlx_new_window(cub->data.mlx, hight, width, "Cub3d");
 	if (!cub->data.win)
 		return (ft_putendl_fd("Error\nFail to open window", 2), 1);
