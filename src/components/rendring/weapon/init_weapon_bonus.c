@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_weapon_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kaneki <kaneki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 15:02:03 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/08 05:11:58 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/13 00:51:41 by kaneki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,24 @@
 static const char	**get_weapon_texture_paths(void)
 {
 	static const char	*paths[MAX_FRAMES] = {
-		"./bonus/textures/player1/01.xpm",
-		"./bonus/textures/player1/02.xpm",
-		"./bonus/textures/player1/03.xpm",
-		"./bonus/textures/player1/04.xpm",
-		"./bonus/textures/player1/05.xpm",
-		"./bonus/textures/player1/06.xpm",
-		"./bonus/textures/player1/07.xpm",
-		"./bonus/textures/player1/08.xpm",
-		"./bonus/textures/player1/09.xpm",
-		"./bonus/textures/player1/010.xpm",
-		"./bonus/textures/player1/011.xpm",
-		"./bonus/textures/player1/012.xpm",
-		"./bonus/textures/player1/013.xpm",
-		"./bonus/textures/player1/014.xpm",
-		"./bonus/textures/player1/015.xpm",
-		"./bonus/textures/player1/016.xpm",
-		"./bonus/textures/player1/017.xpm",
-		"./bonus/textures/player1/018.xpm"
+		"./textures/player1/01.xpm",
+		"./textures/player1/02.xpm",
+		"./textures/player1/03.xpm",
+		"./textures/player1/04.xpm",
+		"./textures/player1/05.xpm",
+		"./textures/player1/06.xpm",
+		"./textures/player1/07.xpm",
+		"./textures/player1/08.xpm",
+		"./textures/player1/09.xpm",
+		"./textures/player1/010.xpm",
+		"./textures/player1/011.xpm",
+		"./textures/player1/012.xpm",
+		"./textures/player1/013.xpm",
+		"./textures/player1/014.xpm",
+		"./textures/player1/015.xpm",
+		"./textures/player1/016.xpm",
+		"./textures/player1/017.xpm",
+		"./textures/player1/018.xpm"
 	};
 
 	return (paths);

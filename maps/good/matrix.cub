@@ -1,7 +1,7 @@
-NO ./bonus/textures/wall/wall_01.xpm
-SO ./bonus/textures/wall/wall_05.xpm
-WE ./bonus/textures/wall/wall_03.xpm
-EA ./bonus/textures/wall/wall_04.xpm
+NO ./textures/wall/wall_01.xpm
+SO ./textures/wall/wall_05.xpm
+WE ./textures/wall/wall_03.xpm
+EA ./textures/wall/wall_04.xpm
 
 C 69,69,69
 F 36,45,40
