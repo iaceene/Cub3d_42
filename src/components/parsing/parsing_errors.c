@@ -31,9 +31,9 @@ void log_state(char *msg, int flag)
     }
     else if (flag == 3)
         clr = COLOR_YELLOW;
-    if (fd == 2)
-        write(2, "Error\n", 6);
     write(fd, clr, ft_strlen(clr));
+    if (fd == 2)
+        write(2, "[ Error ]\n", 10);
     write(fd, "[ ", 2);
     while (msg[i])
     {

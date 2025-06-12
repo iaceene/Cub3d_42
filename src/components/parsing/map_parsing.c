@@ -104,7 +104,7 @@ void set_map_size(t_cub *cub)
 int	map_parsing(int ac, char **av, t_cub *cub)
 {
 	if (ac != 2)
-		return (log_state("Usage: ./cub3D <map.cub>", 0), 1);
+		return (log_state("Usage: ./cub3D \"map.cub\"", 0), 1);
 	if (init_map(cub, av[1]))
 		return (log_state("Failed to initialize map", 0), 1);
 	if (parse_lines(cub))
