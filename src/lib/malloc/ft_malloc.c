@@ -77,6 +77,7 @@ void *ft_malloc(ssize_t len)
 	if (!ptr)
 	{
 		ft_free(&head);
+		log_state("Malloc fail", 0);
 		exit(1);
 	}
 	new_node = ft_new_addr(ptr);

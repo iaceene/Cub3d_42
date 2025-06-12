@@ -23,6 +23,7 @@ typedef struct s_gb
 	struct s_gb *next;
 } t_gb;
 
-void *ft_malloc(ssize_t len);
+void	*ft_malloc(ssize_t len);
+void	log_state(char *msg, int flag);
 
 #endif

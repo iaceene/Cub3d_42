@@ -63,7 +63,7 @@ int	init_map(t_cub *cub, char *filename)
 	log_state("Reading File ...", 3);
 	cub->data.map.map = ft_split(read_map(fd), '\n');
 	if (!cub->data.map.map)
-		return (log_state("Failed to read map", 0), 1);
+		return (log_state("Empty file", 0), 1);
 	log_state("Done reading File", 1);
 	close(fd);
 	return (0);
