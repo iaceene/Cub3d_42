@@ -51,10 +51,10 @@ int	extractor(t_cub *cub)
 		return (1);
 	line = textures_extracter(line, textur);
 	if (!line)
-		return (ft_putendl_fd("Error\nNo map Found", 2), 1);
+		return (log_state("No map Found", 0), 1);
 	line = map_extracter(line, &cub->data.map.map);
 	if (!line)
-		return (ft_putendl_fd("Error\nNo map Found", 2), 1);
+		return (log_state("No map Found", 0), 1);
 	return (0);
 }
 
@@ -71,9 +71,8 @@ int	check_file_ext(char *name)
 			&& !name[ft_strlen(".xpm")])
 			return (0);
 	}
-	ft_putstr_fd("Error\nfile : ", 2);
-	ft_putstr_fd(tmp, 2);
-	ft_putstr_fd(" has invalid extention\n", 2);
+	log_state(ft_strjoin("FILE : ", name), 3);
+	log_state("File has invalid extention", 0);
 	return (1);
 }
 
@@ -82,14 +81,13 @@ int	check_file(char *filename)
 	int	fd;
 
 	if (!filename)
-		return (ft_putendl_fd("Error\nTextur not found", 2), 1);
+		return (log_state("Texture not found", 0), 1);
 	if (check_file_ext(filename))
 		return (1);
 	fd = open(filename, 0);
 	if (fd == -1)
 	{
-		perror(filename);
-		close(fd);
+		log_state(ft_strjoin(ft_strjoin("FILE : ", filename), "not found !"), 0);
 		return (1);
 	}
 	close(fd);

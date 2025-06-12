@@ -58,9 +58,8 @@ int	check_walls(char **map)
 		if (map[y] && map[y + 1] && ft_strlen(map[y]) < ft_strlen(map[y + 1]))
 		{
 			if (!only_walls_map(*(map + y + 1) + ft_strlen(map[y])))
-				return (ft_putstr_fd("Error\nInvalid map : ", 2), 
-					ft_putendl_fd(ft_strjoin(ft_strjoin(map[y], " <<< line : "),
-					ft_itoa(y)), 2), 1);
+				return (log_state(ft_strjoin(ft_strjoin(map[y], " <<< line : "), ft_itoa(y)), 3),
+					log_state("Invalid map", 0), 1);
 		}
 		y++;
 	}
