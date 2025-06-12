@@ -77,8 +77,7 @@ int	add_more_tex(char *path, t_texture *tex, int flg)
 		tex->sky_clr = path;
 		return (0);
 	}
-	return (ft_putendl_fd("Error\nDuplicate texture found!", 2),
-		ft_malloc(-1), exit(1), 1);
+	return (log_state("Duplicate texture found!", 0), 1);
 }
 
 int	add_texture(char *path, t_texture *tex, int flg)
@@ -125,8 +124,7 @@ t_lines	*textures_extracter(t_lines *line, t_texture *textur)
 			else if (!ft_strncmp(line->val, "C ", ft_strlen("C ")))
 				add_texture(ft_split(line->val, ' ')[1], textur, 6);
 			else
-				return (ft_putendl_fd("Error\nInvalid texture", 2),
-					ft_malloc(-1), exit(1), NULL);
+				return (log_state("Invalid texture", 0), NULL);
 		}
 		line = line->next;
 	}

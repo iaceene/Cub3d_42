@@ -14,13 +14,13 @@ SRCS		= \
 			$(SRC_DIR)/lib/gnl/get_next_line_utils.c \
 			$(SRC_DIR)/lib/malloc/ft_malloc.c \
 			$(SRC_DIR)/components/parsing/map_parsing_utile.c \
+			$(SRC_DIR)/components/parsing/parsing_errors.c \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_2.c \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_3.c \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_4.c \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_5.c \
 			$(SRC_DIR)/components/parsing/map_parsing.c \
 			$(SRC_DIR)/components/rendring/init_window.c \
-			$(SRC_DIR)/components/rendring/render_map.c \
 			$(SRC_DIR)/main/main.c
 
 

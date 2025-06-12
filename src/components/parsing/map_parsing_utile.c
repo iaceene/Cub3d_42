@@ -52,13 +52,13 @@ int	init_map(t_cub *cub, char *filename)
 	int	fd;
 
 	if (check_file_extention(filename))
-		return (ft_putendl_fd("Error\nInvalid Extention", 2), 1);
+		return (log_state("Invalid file extention", 0), 1);
 	fd = open(filename, 0);
 	if (fd == -1)
-		return (ft_putendl_fd("Error\nFailed to open map file", 2), 1);
+		return (log_state("Failed to open file", 0), 1);
 	cub->data.map.map = ft_split(read_map(fd), '\n');
 	if (!cub->data.map.map)
-		return (ft_putendl_fd("Error\nFailed to read map", 2), 1);
+		return (log_state("Failed to read map", 0), 1);
 	close(fd);
 	return (0);
 }

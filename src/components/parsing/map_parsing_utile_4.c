@@ -82,12 +82,12 @@ int	check_map(t_cub *cub)
 	while (map[i])
 	{
 		if (map[i][0] != '1' || map[i][ft_strlen(map[i]) - 1] != '1')
-			return (ft_putendl_fd("Error\nUnclosed wall Dedected", 2), 1);
+			return (log_state("Unclosed wall Dedected", 0), 1);
 		j = 0;
 		while (map[i][j])
 		{
 			if (count > 1)
-				return (ft_putendl_fd("Error\nMultiple players Dedected", 2), 1);
+				return (log_state("Multiple players Dedected", 0), 1);
 			if (palyer_chars(map[i][j]))
 				count++;
 			j++;
@@ -95,6 +95,6 @@ int	check_map(t_cub *cub)
 		i++;
 	}
 	if (!count)
-		return (ft_putendl_fd("Error\nMap has no player", 2), 1);
+		return (log_state("The map has no player", 0), 1);
 	return (check_walls(map));
 }

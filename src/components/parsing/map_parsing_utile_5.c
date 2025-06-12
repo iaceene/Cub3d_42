@@ -33,15 +33,13 @@ int	check_comas(char *clr1, char *clr2)
 	int	count;
 
 	if (!clr1 || !clr2)
-		return (ft_putendl_fd("Error\nColor missed!", 2), 1);
+		return (log_state("Color missed!", 0), 1);
 	count = count_comas(clr1);
 	if (count != 3)
-		return (ft_putendl_fd("Error", 2),
-			ft_putendl_fd(clr1, 2), 1);
+		return (log_state(clr1, 0), 1);
 	count = count_comas(clr2);
 	if (count != 3)
-		return (ft_putendl_fd("Error", 2),
-			ft_putendl_fd(clr2, 2), 1);
+		return (log_state(clr2, 0), 1);
 	return (0);
 }
 

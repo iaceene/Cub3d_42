@@ -126,6 +126,7 @@ typedef struct s_cub
 } t_cub;
 
 int 	map_parsing(int ac, char **av, t_cub *cub);
+void 	log_state(char *msg, int flag);
 int 	init_map(t_cub *cub, char *filename);
 char	*read_map(int fd);
 int		check_file_extention(char *str);
