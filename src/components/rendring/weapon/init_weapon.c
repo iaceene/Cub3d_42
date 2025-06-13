@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_weapon_bonus.c                                :+:      :+:    :+:   */
+/*   init_weapon.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kaneki <kaneki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 15:02:03 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/13 00:51:41 by kaneki           ###   ########.fr       */
+/*   Updated: 2025/06/13 01:49:37 by kaneki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static const char	**get_weapon_texture_paths(void)
 
 static int	allocate_weapon_memory(t_cub *cub)
 {
-	cub->texture->weapon = malloc(sizeof(t_img) * MAX_FRAMES);
+	cub->texture->weapon = ft_malloc(sizeof(t_img) * MAX_FRAMES);
 	if (!cub->texture->weapon)
 	{
 		ft_putendl_fd("Error\nMemory allocation failed for weapon textures", 2);
