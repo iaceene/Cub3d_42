@@ -51,20 +51,20 @@ int	init_map(t_cub *cub, char *filename)
 {
 	int	fd;
 
-	log_state("Check file exetention", 3);
+	log_state("CHECKING FILE EXTENTION", 3);
 	if (check_file_extention(filename))
-		return (log_state("Invalid file extention", 0), 1);
-	log_state("Valid file exetention", 1);
-	log_state("Opening file", 3);
+		return (log_state("INVALID FILE EXTENTION", 0), 1);
+	log_state("VALID EXTENTION", 1);
+	log_state("OPENING FILE", 3);
 	fd = open(filename, 0);
 	if (fd == -1)
-		return (log_state("Failed to open file", 0), 1);
-	log_state("File opened", 1);
-	log_state("Reading File ...", 3);
+		return (log_state("FAILED TO OPEN FILE", 0), 1);
+	log_state("FILE OPENED WITH SUCCESS", 1);
+	log_state("READING FILE", 3);
 	cub->data.map.map = ft_split(read_map(fd), '\n');
 	if (!cub->data.map.map)
-		return (log_state("Empty file", 0), 1);
-	log_state("Done reading File", 1);
+		return (log_state("EMPTY FILE", 0), 1);
+	log_state("DONE READING FILE", 1);
 	close(fd);
 	return (0);
 }

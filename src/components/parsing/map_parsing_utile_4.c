@@ -55,12 +55,13 @@ int	check_walls(char **map)
 	y = 0;
 	while (map[y])
 	{
-		log_state(ft_strjoin("Checking line > ", map[y]), 3);
+		log_state(ft_strjoin("CHECKING LINE > ", map[y]), 3);
 		if (map[y] && map[y + 1] && ft_strlen(map[y]) < ft_strlen(map[y + 1]))
 		{
 			if (!only_walls_map(*(map + y + 1) + ft_strlen(map[y])))
-				return (log_state("Invalid map", 0), 1);
+			return (log_state("Invalid map", 0), 1);
 		}
+		log_state("VALID LINE", 1);
 		y++;
 	}
 	log_state("VALID MAP", 1);

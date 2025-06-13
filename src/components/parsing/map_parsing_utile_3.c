@@ -66,7 +66,7 @@ int	check_file_ext(char *name)
 	tmp = name;
 	if (!name)
 		return (log_state("file is NULL", 0), 1);
-	log_state("CHECKING EXETENTION", 3);
+	log_state("CHECKING EXTENTION", 3);
 	while (*name && *name != '.')
 		name++;
 	if (*name)
@@ -75,7 +75,7 @@ int	check_file_ext(char *name)
 			&& !name[ft_strlen(".xpm")])
 			return (log_state("VALID EXTENTION", 1), 0);
 	}
-	log_state("INVALID EXETENTION", 0);
+	log_state("INVALID EXTENTION", 0);
 	i++;
 	return (1);
 }

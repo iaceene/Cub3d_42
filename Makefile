@@ -6,7 +6,7 @@ LIBFT_LIB	= $(LIBFT_DIR)/libft.a
 SRC_DIR		= ./src
 OBJ_DIR		= ./obj
 CC			= cc
-CFLAGS		=  -g3 -fsanitize=address
+CFLAGS		=  -g3 
 MLX_FLAGS	= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm -lbsd
 
 SRCS		= \

@@ -34,7 +34,12 @@ void log_state(char *msg, int flag)
     write(fd, clr, ft_strlen(clr));
     if (fd == 2)
         write(2, "[ Error ]\n", 10);
-    write(fd, "[ ", 2);
+    if (flag == 1)
+        write(fd, "[ ✅ ", 7);
+    else if (flag == 3)
+        write(fd, "[ ⏳ ", 7);
+    else
+        write(fd, "[ ", 2);
     while (msg[i])
     {
         write(fd, &msg[i], 1);
