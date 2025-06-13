@@ -24,6 +24,7 @@ int main(int ac, char **av)
 	log_state("INIT PARSING", 3);
 	if (map_parsing(ac, av, &cub))
 		return (clean_up(), 1);
+	log_state("VALID MAP", 1);
 	log_state("PARSING DONE", 1);
 	clean_up();
 	return (0);

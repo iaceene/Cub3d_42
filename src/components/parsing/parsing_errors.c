@@ -7,7 +7,8 @@
 void exit_cub(void)
 {
     write(1, COLOR_RED, ft_strlen(COLOR_RED));
-    write(1, " --> EXITING ]\n", 15);
+    write(1, " ]\n", 4);
+    write(1, "[ 🚧 EXITING ]\n", 18);
     write(1, COLOR_RESET, ft_strlen(COLOR_RESET));
     ft_malloc(-1);
     exit(1);
@@ -39,7 +40,7 @@ void log_state(char *msg, int flag)
     else if (flag == 3)
         write(fd, "[ ⏳ ", 7);
     else
-        write(fd, "[ ", 2);
+        write(fd, "[ ⛔ ", 7);
     while (msg[i])
     {
         write(fd, &msg[i], 1);
