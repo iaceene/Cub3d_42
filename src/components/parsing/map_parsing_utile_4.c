@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:15:15 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/02 13:22:19 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/13 21:00:51 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,13 @@
 
 int	palyer_chars(char c)
 {
-	return (c == 'W' || c == 'S' || c == 'E'
-		|| c == 'N');
+	return (c == 'W' || c == 'S' || c == 'E' || c == 'N');
 }
 
 int	valid_chars(char c)
 {
-	return (c == ' ' || c == '0' || c == '1'
-		|| c == 'W' || c == 'S' || c == 'E'
-		|| c == 'N');
+	return (c == ' ' || c == '0' || c == '1' || c == 'W' \
+		|| c == 'S' || c == 'E' || c == 'N' || c == '2');
 }
 
 void	reset_texture(t_texture *textur)
@@ -48,21 +46,65 @@ int	only_walls_map(char *s)
 	return (1);
 }
 
+int	check_chars(char *s)
+{
+	int	i;
+
+	if (!s)
+		return (1);
+	i = 0;
+	while (s[i])
+	{
+		if (!valid_chars(s[i]))
+		{
+			s[i + 1] = '\0';
+			log_state(ft_strjoin("INVALID CHAR : ", s + i), 0);
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	check_walls(char **map)
 {
 	int	y;
+	int	x;
 
 	y = 0;
 	while (map[y])
 	{
-		if (map[y] && map[y + 1] && ft_strlen(map[y]) < ft_strlen(map[y + 1]))
+		log_state(ft_strjoin("CHECKING LINE > ", map[y]), 3);
+		x = 0;
+		if (check_chars(map[y]))
+			return (1);
+		while (map[y][x])
 		{
-			if (!only_walls_map(*(map + y + 1) + ft_strlen(map[y])))
-				return (ft_putstr_fd("Error\nInvalid map : ", 2),
-					ft_putendl_fd(ft_strjoin(ft_strjoin(map[y], " <<< line : "),
-					ft_itoa(y)), 2), 1);
+			if (map[y][x] == '0')
+			{
+				if (!map[y][x + 1] || !map[y][x - 1] || \
+						!map[y + 1][x] || !map[y + 1][x])
+					log_state("Player will be out of the map", 0);
+			}
+			x++;
 		}
+		log_state("VALID LINE", 1);
 		y++;
+	}
+	return (0);
+}
+
+int	only_ones(char *line)
+{
+	int	i;
+
+	i = 0;
+	if (!line)
+		return (1);
+	while (line[i])
+	{
+		if (line[i] != '1')
+			return (1);
+		i++;
 	}
 	return (0);
 }
@@ -74,25 +116,30 @@ int	check_map(t_cub *cub)
 	int		i;
 	int		j;
 
-	(1) && (i = 0, count = 0, map = cub->data.map.map);
+	i = 0;
+	count = 0;
+	map = cub->data.map.map;
+	log_state("MAP CHECKING", 3);
 	if (!map)
-		return (1);
+		return (log_state("Thers is no map", 0), 1);
+	if (only_ones(map[0]))
+		log_state(ft_strjoin("Unclosed wall Line : ", map[i]), 0);
 	while (map[i])
 	{
-		if (map[i][0] != '1' || map[i][ft_strlen(map[i]) - 1] != '1')
-			return (ft_putendl_fd("Error\nUnclosed wall Dedected", 2), 1);
 		j = 0;
 		while (map[i][j])
 		{
 			if (count > 1)
-				return (ft_putendl_fd("Error\nMultiple players Dedected", 2), 1);
+				return (log_state("Multiple players Dedected", 0), 1);
 			if (palyer_chars(map[i][j]))
 				count++;
 			j++;
 		}
+		if (!map[i + 1] && only_ones(map[i]))
+			log_state(ft_strjoin("Unclosed wall Line : ", map[i]), 0);
 		i++;
 	}
 	if (!count)
-		return (ft_putendl_fd("Error\nMap has no player", 2), 1);
+		return (log_state("The map has no player", 0), 1);
 	return (check_walls(map));
 }

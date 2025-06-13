@@ -6,7 +6,7 @@
 /*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:03:11 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/04 14:10:16 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/13 20:56:21 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,32 @@ int	extractor(t_cub *cub)
 		return (1);
 	line = textures_extracter(line, textur);
 	if (!line)
-		return (ft_putendl_fd("Error\nNo map Found", 2), 1);
+		return (log_state("No map Found", 0), 1);
 	line = map_extracter(line, &cub->data.map.map);
 	if (!line)
-		return (ft_putendl_fd("Error\nNo map Found", 2), 1);
+		return (log_state("No map Found", 0), 1);
 	return (0);
 }
 
 int	check_file_ext(char *name)
 {
-	char	*tmp;
+	char		*tmp;
+	static int	i;
 
 	tmp = name;
+	if (!name)
+		return (log_state("file is NULL", 0), 1);
+	log_state("CHECKING EXTENTION", 3);
 	while (*name && *name != '.')
 		name++;
 	if (*name)
 	{
 		if (!ft_strncmp(name, ".xpm", ft_strlen(".xpm"))
 			&& !name[ft_strlen(".xpm")])
-			return (0);
+			return (log_state("VALID EXTENTION", 1), 0);
 	}
-	ft_putstr_fd("Error\nfile : ", 2);
-	ft_putstr_fd(tmp, 2);
-	ft_putstr_fd(" has invalid extention\n", 2);
+	log_state("INVALID EXTENTION", 0);
+	i++;
 	return (1);
 }
 
@@ -82,16 +85,18 @@ int	check_file(char *filename)
 	int	fd;
 
 	if (!filename)
-		return (ft_putendl_fd("Error\nTextur not found", 2), 1);
+		return (log_state("Texture not found", 0), 1);
+	log_state(ft_strjoin("CHECKING FILE ", filename), 3);
 	if (check_file_ext(filename))
 		return (1);
 	fd = open(filename, 0);
 	if (fd == -1)
 	{
-		perror(filename);
-		close(fd);
+		log_state(ft_strjoin(ft_strjoin("FILE : ", filename), \
+			" NOT FOUND!"), 0);
 		return (1);
 	}
+	log_state("FILE EXIST", 1);
 	close(fd);
 	return (0);
 }
@@ -100,9 +105,11 @@ int	check_texture(t_cub *cub)
 {
 	t_texture	*texture;
 
+	log_state("CHECKING TEXTURES", 3);
 	texture = cub->texture;
 	if (check_file(texture->ea_path) || check_file(texture->so_path)
 		|| check_file(texture->we_path) || check_file(texture->no_path))
 		return (1);
+	log_state("VALID TEXTURES", 1);
 	return (0);
 }
