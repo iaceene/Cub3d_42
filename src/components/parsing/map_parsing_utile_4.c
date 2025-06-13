@@ -55,7 +55,7 @@ int	check_walls(char **map)
 	y = 0;
 	while (map[y])
 	{
-		log_state(ft_strjoin("Checking > ", map[y]), 3);
+		log_state(ft_strjoin("Checking line > ", map[y]), 3);
 		if (map[y] && map[y + 1] && ft_strlen(map[y]) < ft_strlen(map[y + 1]))
 		{
 			if (!only_walls_map(*(map + y + 1) + ft_strlen(map[y])))
@@ -63,6 +63,7 @@ int	check_walls(char **map)
 		}
 		y++;
 	}
+	log_state("VALID MAP", 1);
 	return (0);
 }
 
@@ -76,8 +77,9 @@ int	check_map(t_cub *cub)
 	i = 0;
 	count = 0;
 	map = cub->data.map.map;
+	log_state("MAP CHECKING", 3);
 	if (!map)
-		return (1);
+		return (log_state("thers is no map", 0), 1);
 	while (map[i])
 	{
 		if (map[i][0] != '1' || map[i][ft_strlen(map[i]) - 1] != '1')

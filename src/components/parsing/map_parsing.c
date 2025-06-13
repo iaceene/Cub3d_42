@@ -12,9 +12,9 @@
 
 #include "../../include/cub3d.h"
 
-int	get_len(char **s)
+int get_len(char **s)
 {
-	int	i;
+	int i;
 
 	if (!s)
 		return (0);
@@ -24,36 +24,33 @@ int	get_len(char **s)
 	return (i);
 }
 
-int	check_grb_rang(t_cub *cub)
+int check_grb_rang(t_cub *cub)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (i < 3)
 	{
-		if (cub->texture->sky_grb[i] == -1
-			|| cub->texture->floor_grb[i] == -1)
+		if (cub->texture->sky_grb[i] == -1 || cub->texture->floor_grb[i] == -1)
 			return (log_state("Invalid RGB range", 0), 1);
 		i++;
 	}
-	log_state("DONE PARSE COLORS", 1);
+	log_state("VALID COLORS", 1);
 	return (0);
 }
 
-int	check_rgb(t_cub *cub)
+int check_rgb(t_cub *cub)
 {
-	char	**clr1;
-	char	**clr2;
-	int		i;
+	char **clr1;
+	char **clr2;
+	int i;
 
 	i = 0;
-	log_state("INIT PARSE COLORS", 3);
 	if (check_comas(cub->texture->sky_clr, cub->texture->floor_clr))
 		return (1);
 	clr1 = ft_split(cub->texture->floor_clr, ',');
 	clr2 = ft_split(cub->texture->sky_clr, ',');
-	if (!clr1 || !clr2
-		|| get_len(clr1) != 3 || get_len(clr2) != 3)
+	if (!clr1 || !clr2 || get_len(clr1) != 3 || get_len(clr2) != 3)
 		return (log_state("Invalid color format", 0), 1);
 	while (i < 3)
 	{
@@ -64,11 +61,11 @@ int	check_rgb(t_cub *cub)
 	return (check_grb_rang(cub));
 }
 
-int	check_colors(t_cub *cub)
+int check_colors(t_cub *cub)
 {
-	t_texture	*texture;
+	t_texture *texture;
 
-	log_state("INIT PARSE TEXTURES", 3);
+	log_state("CHECK COLORS", 3);
 	texture = cub->texture;
 	if (!texture->floor_clr || !texture->sky_clr)
 	{
@@ -80,18 +77,17 @@ int	check_colors(t_cub *cub)
 			log_state("colors not found", 0);
 		return (1);
 	}
-	log_state("INIT PARSE TEXTURES", 1);
 	return (check_rgb(cub));
 }
 
 void set_map_size(t_cub *cub)
 {
-	char		**map;
-	size_t		x;
-	int			y;
+	char **map;
+	size_t x;
+	int y;
 
 	if (!cub)
-		return ;
+		return;
 	map = cub->data.map.map;
 	x = 0;
 	y = 0;
@@ -105,7 +101,7 @@ void set_map_size(t_cub *cub)
 	cub->data.map.height = y;
 }
 
-int	map_parsing(int ac, char **av, t_cub *cub)
+int map_parsing(int ac, char **av, t_cub *cub)
 {
 	if (ac != 2)
 		return (log_state("Usage: ./cub3D \"map.cub\"", 0), 1);
@@ -115,15 +111,14 @@ int	map_parsing(int ac, char **av, t_cub *cub)
 	if (parse_lines(cub))
 		return (log_state("Failed to parse lines", 0), 1);
 	log_state("DONE PARSE LINES", 1);
-	log_state("INIT PARSE MAP LINES", 3);
+	log_state("ADDING MAP LINES", 3);
 	if (extractor(cub))
-	return (1);
-	log_state("DONE PARSE MAP LINES", 1);
-	// if (check_texture(cub) || check_colors(cub)
-	if (check_colors(cub)
-		|| check_map(cub))
 		return (1);
-	log_state("DONE PARSE COLORS LINES", 1);
+	log_state("DONE ADDING MAP LINES", 1);
+	if (check_texture(cub))
+		return (1);
+	if (check_colors(cub) || check_map(cub))
+		return (1);
 	set_map_size(cub);
 	return (0);
 }

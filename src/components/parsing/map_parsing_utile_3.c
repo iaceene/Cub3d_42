@@ -61,18 +61,22 @@ int	extractor(t_cub *cub)
 int	check_file_ext(char *name)
 {
 	char	*tmp;
+	static int	i;
 
 	tmp = name;
+	if (!name)
+		return (log_state("file is NULL", 0), 1);
+	log_state(ft_strjoin("FILE : ", name), 3);
 	while (*name && *name != '.')
 		name++;
 	if (*name)
 	{
 		if (!ft_strncmp(name, ".xpm", ft_strlen(".xpm"))
 			&& !name[ft_strlen(".xpm")])
-			return (0);
+			return (log_state("VALID FILE", 1), 0);
 	}
-	log_state(ft_strjoin("FILE : ", name), 3);
 	log_state("File has invalid extention", 0);
+	i++;
 	return (1);
 }
 
@@ -98,9 +102,11 @@ int	check_texture(t_cub *cub)
 {
 	t_texture	*texture;
 
+	log_state("CHECKING TEXTURES", 3);
 	texture = cub->texture;
 	if (check_file(texture->ea_path) || check_file(texture->so_path)
 		|| check_file(texture->we_path) || check_file(texture->no_path))
 		return (1);
+	log_state("VALID TEXTURES", 1);
 	return (0);
 }
