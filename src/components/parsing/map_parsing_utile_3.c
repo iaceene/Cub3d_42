@@ -66,16 +66,16 @@ int	check_file_ext(char *name)
 	tmp = name;
 	if (!name)
 		return (log_state("file is NULL", 0), 1);
-	log_state(ft_strjoin("FILE : ", name), 3);
+	log_state("CHECKING EXETENTION", 3);
 	while (*name && *name != '.')
 		name++;
 	if (*name)
 	{
 		if (!ft_strncmp(name, ".xpm", ft_strlen(".xpm"))
 			&& !name[ft_strlen(".xpm")])
-			return (log_state("VALID FILE", 1), 0);
+			return (log_state("VALID EXTENTION", 1), 0);
 	}
-	log_state("File has invalid extention", 0);
+	log_state("INVALID EXETENTION", 0);
 	i++;
 	return (1);
 }
@@ -85,15 +85,17 @@ int	check_file(char *filename)
 	int	fd;
 
 	if (!filename)
-		return (log_state("Texture not found", 0), 1);
+	return (log_state("Texture not found", 0), 1);
+	log_state(ft_strjoin("CHECKING FILE ", filename), 3);
 	if (check_file_ext(filename))
 		return (1);
 	fd = open(filename, 0);
 	if (fd == -1)
 	{
-		log_state(ft_strjoin(ft_strjoin("FILE : ", filename), "not found !"), 0);
+		log_state(ft_strjoin(ft_strjoin("FILE : ", filename), " NOT FOUND!"), 0);
 		return (1);
 	}
+	log_state("FILE EXIST", 1);
 	close(fd);
 	return (0);
 }
