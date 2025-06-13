@@ -19,10 +19,10 @@
 F 76,76,76
 C 99,99,99
 
-NO textures/east.xpm
-SO textures/east.xpm
-WE textures/east.xpm
-EA textures/east.xpm
+NO textures/wall/wall_01.xpm
+SO textures/wall/wall_05.xpm
+WE textures/wall/wall_03.xpm
+EA textures/wall/wall_04.xpm
 
 1111111111111111111
 10W1001001001000001

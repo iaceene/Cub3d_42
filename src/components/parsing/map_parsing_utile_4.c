@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing_utile_4.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:15:15 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/01 17:08:59 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/13 21:00:51 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ int palyer_chars(char c)
 
 int valid_chars(char c)
 {
+<<<<<<< HEAD
 	return (c == ' ' || c == '0' || c == '1' || c == 'W' || c == 'S' || c == 'E' || c == 'N' || c == '2');
+=======
+	return (c == ' ' || c == '0' || c == '1' || c == 'W' \
+		|| c == 'S' || c == 'E' || c == 'N' || c == '2');
+>>>>>>> cub3D_v3
 }
 
 void reset_texture(t_texture *textur)
@@ -45,6 +50,7 @@ int only_walls_map(char *s)
 	return (1);
 }
 
+<<<<<<< HEAD
 int check_chars(char *s)
 {
 	int i;
@@ -68,6 +74,31 @@ int check_walls(char **map)
 {
 	int y;
 	int x;
+=======
+int	check_chars(char *s)
+{
+	int	i;
+
+	if (!s)
+		return (1);
+	i = 0;
+	while (s[i])
+	{
+		if (!valid_chars(s[i]))
+		{
+			s[i + 1] = '\0';
+			log_state(ft_strjoin("INVALID CHAR : ", s + i), 0);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	check_walls(char **map)
+{
+	int	y;
+	int	x;
+>>>>>>> cub3D_v3
 
 	y = 0;
 	while (map[y])
@@ -80,7 +111,12 @@ int check_walls(char **map)
 		{
 			if (map[y][x] == '0')
 			{
+<<<<<<< HEAD
 				if (!map[y][x + 1] || !map[y][x - 1] || !map[y + 1][x] || !map[y + 1][x])
+=======
+				if (!map[y][x + 1] || !map[y][x - 1] || \
+						!map[y + 1][x] || !map[y + 1][x])
+>>>>>>> cub3D_v3
 					log_state("Player will be out of the map", 0);
 			}
 			x++;
@@ -91,7 +127,27 @@ int check_walls(char **map)
 	return (0);
 }
 
+<<<<<<< HEAD
 int only_ones(char *line)
+=======
+int	only_ones(char *line)
+{
+	int	i;
+
+	i = 0;
+	if (!line)
+		return (1);
+	while (line[i])
+	{
+		if (line[i] != '1')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	check_map(t_cub *cub)
+>>>>>>> cub3D_v3
 {
 	int i;
 

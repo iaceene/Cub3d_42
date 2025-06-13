@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:38:14 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/05/04 17:21:04 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/13 20:59:07 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,12 @@ int check_grb_rang(t_cub *cub)
 	i = 0;
 	while (i < 3)
 	{
+<<<<<<< HEAD
 		if (cub->texture->sky_grb[i] == -1 || cub->texture->floor_grb[i] == -1)
+=======
+		if (cub->texture->sky_grb[i] == -1 || \
+				cub->texture->floor_grb[i] == -1)
+>>>>>>> cub3D_v3
 			return (log_state("Invalid RGB range", 0), 1);
 		i++;
 	}
@@ -80,11 +85,17 @@ int check_colors(t_cub *cub)
 	return (check_rgb(cub));
 }
 
-void set_map_size(t_cub *cub)
+void	set_map_size(t_cub *cub)
 {
+<<<<<<< HEAD
 	char **map;
 	size_t x;
 	int y;
+=======
+	char	**map;
+	size_t	x;
+	int		y;
+>>>>>>> cub3D_v3
 
 	if (!cub)
 		return;

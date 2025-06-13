@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:16:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/04/30 18:16:13 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/13 21:05:17 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malloc.h"
 
-void ft_free(t_gb **head)
+void	ft_free(t_gb **head)
 {
-	t_gb *tmp;
+	t_gb	*tmp;
 
 	if (!head)
-		return;
+		return ;
 	while (*head)
 	{
 		tmp = (*head)->next;
@@ -28,31 +28,31 @@ void ft_free(t_gb **head)
 	*head = NULL;
 }
 
-t_gb *ft_new_addr(void *add)
+t_gb	*ft_new_addr(void *add)
 {
-	t_gb *ret;
+	t_gb	*ret;
 
 	ret = malloc(sizeof(t_gb));
 	if (!ret)
-		return NULL;
+		return (NULL);
 	ret->ptr = add;
 	ret->next = NULL;
-	return ret;
+	return (ret);
 }
 
-t_gb *ft_last_addr(t_gb *head)
+t_gb	*ft_last_addr(t_gb *head)
 {
 	while (head && head->next)
 		head = head->next;
-	return head;
+	return (head);
 }
 
-void ft_add_new(t_gb **head, t_gb *new)
+void	ft_add_new(t_gb **head, t_gb *new)
 {
-	t_gb *last;
+	t_gb	*last;
 
 	if (!head || !new)
-		return;
+		return ;
 	if (!*head)
 		*head = new;
 	else
@@ -62,16 +62,16 @@ void ft_add_new(t_gb **head, t_gb *new)
 	}
 }
 
-void *ft_malloc(ssize_t len)
+void	*ft_malloc(ssize_t len)
 {
-	static t_gb *head;
-	void *ptr;
-	t_gb *new_node;
+	static t_gb	*head;
+	void		*ptr;
+	t_gb		*new_node;
 
 	if (len < 0)
 	{
 		ft_free(&head);
-		return NULL;
+		return (NULL);
 	}
 	ptr = malloc(len);
 	if (!ptr)
@@ -88,5 +88,5 @@ void *ft_malloc(ssize_t len)
 		exit(1);
 	}
 	ft_add_new(&head, new_node);
-	return ptr;
+	return (ptr);
 }
