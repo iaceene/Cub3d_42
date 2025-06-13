@@ -19,8 +19,7 @@ int palyer_chars(char c)
 
 int valid_chars(char c)
 {
-	return (c == ' ' || c == '0' || c == '1' || c == 'W' || c == 'S' || c == 'E' || c == 'N'
-		|| c == '2');
+	return (c == ' ' || c == '0' || c == '1' || c == 'W' || c == 'S' || c == 'E' || c == 'N' || c == '2');
 }
 
 void reset_texture(t_texture *textur)
@@ -92,6 +91,22 @@ int check_walls(char **map)
 	return (0);
 }
 
+int only_ones(char *line)
+{
+	int i;
+
+	i = 0;
+	if (!line)
+		return (1);
+	while (line[i])
+	{
+		if (line[i] != '1')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int check_map(t_cub *cub)
 {
 	char **map;
@@ -105,10 +120,10 @@ int check_map(t_cub *cub)
 	log_state("MAP CHECKING", 3);
 	if (!map)
 		return (log_state("Thers is no map", 0), 1);
+	if (only_ones(map[0]))
+		log_state(ft_strjoin("Unclosed wall Line : ", map[i]), 0);
 	while (map[i])
 	{
-		if (map[i][0] != '1' || map[i][ft_strlen(map[i]) - 1] != '1')
-			return (log_state("Unclosed wall Dedected", 0), 1);
 		j = 0;
 		while (map[i][j])
 		{
@@ -118,6 +133,8 @@ int check_map(t_cub *cub)
 				count++;
 			j++;
 		}
+		if (!map[i + 1] && only_ones(map[i]))
+			log_state(ft_strjoin("Unclosed wall Line : ", map[i]), 0);
 		i++;
 	}
 	if (!count)
