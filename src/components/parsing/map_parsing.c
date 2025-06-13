@@ -12,9 +12,9 @@
 
 #include "../../include/cub3d.h"
 
-int get_len(char **s)
+int	get_len(char **s)
 {
-	int i;
+	int	i;
 
 	if (!s)
 		return (0);
@@ -24,19 +24,15 @@ int get_len(char **s)
 	return (i);
 }
 
-int check_grb_rang(t_cub *cub)
+int	check_grb_rang(t_cub *cub)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 3)
 	{
-<<<<<<< HEAD
-		if (cub->texture->sky_grb[i] == -1 || cub->texture->floor_grb[i] == -1)
-=======
 		if (cub->texture->sky_grb[i] == -1 || \
 				cub->texture->floor_grb[i] == -1)
->>>>>>> cub3D_v3
 			return (log_state("Invalid RGB range", 0), 1);
 		i++;
 	}
@@ -44,11 +40,11 @@ int check_grb_rang(t_cub *cub)
 	return (0);
 }
 
-int check_rgb(t_cub *cub)
+int	check_rgb(t_cub *cub)
 {
-	char **clr1;
-	char **clr2;
-	int i;
+	char	**clr1;
+	char	**clr2;
+	int		i;
 
 	i = 0;
 	if (check_comas(cub->texture->sky_clr, cub->texture->floor_clr))
@@ -66,9 +62,9 @@ int check_rgb(t_cub *cub)
 	return (check_grb_rang(cub));
 }
 
-int check_colors(t_cub *cub)
+int	check_colors(t_cub *cub)
 {
-	t_texture *texture;
+	t_texture	*texture;
 
 	log_state("CHECK COLORS", 3);
 	texture = cub->texture;
@@ -87,18 +83,12 @@ int check_colors(t_cub *cub)
 
 void	set_map_size(t_cub *cub)
 {
-<<<<<<< HEAD
-	char **map;
-	size_t x;
-	int y;
-=======
 	char	**map;
 	size_t	x;
 	int		y;
->>>>>>> cub3D_v3
 
 	if (!cub)
-		return;
+		return ;
 	map = cub->data.map.map;
 	x = 0;
 	y = 0;
@@ -112,7 +102,7 @@ void	set_map_size(t_cub *cub)
 	cub->data.map.height = y;
 }
 
-int map_parsing(int ac, char **av, t_cub *cub)
+int	map_parsing(int ac, char **av, t_cub *cub)
 {
 	if (ac != 2)
 		return (log_state("Usage: ./cub3D \"map.cub\"", 0), 1);

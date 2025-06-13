@@ -5,11 +5,7 @@ LIBFT_DIR	= ./src/lib/libft
 LIBFT_LIB	= $(LIBFT_DIR)/libft.a
 SRC_DIR		= ./src
 CC			= cc
-<<<<<<< HEAD
-CFLAGS		=  -g3 
-=======
 CFLAGS		= -Wall -Wextra -Werror #-g3 -fsanitize=address
->>>>>>> cub3D_v3
 MLX_FLAGS	= -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm -lbsd
 
 SRCS		= \
@@ -23,10 +19,6 @@ SRCS		= \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_4.c \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_5.c \
 			$(SRC_DIR)/components/parsing/map_parsing.c \
-<<<<<<< HEAD
-			$(SRC_DIR)/components/rendring/init_window.c \
-			$(SRC_DIR)/main/main.c
-=======
 			$(SRC_DIR)/components/rendring/core/init.c \
         	$(SRC_DIR)/components/rendring/player/controls.c \
         	$(SRC_DIR)/components/rendring/player/movement.c \
@@ -42,7 +34,6 @@ SRCS		= \
         	$(SRC_DIR)/components/rendring/wall/wall.c \
         	$(SRC_DIR)/components/rendring/weapon/init_weapon.c \
 			$(SRC_DIR)/main/main.c \
->>>>>>> cub3D_v3
 
 OBJS = $(SRCS:.c=.o)
 

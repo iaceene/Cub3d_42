@@ -12,22 +12,18 @@
 
 #include "../../include/cub3d.h"
 
-int palyer_chars(char c)
+int	palyer_chars(char c)
 {
 	return (c == 'W' || c == 'S' || c == 'E' || c == 'N');
 }
 
-int valid_chars(char c)
+int	valid_chars(char c)
 {
-<<<<<<< HEAD
-	return (c == ' ' || c == '0' || c == '1' || c == 'W' || c == 'S' || c == 'E' || c == 'N' || c == '2');
-=======
 	return (c == ' ' || c == '0' || c == '1' || c == 'W' \
 		|| c == 'S' || c == 'E' || c == 'N' || c == '2');
->>>>>>> cub3D_v3
 }
 
-void reset_texture(t_texture *textur)
+void	reset_texture(t_texture *textur)
 {
 	textur->cn = 0;
 	textur->no = 0;
@@ -37,7 +33,7 @@ void reset_texture(t_texture *textur)
 	textur->we = 0;
 }
 
-int only_walls_map(char *s)
+int	only_walls_map(char *s)
 {
 	if (!s)
 		return (0);
@@ -50,31 +46,6 @@ int only_walls_map(char *s)
 	return (1);
 }
 
-<<<<<<< HEAD
-int check_chars(char *s)
-{
-	int i;
-
-	if (!s)
-		return (1);
-	i = 0;
-	while (s[i])
-	{
-		if (!valid_chars(s[i]))
-		{
-			s[i + 1] = '\0';
-			log_state(ft_strjoin("INVALID CHAR : ", s + i), 0);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int check_walls(char **map)
-{
-	int y;
-	int x;
-=======
 int	check_chars(char *s)
 {
 	int	i;
@@ -98,7 +69,6 @@ int	check_walls(char **map)
 {
 	int	y;
 	int	x;
->>>>>>> cub3D_v3
 
 	y = 0;
 	while (map[y])
@@ -111,12 +81,8 @@ int	check_walls(char **map)
 		{
 			if (map[y][x] == '0')
 			{
-<<<<<<< HEAD
-				if (!map[y][x + 1] || !map[y][x - 1] || !map[y + 1][x] || !map[y + 1][x])
-=======
 				if (!map[y][x + 1] || !map[y][x - 1] || \
 						!map[y + 1][x] || !map[y + 1][x])
->>>>>>> cub3D_v3
 					log_state("Player will be out of the map", 0);
 			}
 			x++;
@@ -127,9 +93,6 @@ int	check_walls(char **map)
 	return (0);
 }
 
-<<<<<<< HEAD
-int only_ones(char *line)
-=======
 int	only_ones(char *line)
 {
 	int	i;
@@ -147,28 +110,11 @@ int	only_ones(char *line)
 }
 
 int	check_map(t_cub *cub)
->>>>>>> cub3D_v3
 {
-	int i;
-
-	i = 0;
-	if (!line)
-		return (1);
-	while (line[i])
-	{
-		if (line[i] != '1')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int check_map(t_cub *cub)
-{
-	char **map;
-	int count;
-	int i;
-	int j;
+	char	**map;
+	int		count;
+	int		i;
+	int		j;
 
 	i = 0;
 	count = 0;

@@ -60,11 +60,7 @@ int	extractor(t_cub *cub)
 
 int	check_file_ext(char *name)
 {
-<<<<<<< HEAD
-	char	*tmp;
-=======
 	char		*tmp;
->>>>>>> cub3D_v3
 	static int	i;
 
 	tmp = name;
@@ -89,23 +85,15 @@ int	check_file(char *filename)
 	int	fd;
 
 	if (!filename)
-<<<<<<< HEAD
-	return (log_state("Texture not found", 0), 1);
-=======
 		return (log_state("Texture not found", 0), 1);
->>>>>>> cub3D_v3
 	log_state(ft_strjoin("CHECKING FILE ", filename), 3);
 	if (check_file_ext(filename))
 		return (1);
 	fd = open(filename, 0);
 	if (fd == -1)
 	{
-<<<<<<< HEAD
-		log_state(ft_strjoin(ft_strjoin("FILE : ", filename), " NOT FOUND!"), 0);
-=======
 		log_state(ft_strjoin(ft_strjoin("FILE : ", filename), \
 			" NOT FOUND!"), 0);
->>>>>>> cub3D_v3
 		return (1);
 	}
 	log_state("FILE EXIST", 1);

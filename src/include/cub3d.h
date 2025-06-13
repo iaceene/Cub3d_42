@@ -6,33 +6,13 @@
 /*   By: kaneki <kaneki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/10 00:39:30 by yaajagro         ###   ########.fr       */
-=======
 /*   Updated: 2025/06/13 01:51:45 by kaneki           ###   ########.fr       */
->>>>>>> cub3D_v3
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-<<<<<<< HEAD
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <stdbool.h>
-#include <sys/time.h>
-#include <time.h>
-#include <math.h>
-#include <X11/keysym.h>
-#include <X11/X.h>
-#include "../lib/.mlx/mlx.h"
-#include "../lib/libft/libft.h"
-#include "../lib/gnl/get_next_line.h"
-#include "../lib/malloc/ft_malloc.h"
-=======
 # include <stdio.h>
 # include <fcntl.h>
 # include <stdlib.h>
@@ -46,7 +26,6 @@
 # include "../lib/libft/libft.h"
 # include "../lib/gnl/get_next_line.h"
 # include "../lib/malloc/ft_malloc.h"
->>>>>>> cub3D_v3
 
 # define COLOR_RESET "\x1b[0m"
 # define COLOR_YELLOW "\x1b[33m"
@@ -64,18 +43,6 @@
 # define MINIMAP_HEIGHT 200
 # define MAX_FRAMES 18
 
-<<<<<<< HEAD
-#define MOVE_SPEED 1
-#define CAM_SPEED 10
-#define TILE_SIZE 8
-#define FOV_ANGLE 60.0f  // Field of view angle (typically 60 degrees)
-#define RAY_COUNT 120  
-#define PI 3.14159265
-// #define MAP_WIDTH 24
-// #define MAP_HEIGHT 10
-// #define WINDOW_WIDTH (TILE_SIZE * MAP_WIDTH)
-// #define WINDOW_HEIGHT (TILE_SIZE * MAP_HEIGHT)
-=======
 # define KEY_W 119
 # define KEY_A 97
 # define KEY_S 115
@@ -91,7 +58,6 @@
 # define PLAYER_COLOR 0x00FF00
 # define BLOCK_SIZE 10
 # define PLAYER_SIZE 3
->>>>>>> cub3D_v3
 
 typedef struct s_map
 {
@@ -204,11 +170,6 @@ typedef struct s_cub
 	int			color;
 }	t_cub;
 
-<<<<<<< HEAD
-int 	map_parsing(int ac, char **av, t_cub *cub);
-void 	log_state(char *msg, int flag);
-int 	init_map(t_cub *cub, char *filename);
-=======
 typedef struct s_draw_info
 {
 	t_img	*tex;
@@ -250,7 +211,6 @@ typedef struct s_ray_params
 
 int		map_parsing(int ac, char **av, t_cub *cub);
 int		init_map(t_cub *cub, char *filename);
->>>>>>> cub3D_v3
 char	*read_map(int fd);
 int		check_file_extention(char *str);
 t_lines	*new_line(char *val);
@@ -279,12 +239,6 @@ bool	touch_one(float px, float py, t_cub *cub);
 float	use_distance(float x, float y);
 float	use_fixed_dist(float x2, float y2, t_cub *game);
 void	my_pixel_put(int x, int y, t_img *img, int color);
-<<<<<<< HEAD
-int		is_wall_point(t_cub *cub, int x, int y);
-double	deg_to_rad(double deg);
-int		init_ray_catstin(t_cub *cub);
-void *ray_thread(void *arg);
-=======
 void	clear_image(t_cub *cub);
 void	render_draw_square(int x, int y, int size, t_cub *cub);
 void	render_draw_minimap(t_cub *cub);
@@ -307,6 +261,5 @@ void	init_minimap_values(t_cub *cub);
 void	draw_border_pixel(t_cub *cub, int x, int y, int radius);
 int		calculate_distance_sq(int x, int y, int center_x, int center_y);
 int		get_map_height(char **map);
->>>>>>> cub3D_v3
 
 #endif
