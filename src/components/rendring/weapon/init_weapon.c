@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_weapon.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kaneki <kaneki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 15:02:03 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/13 01:49:37 by kaneki           ###   ########.fr       */
+/*   Updated: 2025/06/16 23:03:15 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static const char	**get_weapon_texture_paths(void)
 
 static int	allocate_weapon_memory(t_cub *cub)
 {
-	cub->texture->weapon = ft_malloc(sizeof(t_img) * MAX_FRAMES);
+	
 	if (!cub->texture->weapon)
 	{
 		ft_putendl_fd("Error\nMemory allocation failed for weapon textures", 2);
@@ -87,8 +87,7 @@ static int	load_all_weapon_textures(t_cub *cub)
 
 int	init_textures_weapon(t_cub *cub)
 {
-	if (allocate_weapon_memory(cub))
-		exit(1);
+	cub->texture->weapon = ft_malloc(sizeof(t_img) * MAX_FRAMES);
 	if (load_all_weapon_textures(cub))
 		exit(1);
 	init_weapon_animation_params(cub);

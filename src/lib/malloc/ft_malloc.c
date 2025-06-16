@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:16:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/13 21:05:17 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/16 23:02:29 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	*ft_malloc(ssize_t len)
 	{
 		ft_free(&head);
 		log_state("Malloc fail", 0);
-		exit(1);
 	}
 	new_node = ft_new_addr(ptr);
 	if (!new_node)
