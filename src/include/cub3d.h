@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kaneki <kaneki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/13 01:51:45 by kaneki           ###   ########.fr       */
+/*   Updated: 2025/06/16 22:23:38 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,5 +261,9 @@ void	init_minimap_values(t_cub *cub);
 void	draw_border_pixel(t_cub *cub, int x, int y, int radius);
 int		calculate_distance_sq(int x, int y, int center_x, int center_y);
 int		get_map_height(char **map);
+int		check_chars(char *s);
+int		add_texture(char *path, t_texture *tex, int flg);
+int		palyer_chars(char c);
+int		get_len(char **s);
 
 #endif

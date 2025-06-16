@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing_utile_4.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/29 21:15:15 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/13 21:00:51 by iezzam           ###   ########.fr       */
+/*   Created: 2025/06/16 22:15:27 by yaajagro          #+#    #+#             */
+/*   Updated: 2025/06/16 22:17:29 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,83 +63,4 @@ int	check_chars(char *s)
 		i++;
 	}
 	return (0);
-}
-
-int	check_walls(char **map)
-{
-	int	y;
-	int	x;
-
-	y = 0;
-	while (map[y])
-	{
-		log_state(ft_strjoin("CHECKING LINE > ", map[y]), 3);
-		x = 0;
-		if (check_chars(map[y]))
-			return (1);
-		while (map[y][x])
-		{
-			if (map[y][x] == '0')
-			{
-				if (!map[y][x + 1] || !map[y][x - 1] || \
-						!map[y + 1][x] || !map[y + 1][x])
-					log_state("Player will be out of the map", 0);
-			}
-			x++;
-		}
-		log_state("VALID LINE", 1);
-		y++;
-	}
-	return (0);
-}
-
-int	only_ones(char *line)
-{
-	int	i;
-
-	i = 0;
-	if (!line)
-		return (1);
-	while (line[i])
-	{
-		if (line[i] != '1')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	check_map(t_cub *cub)
-{
-	char	**map;
-	int		count;
-	int		i;
-	int		j;
-
-	i = 0;
-	count = 0;
-	map = cub->data.map.map;
-	log_state("MAP CHECKING", 3);
-	if (!map)
-		return (log_state("Thers is no map", 0), 1);
-	if (only_ones(map[0]))
-		log_state(ft_strjoin("Unclosed wall Line : ", map[i]), 0);
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (count > 1)
-				return (log_state("Multiple players Dedected", 0), 1);
-			if (palyer_chars(map[i][j]))
-				count++;
-			j++;
-		}
-		if (!map[i + 1] && only_ones(map[i]))
-			log_state(ft_strjoin("Unclosed wall Line : ", map[i]), 0);
-		i++;
-	}
-	if (!count)
-		return (log_state("The map has no player", 0), 1);
-	return (check_walls(map));
 }

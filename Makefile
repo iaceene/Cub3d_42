@@ -18,6 +18,8 @@ SRCS		= \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_3.c \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_4.c \
 			$(SRC_DIR)/components/parsing/map_parsing_utile_5.c \
+        	$(SRC_DIR)/components/parsing/map_parsing_utile_6.c \
+        	$(SRC_DIR)/components/parsing/map_parsing_utile_7.c \
 			$(SRC_DIR)/components/parsing/map_parsing.c \
 			$(SRC_DIR)/components/rendring/core/init.c \
         	$(SRC_DIR)/components/rendring/player/controls.c \

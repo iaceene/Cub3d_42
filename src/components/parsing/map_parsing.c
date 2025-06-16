@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/29 17:38:14 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/13 20:59:07 by iezzam           ###   ########.fr       */
+/*   Created: 2025/06/16 22:14:58 by yaajagro          #+#    #+#             */
+/*   Updated: 2025/06/16 22:18:40 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
-
-int	get_len(char **s)
-{
-	int	i;
-
-	if (!s)
-		return (0);
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
 
 int	check_grb_rang(t_cub *cub)
 {

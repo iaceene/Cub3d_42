@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing_utile_2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/29 21:01:07 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/13 20:57:16 by iezzam           ###   ########.fr       */
+/*   Created: 2025/06/16 22:15:39 by yaajagro          #+#    #+#             */
+/*   Updated: 2025/06/16 22:15:40 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,30 +101,4 @@ int	add_texture(char *path, t_texture *tex, int flg)
 		return (0);
 	}
 	return (add_more_tex(path, tex, flg));
-}
-
-t_lines	*textures_extracter(t_lines *line, t_texture *textur)
-{
-	while (line && line->next && !is_same(line->val, "MAP BEGIN"))
-	{
-		if (!is_same(line->val, "TEXTUR BEGIN"))
-		{
-			if (!ft_strncmp(line->val, "NO ", ft_strlen("NO ")))
-				add_texture(ft_split(line->val, ' ')[1], textur, 1);
-			else if (!ft_strncmp(line->val, "SO ", ft_strlen("SO ")))
-				add_texture(ft_split(line->val, ' ')[1], textur, 2);
-			else if (!ft_strncmp(line->val, "WE ", ft_strlen("WE ")))
-				add_texture(ft_split(line->val, ' ')[1], textur, 3);
-			else if (!ft_strncmp(line->val, "EA ", ft_strlen("EA ")))
-				add_texture(ft_split(line->val, ' ')[1], textur, 4);
-			else if (!ft_strncmp(line->val, "F ", ft_strlen("F ")))
-				add_texture(ft_split(line->val, ' ')[1], textur, 5);
-			else if (!ft_strncmp(line->val, "C ", ft_strlen("C ")))
-				add_texture(ft_split(line->val, ' ')[1], textur, 6);
-			else
-				return (log_state("Invalid texture", 0), NULL);
-		}
-		line = line->next;
-	}
-	return (line);
 }
