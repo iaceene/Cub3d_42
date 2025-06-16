@@ -3,6 +3,7 @@ MLX_DIR		= ./src/lib/.mlx
 MLX_LIB		= $(MLX_DIR)/libmlx.a
 LIBFT_DIR	= ./src/lib/libft
 LIBFT_LIB	= $(LIBFT_DIR)/libft.a
+HEADER 		= ./src/include/cub3d.h
 SRC_DIR		= ./src
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror #-g3 -fsanitize=address
@@ -44,7 +45,7 @@ NAME = cub3D
 all: $(MLX_LIB) $(LIBFT_LIB) $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(MLX_LIB):
 	@$(MAKE) -s -C $(MLX_DIR)
@@ -52,8 +53,8 @@ $(MLX_LIB):
 $(LIBFT_LIB):
 	@$(MAKE) -s -C $(LIBFT_DIR)
 
-$(NAME): $(OBJS) ./src/include/cub3d.h
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_FLAGS)
+$(NAME): $(OBJS) $(HEADER)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_FLAGS)
 	@echo "$(NAME) compiled successfully"
 
 clean:
