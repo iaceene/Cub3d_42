@@ -6,28 +6,23 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:27:06 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/16 22:27:07 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/16 22:51:06 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	clean_up(void)
+int main(int ac, char **av)
 {
-	ft_malloc(-1);
-}
+	t_cub cub;
 
-int	main(int ac, char **av)
-{
-	t_cub	cub;
-
-	printf(COLOR_YELLOW "[INIT PARSING] " COLOR_RESET "\n");
+	log_state("INIT PARSING", 3);
 	if (map_parsing(ac, av, &cub))
-		return (clean_up(), 1);
-	printf(COLOR_GREEN "[DONE PARSING] " COLOR_RESET "\n");
-	printf(COLOR_YELLOW "[CREATING WINDOW]  " COLOR_RESET "\n");
+		return (ft_malloc(-1), 1);
+	check_rendring_depend(&cub);
+	log_state("PARSING DONE", 1);
 	if (init_window(&cub))
-		return (clean_up(), 1);
-	clean_up();
+		return (ft_malloc(-1), 1);
+	ft_malloc(-1);
 	return (0);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_bonus.c                                       :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kaneki <kaneki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/13 00:51:58 by kaneki           ###   ########.fr       */
+/*   Updated: 2025/06/16 22:48:16 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	init_image(t_cub *cub)
 {
 	cub->data.img.img = mlx_new_image(cub->data.mlx, WIDTH, HEIGHT);
 	if (!cub->data.img.img)
-		return (perror("Fail to open img"), 1);
+		return (log_state("FAIL TO OPEN IMG", 0), 1);
 	cub->data.img.addr = mlx_get_data_addr(cub->data.img.img,
 			&cub->data.img.bits_per_pixel,
 			&cub->data.img.line_length,
@@ -74,10 +74,7 @@ void	init_texture_door(t_cub *cub)
 			&cub->texture->door_img.width,
 			&cub->texture->door_img.height);
 	if (!cub->texture->door_img.img)
-	{
-		ft_putendl_fd("Error\nFailed to load door texture", 2);
-		exit(1);
-	}
+		log_state("FAIL TO OPEN DOOR IMG", 0);
 	cub->texture->door_img.addr = mlx_get_data_addr(cub->texture->door_img.img,
 			&cub->texture->door_img.bits_per_pixel,
 			&cub->texture->door_img.line_length,
@@ -86,12 +83,14 @@ void	init_texture_door(t_cub *cub)
 
 int	init_window(t_cub *cub)
 {
+	log_state("CREATING WINDOW", 3);
 	cub->data.mlx = mlx_init();
 	if (!cub->data.mlx)
-		return (ft_putendl_fd("Error\nFail to create connection", 2), 1);
+		return (log_state("FAIL TO CREATE CONNECTION", 0), 1);
 	cub->data.win = mlx_new_window(cub->data.mlx, WIDTH, HEIGHT, "Cub3d");
 	if (!cub->data.win)
-		return (ft_putendl_fd("Error\nFail to open window", 2), 1);
+		return (log_state("FAIL TO CREATE WINDOW", 0), 1);
+	log_state("WINDOW CREATED SUCCESSFULLY", 1);
 	init_player(&cub->player, cub);
 	if (init_image(cub))
 		return (1);
