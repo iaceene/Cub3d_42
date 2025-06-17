@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/17 23:15:25 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:30:25 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	game_loop(t_cub *cub)
 	int				x;
 
 	if (!i)
-		log_state("LOAD GAME", 1);
+		log_state("GAME LOADED", 1);
 	i++;
 	handle_movement(cub);
 	clear_image(cub);

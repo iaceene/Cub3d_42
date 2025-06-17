@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:37:28 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/17 23:10:55 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:29:14 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	event_hook_window(t_cub *cub)
 	mlx_hook(cub->data.win, 3, 1L << 1, key_release, cub);
 	mlx_hook(cub->data.win, 6, 1L << 6, mouse_move, cub);
 	log_state("MOUSE BINDING", 1);
+	log_state("LOADING GANE ...", 3);
 	mlx_loop_hook(cub->data.mlx, game_loop, cub);
 	mlx_loop(cub->data.mlx);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:14:50 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/16 22:14:53 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:26:19 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	exit_cub(void)
 {
 	write(1, COLOR_RED, ft_strlen(COLOR_RED));
 	write(1, " ]\n", 4);
-	write(1, "[ 🚧 EXITING ]\n", 18);
+	write(1, "[ 🚧 CLEANING AND EXITING ]\n", 31);
 	write(1, COLOR_RESET, ft_strlen(COLOR_RESET));
 	ft_malloc(-1);
 	exit(1);

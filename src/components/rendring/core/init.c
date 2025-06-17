@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/17 23:07:18 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:32:26 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,11 @@ int	init_window(t_cub *cub)
 	init_player(&cub->player, cub);
 	if (init_image(cub))
 		return (destroy_imgs_exit(cub, "FAILED TO CREATE MAIN IMG"), 1);
+	log_state("LOADING TEXTURES ...", 3);
 	init_textures_weapon(cub);
 	init_texture_wall(cub);
 	init_texture_door(cub);
+	log_state("TEXTURES LOADED", 1);
 	if (event_hook_window(cub))
 		return (1);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:14:58 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/16 22:18:40 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:27:59 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_grb_rang(t_cub *cub)
 	{
 		if (cub->texture->sky_grb[i] == -1 || \
 				cub->texture->floor_grb[i] == -1)
-			return (log_state("Invalid RGB range", 0), 1);
+			return (log_state("INVALID RGB RANGE", 0), 1);
 		i++;
 	}
 	log_state("VALID COLORS", 1);
