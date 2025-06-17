@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/16 22:48:16 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 22:51:50 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static void	set_player_angle(t_player *player, char dir)
 {
+	if (!player)
+		return ;
 	if (dir == 'N')
 		player->angle = PI / 2;
 	else if (dir == 'S')
@@ -55,9 +57,11 @@ void	init_player(t_player *player, t_cub *cub)
 
 int	init_image(t_cub *cub)
 {
+	log_state("CREATING MAIN IMG DISPLAY", 3);
 	cub->data.img.img = mlx_new_image(cub->data.mlx, WIDTH, HEIGHT);
 	if (!cub->data.img.img)
 		return (log_state("FAIL TO OPEN IMG", 0), 1);
+	log_state("CREATING MAIN IMG DISPLAY", 1);
 	cub->data.img.addr = mlx_get_data_addr(cub->data.img.img,
 			&cub->data.img.bits_per_pixel,
 			&cub->data.img.line_length,
@@ -89,7 +93,8 @@ int	init_window(t_cub *cub)
 		return (log_state("FAIL TO CREATE CONNECTION", 0), 1);
 	cub->data.win = mlx_new_window(cub->data.mlx, WIDTH, HEIGHT, "Cub3d");
 	if (!cub->data.win)
-		return (log_state("FAIL TO CREATE WINDOW", 0), 1);
+		return (mlx_destroy_display(cub->data.mlx), free(cub->data.mlx),
+			log_state("FAIL TO CREATE WINDOW", 0), 1);
 	log_state("WINDOW CREATED SUCCESSFULLY", 1);
 	init_player(&cub->player, cub);
 	if (init_image(cub))

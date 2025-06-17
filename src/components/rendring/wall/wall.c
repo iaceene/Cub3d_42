@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 15:04:40 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/17 04:09:41 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 22:48:58 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void destroy_imgs_exit(t_cub *cub, int flag)
 	free(cub->data.mlx);
 	if (!flag)
 		log_state("FAILED TO CREATE AN IMAGE", 0);
-	printf("[ BYE ! ]");
+	printf("[ BYE ! ]\n");
 	ft_malloc(-1);
 	exit(0);
 }
