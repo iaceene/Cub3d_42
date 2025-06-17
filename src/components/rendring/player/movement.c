@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 13:55:45 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/02 13:12:36 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/17 23:13:06 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,13 @@ void	try_open_door(t_cub *cub)
 	cub->door_x = fx;
 	cub->door_y = fy;
 	if (cub->data.map.map[fy][fx] == '2')
+	{
 		cub->data.map.map[fy][fx] = 'D';
+		log_state("OPENING DOOR", 1);
+	}
 	else if (cub->data.map.map[fy][fx] == 'D')
+	{
 		cub->data.map.map[fy][fx] = '2';
+		log_state("CLOSING DOOR", 1);
+	}
 }

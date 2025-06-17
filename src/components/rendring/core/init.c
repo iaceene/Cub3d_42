@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 14:06:51 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/17 22:51:50 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:07:18 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	init_image(t_cub *cub)
 	log_state("CREATING MAIN IMG DISPLAY", 3);
 	cub->data.img.img = mlx_new_image(cub->data.mlx, WIDTH, HEIGHT);
 	if (!cub->data.img.img)
-		return (log_state("FAIL TO OPEN IMG", 0), 1);
+		return (1);
 	log_state("CREATING MAIN IMG DISPLAY", 1);
 	cub->data.img.addr = mlx_get_data_addr(cub->data.img.img,
 			&cub->data.img.bits_per_pixel,
@@ -78,7 +78,7 @@ void	init_texture_door(t_cub *cub)
 			&cub->texture->door_img.width,
 			&cub->texture->door_img.height);
 	if (!cub->texture->door_img.img)
-		log_state("FAIL TO OPEN DOOR IMG", 0);
+		destroy_imgs_exit(cub, "FAILED TO LOAD DOOR TEXTURE");
 	cub->texture->door_img.addr = mlx_get_data_addr(cub->texture->door_img.img,
 			&cub->texture->door_img.bits_per_pixel,
 			&cub->texture->door_img.line_length,
@@ -98,7 +98,7 @@ int	init_window(t_cub *cub)
 	log_state("WINDOW CREATED SUCCESSFULLY", 1);
 	init_player(&cub->player, cub);
 	if (init_image(cub))
-		return (1);
+		return (destroy_imgs_exit(cub, "FAILED TO CREATE MAIN IMG"), 1);
 	init_textures_weapon(cub);
 	init_texture_wall(cub);
 	init_texture_door(cub);

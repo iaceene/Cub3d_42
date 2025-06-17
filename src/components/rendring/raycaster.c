@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 08:49:34 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/02 12:09:56 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/17 23:15:25 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,14 @@ void	cast_ray(t_cub *cub, float ray_angle, int screen_x)
 
 int	game_loop(t_cub *cub)
 {
-	float	ray_step;
-	float	ray_angle;
-	int		x;
+	static int		i;
+	float			ray_step;
+	float			ray_angle;
+	int				x;
 
+	if (!i)
+		log_state("LOAD GAME", 1);
+	i++;
 	handle_movement(cub);
 	clear_image(cub);
 	draw_split_background(cub);

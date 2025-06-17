@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 15:02:03 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/17 00:42:34 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:03:34 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	init_textures_weapon(t_cub *cub)
 {
 	cub->texture->weapon = ft_malloc(sizeof(t_img) * 18);
 	if (load_all_weapon_textures(cub))
-		exit(1);
+		destroy_imgs_exit(cub, "FAILED TO LOAD WEAPON TEXTURE");
 	init_weapon_animation_params(cub);
 	return (0);
 }

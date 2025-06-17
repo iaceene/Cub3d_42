@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 15:04:40 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/17 22:48:58 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:03:03 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int load_east_texture(t_cub *cub)
 	return (0);
 }
 
-void destroy_imgs_exit(t_cub *cub, int flag)
+void destroy_imgs_exit(t_cub *cub, char *msg)
 {
 	if (cub->texture->door_img.img)
 		mlx_destroy_image(cub->data.mlx, cub->texture->door_img.img);
@@ -92,15 +92,16 @@ void destroy_imgs_exit(t_cub *cub, int flag)
 	mlx_destroy_window(cub->data.mlx, cub->data.win);
 	mlx_destroy_display(cub->data.mlx);
 	free(cub->data.mlx);
-	if (!flag)
-		log_state("FAILED TO CREATE AN IMAGE", 0);
-	printf("[ BYE ! ]\n");
+	if (msg)
+		log_state(msg, 0);
+	log_state("CLEANING...", 1);
 	ft_malloc(-1);
+	printf("[ BYE ! ]\n");
 	exit(0);
 }
 
 void init_texture_wall(t_cub *cub)
 {
 	if (load_north_texture(cub) || load_south_texture(cub) || load_west_texture(cub) || load_east_texture(cub))
-		destroy_imgs_exit(cub, 0);
+		destroy_imgs_exit(cub, "FAILED TO LOAD A WALL TEXTURE");
 }
