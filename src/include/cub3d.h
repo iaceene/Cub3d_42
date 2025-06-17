@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:17:09 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/16 22:52:58 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 04:00:47 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@
 # define BLOCK 1000
 # define MINIMAP_WIDTH 200
 # define MINIMAP_HEIGHT 200
-# define MAX_FRAMES 18
 
 # define KEY_W 119
 # define KEY_A 97
@@ -266,5 +265,6 @@ int		add_texture(char *path, t_texture *tex, int flg);
 int		palyer_chars(char c);
 int		get_len(char **s);
 void	check_rendring_depend(t_cub *cub);
+void	destroy_imgs_exit(t_cub *cub, int flag);
 
 #endif

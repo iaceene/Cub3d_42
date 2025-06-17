@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   controls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:37:28 by iezzam            #+#    #+#             */
-/*   Updated: 2025/05/31 15:21:04 by iezzam           ###   ########.fr       */
+/*   Updated: 2025/06/17 04:02:33 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int	event_hook_window(t_cub *cub)
 
 int	close_window(t_cub *cub)
 {
-	mlx_destroy_window(cub->data.mlx, cub->data.win);
-	exit(0);
+	destroy_imgs_exit(cub, 1);
 	return (0);
 }
 

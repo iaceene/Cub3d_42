@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:15:13 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/16 22:17:38 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 00:46:08 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_walls(char **map)
 			return (1);
 		while (map[y][x])
 		{
-			if (map[y][x] == '0')
+			if (map[y][x] == '0' || map[y][x] == '2')
 			{
 				if (!map[y][x + 1] || !map[y][x - 1] || \
 						!map[y + 1][x] || !map[y + 1][x])

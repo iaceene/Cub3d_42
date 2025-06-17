@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 15:02:03 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/16 23:03:15 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/17 00:42:34 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static const char	**get_weapon_texture_paths(void)
 {
-	static const char	*paths[MAX_FRAMES] = {
+	static const char	*paths[18] = {
 		"./textures/player1/01.xpm",
 		"./textures/player1/02.xpm",
 		"./textures/player1/03.xpm",
@@ -38,16 +38,6 @@ static const char	**get_weapon_texture_paths(void)
 	return (paths);
 }
 
-static int	allocate_weapon_memory(t_cub *cub)
-{
-	
-	if (!cub->texture->weapon)
-	{
-		ft_putendl_fd("Error\nMemory allocation failed for weapon textures", 2);
-		return (1);
-	}
-	return (0);
-}
 
 static int	load_single_weapon_texture(t_cub *cub, const char *path, int frame)
 {
@@ -76,7 +66,7 @@ static int	load_all_weapon_textures(t_cub *cub)
 
 	paths = get_weapon_texture_paths();
 	f = 0;
-	while (f < MAX_FRAMES)
+	while (f < 18)
 	{
 		if (load_single_weapon_texture(cub, paths[f], f))
 			return (1);
@@ -87,7 +77,7 @@ static int	load_all_weapon_textures(t_cub *cub)
 
 int	init_textures_weapon(t_cub *cub)
 {
-	cub->texture->weapon = ft_malloc(sizeof(t_img) * MAX_FRAMES);
+	cub->texture->weapon = ft_malloc(sizeof(t_img) * 18);
 	if (load_all_weapon_textures(cub))
 		exit(1);
 	init_weapon_animation_params(cub);
