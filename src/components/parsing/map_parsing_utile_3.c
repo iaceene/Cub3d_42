@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:15:33 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/18 22:42:59 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:58:06 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,6 @@ t_lines	*map_extracter(t_lines *line, char ***map)
 	}
 	new[i] = NULL;
 	return (line);
-}
-
-void	remove_spaces(t_lines *lines)
-{
-	bool	flag;
-	char	*tmp;
-
-	if (!lines)
-		return ;
-	flag = false;
-	while (lines)
-	{
-		if (is_same("TEXTUR BEGIN", lines->val))
-			flag = true;
-		if (flag && !is_same("MAP BEGIN", lines->val))
-		{
-			tmp = lines->val;
-			while (*tmp && *tmp == ' ')
-				tmp++;
-			lines->val = ft_strdup(tmp);
-		}
-		if (is_same("MAP BEGIN", lines->val))
-			break ;
-		lines = lines->next;
-	}
 }
 
 int	extractor(t_cub *cub)
