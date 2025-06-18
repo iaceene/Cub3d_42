@@ -39,6 +39,7 @@ SRCS = \
     $(SRC_DIR)/components/rendring/floor_sky/floor_sky.c \
     $(SRC_DIR)/components/rendring/weapon/weapon.c \
     $(SRC_DIR)/components/rendring/wall/wall.c \
+    $(SRC_DIR)/components/rendring/wall/utils.c \
     $(SRC_DIR)/components/rendring/weapon/init_weapon.c \
     $(SRC_DIR)/main/main.c
 

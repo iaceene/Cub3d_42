@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:27:06 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/16 22:51:06 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:41:22 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_cub cub;
+	t_cub	cub;
 
 	log_state("INIT PARSING", 3);
 	if (map_parsing(ac, av, &cub))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_weapon.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 15:02:03 by iezzam            #+#    #+#             */
-/*   Updated: 2025/06/17 23:03:34 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:30:32 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static const char	**get_weapon_texture_paths(void)
 
 	return (paths);
 }
-
 
 static int	load_single_weapon_texture(t_cub *cub, const char *path, int frame)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing_utile_7.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iezzam <iezzam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:18:13 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/17 22:52:17 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:42:27 by iezzam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 
 void	check_rendring_depend(t_cub *cub)
 {
-	char	*door_path = "./textures/door/__door1.xpm";
+	char	*door_path;
 	int		fd;
-	
+
+	door_path = "./textures/door/__door1.xpm";
 	if (!cub)
 		return ;
 	log_state("CHECKING DEPENDENCIES", 3);
 	fd = open(door_path, 0);
 	if (fd == -1)
-	log_state("DOOR IMG NOT FOUND", 0);
+		log_state("DOOR IMG NOT FOUND", 0);
 	close(fd);
 	log_state("CHECKING DEPENDENCIES", 1);
 }
