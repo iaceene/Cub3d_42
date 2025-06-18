@@ -1,12 +1,13 @@
-NO textures/wall/wall_01.xpm
-SO textures/wall/wall_05.xpm
-WE textures/wall/wall_03.xpm
-EA textures/wall/wall_04.xpm
+                 NO textures/wall/wall_01.xpm
+        SO textures/wall/wall_05.xpm
+        WE textures/wall/wall_03.xpm
+   EA textures/wall/wall_04.xpm
 
-F 20,20,20
-C 200,200,200
+       F 20,20,20
+     C 200,200,200
 
-11111
+                11111
+111111111111111111111111
 10001
 10S01
 10001

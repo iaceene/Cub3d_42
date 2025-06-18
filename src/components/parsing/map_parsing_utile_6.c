@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:15:13 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/18 22:25:25 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:49:22 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	check_walls(char **map)
 		{
 			if (map[y][x] == '0' || map[y][x] == '2')
 			{
-				if (!map[y][x + 1] || !map[y][x - 1] || \
-						!map[y + 1][x] || !map[y + 1][x])
+				if (!map[y][x + 1] || map[y][x + 1] == ' ' || !map[y][x - 1] || map[y][x - 1] == ' ' || \
+						!map[y + 1][x] || map[y + 1][x] == ' ' || !map[y - 1][x] || map[y - 1][x] == ' ')
 					log_state("Player will be out of the map", 0);
 			}
 			x++;
