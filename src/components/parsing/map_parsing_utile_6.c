@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:15:13 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/17 00:46:08 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/18 21:57:35 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,21 +82,16 @@ t_lines	*textures_extracter(t_lines *line, t_texture *textur)
 	return (line);
 }
 
-int	check_map(t_cub *cub)
+int	chech_map_help(t_cub *cub)
 {
-	char	**map;
 	int		count;
+	char	**map;
 	int		i;
 	int		j;
 
 	i = 0;
 	count = 0;
 	map = cub->data.map.map;
-	log_state("MAP CHECKING", 3);
-	if (!map)
-		return (log_state("Thers is no map", 0), 1);
-	if (only_ones(map[0]))
-		log_state(ft_strjoin("Unclosed wall Line : ", map[i]), 0);
 	while (map[i])
 	{
 		j = 0;
@@ -114,5 +109,19 @@ int	check_map(t_cub *cub)
 	}
 	if (!count)
 		return (log_state("The map has no player", 0), 1);
+}
+
+int	check_map(t_cub *cub)
+{
+	char	**map;
+
+	map = cub->data.map.map;
+	log_state("MAP CHECKING", 3);
+	if (!map)
+		return (log_state("Thers is no map", 0), 1);
+	if (only_ones(map[0]))
+		log_state(ft_strjoin("Unclosed wall Line : ", map[0]), 0);
+	if (chech_map_help(cub))
+		return (1);
 	return (check_walls(map));
 }
