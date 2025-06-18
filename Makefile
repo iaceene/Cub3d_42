@@ -1,4 +1,3 @@
-# Directories
 MLX_DIR     = ./src/lib/.mlx
 MLX_LIB     = $(MLX_DIR)/libmlx.a
 LIBFT_DIR   = ./src/lib/libft
@@ -6,13 +5,9 @@ LIBFT_LIB   = $(LIBFT_DIR)/libft.a
 HEADER      = ./src/include/cub3d.h
 SRC_DIR     = ./src
 OBJ_DIR     = ./obj
-
-# Compiler and flags
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror
 MLX_FLAGS   = -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lXext -lX11 -lm -lbsd
-
-# Source files
 SRCS = \
     $(SRC_DIR)/lib/gnl/get_next_line.c \
     $(SRC_DIR)/lib/gnl/get_next_line_utils.c \
@@ -42,50 +37,39 @@ SRCS = \
     $(SRC_DIR)/components/rendring/wall/utils.c \
     $(SRC_DIR)/components/rendring/weapon/init_weapon.c \
     $(SRC_DIR)/main/main.c
-
-# Object files in obj/
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
-# Final executable
 NAME = cub3D
 
-# Default target
 all: $(OBJ_DIR) $(MLX_LIB) $(LIBFT_LIB) $(NAME)
 
-# Create obj directory
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-# Rule to compile .c to .o into obj/
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-# Libraries
 $(MLX_LIB):
 	@$(MAKE) -s -C $(MLX_DIR)
 
 $(LIBFT_LIB):
 	@$(MAKE) -s -C $(LIBFT_DIR)
 
-# Link all objects into final executable
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_FLAGS)
 	@echo "$(NAME) compiled successfully"
 
-# Clean object files
 clean:
 	@$(MAKE) -s -C $(MLX_DIR) clean
 	@$(MAKE) -s -C $(LIBFT_DIR) clean
 	@rm -rf $(OBJ_DIR)
-	@echo "Object files removed"
 
-# Full clean
 fclean: clean
 	@rm -f $(NAME)
 	@echo "$(NAME) removed"
 
-# Recompile everything
+bonus: fclean all
+
 re: fclean all
 
 .PHONY: all clean fclean re

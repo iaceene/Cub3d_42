@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:15:13 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/18 21:57:35 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/18 21:59:56 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,14 @@ t_lines	*textures_extracter(t_lines *line, t_texture *textur)
 	return (line);
 }
 
-int	chech_map_help(t_cub *cub)
+int	chech_map_help(char **map)
 {
 	int		count;
-	char	**map;
 	int		i;
 	int		j;
 
 	i = 0;
 	count = 0;
-	map = cub->data.map.map;
 	while (map[i])
 	{
 		j = 0;
@@ -109,6 +107,7 @@ int	chech_map_help(t_cub *cub)
 	}
 	if (!count)
 		return (log_state("The map has no player", 0), 1);
+	return (0);
 }
 
 int	check_map(t_cub *cub)
@@ -121,7 +120,7 @@ int	check_map(t_cub *cub)
 		return (log_state("Thers is no map", 0), 1);
 	if (only_ones(map[0]))
 		log_state(ft_strjoin("Unclosed wall Line : ", map[0]), 0);
-	if (chech_map_help(cub))
+	if (chech_map_help(map))
 		return (1);
 	return (check_walls(map));
 }
