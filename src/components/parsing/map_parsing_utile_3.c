@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:15:33 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/16 22:15:34 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:04:12 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,8 @@ int	extractor(t_cub *cub)
 
 int	check_file_ext(char *name)
 {
-	char		*tmp;
 	static int	i;
 
-	tmp = name;
 	if (!name)
 		return (log_state("file is NULL", 0), 1);
 	log_state("CHECKING EXTENTION", 3);
