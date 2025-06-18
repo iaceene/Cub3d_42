@@ -6,7 +6,7 @@
 /*   By: yaajagro <yaajagro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:15:13 by yaajagro          #+#    #+#             */
-/*   Updated: 2025/06/18 21:59:56 by yaajagro         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:19:40 by yaajagro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ int	only_ones(char *line)
 		return (1);
 	while (line[i])
 	{
-		if (line[i] != '1')
+		if (line[i] != '1' && line[i] != ' '
+			&& line[i] != '\t')
 			return (1);
 		i++;
 	}
@@ -102,7 +103,7 @@ int	chech_map_help(char **map)
 			j++;
 		}
 		if (!map[i + 1] && only_ones(map[i]))
-			log_state(ft_strjoin("Unclosed wall Line : ", map[i]), 0);
+			log_state(ft_strjoin(ft_strjoin("Unclosed wall Line ", ft_strjoin(ft_itoa(i), " ->")), map[i]), 0);
 		i++;
 	}
 	if (!count)
@@ -119,7 +120,7 @@ int	check_map(t_cub *cub)
 	if (!map)
 		return (log_state("Thers is no map", 0), 1);
 	if (only_ones(map[0]))
-		log_state(ft_strjoin("Unclosed wall Line : ", map[0]), 0);
+		log_state(ft_strjoin(ft_strjoin("Unclosed wall Line ", ft_strjoin(ft_itoa(0), " ->")), map[0]), 0);
 	if (chech_map_help(map))
 		return (1);
 	return (check_walls(map));
